@@ -160,3 +160,4 @@ The site is fully responsive and works on:
 **Status: READY TO USE** ✓
 
 Just add your images and update the text content, and you'll have a fully functional restaurant website!
+# crave
