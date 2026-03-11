@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Reservation - Crave Restaurant</title>
+	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="css/util.css">
+</head>
+<body>
+	<!-- Header -->
+	<header>
+		<div class="wrap-menu-header gradient1 trans-0-4">
+			<div class="container h-full">
+				<div class="wrap_header trans-0-3">
+					<div class="logo">
+						<a href="cravee.html">
+							<img src="images/logo.png" alt="Crave Restaurant" style="height: 50px;">
+						</a>
+					</div>
+
+					<div class="wrap_menu p-l-45">
+						<nav class="menu">
+							<ul class="main_menu">
+								<li><a href="cravee.html">Home</a></li>
+								<li><a href="menu.html">Menu</a></li>
+								<li><a href="reservation.html">Reservation</a></li>
+								<li><a href="gallery.html">Gallery</a></li>
+								<li><a href="about.html">About</a></li>
+								<li><a href="blog.html">Blog</a></li>
+								<li><a href="contact.html">Contact</a></li>
+							</ul>
+						</nav>
+					</div>
+
+					<div class="flex-w flex-l-m">
+						<button class="btn-show-sidebar trans-0-4">☰</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<!-- Sidebar -->
+	<aside class="sidebar trans-0-4">
+		<button class="btn-hide-sidebar">✕</button>
+		<ul class="menu-sidebar p-t-95 p-b-70">
+			<li class="t-center m-b-13"><a href="cravee.html" class="txt19">Home</a></li>
+			<li class="t-center m-b-13"><a href="menu.html" class="txt19">Menu</a></li>
+			<li class="t-center m-b-13"><a href="reservation.html" class="txt19">Reservation</a></li>
+			<li class="t-center m-b-13"><a href="gallery.html" class="txt19">Gallery</a></li>
+			<li class="t-center m-b-13"><a href="about.html" class="txt19">About</a></li>
+			<li class="t-center m-b-13"><a href="blog.html" class="txt19">Blog</a></li>
+			<li class="t-center m-b-33"><a href="contact.html" class="txt19">Contact</a></li>
+		</ul>
+	</aside>
+
+	<!-- Reservation Section -->
+	<section style="min-height: 100vh; padding: 60px 0; background-color: #f9f9f9;">
+		<div class="container">
+			<div class="row m-b-50">
+				<div class="col-md-8" style="margin: 0 auto;">
+					<h2 class="tit3 t-center m-b-15">Make a Reservation</h2>
+					<p class="t-center m-b-40" style="font-size: 16px;">Book your table at Crave Restaurant</p>
+
+					<form id="reservationForm">
+						<div class="row">
+							<div class="col-md-6">
+								<label for="name" style="display: block; margin-bottom: 5px; font-weight: 600;">Full Name *</label>
+								<input type="text" id="name" name="name" required placeholder="Your full name">
+							</div>
+
+							<div class="col-md-6">
+								<label for="email" style="display: block; margin-bottom: 5px; font-weight: 600;">Email Address *</label>
+								<input type="email" id="email" name="email" required placeholder="your.email@example.com">
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-6">
+								<label for="phone" style="display: block; margin-bottom: 5px; font-weight: 600;">Phone Number *</label>
+								<input type="tel" id="phone" name="phone" required placeholder="(123) 456-7890">
+							</div>
+
+							<div class="col-md-6">
+								<label for="guests" style="display: block; margin-bottom: 5px; font-weight: 600;">Number of Guests *</label>
+								<select id="guests" name="guests" required>
+									<option value="">Select number of guests</option>
+									<option value="1">1 Guest</option>
+									<option value="2">2 Guests</option>
+									<option value="3">3 Guests</option>
+									<option value="4">4 Guests</option>
+									<option value="5">5 Guests</option>
+									<option value="6">6 Guests</option>
+									<option value="7">7 Guests</option>
+									<option value="8">8 Guests</option>
+									<option value="9">9+ Guests</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-6">
+								<label for="date" style="display: block; margin-bottom: 5px; font-weight: 600;">Preferred Date *</label>
+								<input type="date" id="date" name="date" required>
+							</div>
+
+							<div class="col-md-6">
+								<label for="time" style="display: block; margin-bottom: 5px; font-weight: 600;">Preferred Time *</label>
+								<select id="time" name="time" required>
+									<option value="">Select time</option>
+									<option value="11:00">11:00 AM</option>
+									<option value="11:30">11:30 AM</option>
+									<option value="12:00">12:00 PM</option>
+									<option value="17:00">5:00 PM</option>
+									<option value="17:30">5:30 PM</option>
+									<option value="18:00">6:00 PM</option>
+									<option value="18:30">6:30 PM</option>
+									<option value="19:00">7:00 PM</option>
+									<option value="19:30">7:30 PM</option>
+									<option value="20:00">8:00 PM</option>
+									<option value="20:30">8:30 PM</option>
+									<option value="21:00">9:00 PM</option>
+								</select>
+							</div>
+						</div>
+
+						<div>
+							<label for="message" style="display: block; margin-bottom: 5px; font-weight: 600;">Special Requests</label>
+							<textarea id="message" name="message" rows="5" placeholder="Any special requests? (e.g., High chair, window seating, celebration)"></textarea>
+						</div>
+
+						<button type="submit" class="btn1" style="width: 100%; padding: 15px; font-size: 16px;">Confirm Reservation</button>
+					</form>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-4 p-t-30 t-center">
+					<h4 class="txt5 m-b-15">Phone</h4>
+					<p style="font-size: 16px;">(555) 123-4567</p>
+				</div>
+
+				<div class="col-md-4 p-t-30 t-center">
+					<h4 class="txt5 m-b-15">Email</h4>
+					<p style="font-size: 16px;"><a href="mailto:info@patoplace.com" class="txt4">info@patoplace.com</a></p>
+				</div>
+
+				<div class="col-md-4 p-t-30 t-center">
+					<h4 class="txt5 m-b-15">Hours</h4>
+					<p style="font-size: 16px;">Mon-Thu: 11AM - 10PM<br>Fri-Sat: 11AM - 11PM<br>Sun: 10AM - 9PM</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Footer -->
+	<footer>
+		<div class="container">
+			<p>&copy; 2024 Pato Place Restaurant. All rights reserved.</p>
+			<p>
+				<a href="cravee.html">Home</a> | 
+				<a href="menu.html">Menu</a> | 
+				<a href="reservation.html">Reservation</a> | 
+				<a href="contact.html">Contact</a>
+			</p>
+		</div>
+	</footer>
+
+	<script src="js/vendor-setup.js"></script>
+	<script src="js/main.js"></script>
+</body>
+</html>
