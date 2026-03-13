@@ -566,10 +566,6 @@ form button:hover {
 
 /* Menu item button positions */
 .item-ourmenu .btn2 {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  padding: 12px 24px;
   border-radius: 5px;
   text-decoration: none;
   color: #fff;
