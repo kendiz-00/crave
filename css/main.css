@@ -571,6 +571,31 @@ form button:hover {
   color: #fff;
 }
 
+.item-ourmenu .btn-menu-wrap {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: calc(100% - 40px);
+  max-width: 300px;
+}
+
+.item-ourmenu .btn-menu-wrap .btn2 {
+  flex: 1 1 auto;
+}
+
+.item-ourmenu .btn-order {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.item-ourmenu .btn-order:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
 /* Back to top */
 .btn-back-to-top {
   position: fixed;
