@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Animations
   initAnimations();
+  
+  // Menu filtering
+  initMenuFilter();
 });
 
 /**
@@ -137,3 +140,35 @@ function initSwiper() {
 }
 
 // Swiper is initialized by swiper-custom.js when loaded (cravee.html)
+
+/**
+ * Initialize Menu Filter
+ */
+function initMenuFilter() {
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const menuItems = document.querySelectorAll('.menu-item');
+  
+  if (filterButtons.length === 0 || menuItems.length === 0) return;
+  
+  filterButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      // Remove active class from all buttons
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      // Add active class to clicked button
+      this.classList.add('active');
+      
+      const filterValue = this.getAttribute('data-filter');
+      
+      // Filter menu items
+      menuItems.forEach(item => {
+        const category = item.getAttribute('data-category');
+        
+        if (filterValue === 'all' || category === filterValue) {
+          item.classList.remove('hide');
+        } else {
+          item.classList.add('hide');
+        }
+      });
+    });
+  });
+}

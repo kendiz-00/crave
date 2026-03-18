@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
 	<!-- Header -->
@@ -111,76 +111,22 @@
 		</div>
 	</aside>
 
-	<!-- Slide1 - Hero Slider -->
-	<section class="section-slide">
-		<div class="wrap-slick1">
-			<div class="swiper swiper-hero">
-				<div class="swiper-wrapper">
-					<div class="swiper-slide item-slick1 item1-slick1" style="background-image: url(images/cover_page.jpeg);">
-						<div class="wrap-content-slide1 sizefull flex-col-c-m p-l-15 p-r-15 p-t-150 p-b-170">
-							<span class="caption1-slide1 txt1 t-center animated visible-false m-b-15" data-appear="fadeInDown" style="color: red; font-weight: bold; font-style: italic;">
-								Welcome to
-							</span>
-
-							<h2 class="caption2-slide1 tit1 t-center animated visible-false m-b-37" data-appear="fadeInUp">
-								Crave
-							</h2>
-
-							<div class="wrap-btn-slide1 animated visible-false" data-appear="zoomIn">
-								<!-- Button1 -->
-								<a href="menu.html" class="btn1 flex-c-m size1 txt3 trans-0-4">
-									Look Menu
-								</a>
-							</div>
-						</div>
-					</div>
-
-					<div class="swiper-slide item-slick1 item2-slick1" style="background-image: url(images/wrap.jpeg);">
-						<div class="wrap-content-slide1 sizefull flex-col-c-m p-l-15 p-r-15 p-t-150 p-b-170">
-							<span class="caption1-slide1 txt1 t-center animated visible-false m-b-15" data-appear="rollIn" style="color: red; font-weight: bold; font-style: italic;">
-								Welcome to
-							</span>
-
-							<h2 class="caption2-slide1 tit1 t-center animated visible-false m-b-37" data-appear="lightSpeedIn">
-								Crave
-							</h2>
-
-							<div class="wrap-btn-slide1 animated visible-false" data-appear="slideInUp">
-								<!-- Button1 -->
-								<a href="menu.html" class="btn1 flex-c-m size1 txt3 trans-0-4">
-									Look Menu
-								</a>
-							</div>
-						</div>
-					</div>
-
-					<div class="swiper-slide item-slick1 item3-slick1" style="background-image: url(images/cover_page_3.jpeg);">
-						<div class="wrap-content-slide1 sizefull flex-col-c-m p-l-15 p-r-15 p-t-150 p-b-170">
-							<span class="caption1-slide1 txt1 t-center animated visible-false m-b-15" data-appear="rotateInDownLeft" style="color: red; font-weight: bold; font-style: italic;">
-								Welcome to
-							</span>
-
-							<h2 class="caption2-slide1 tit1 t-center animated visible-false m-b-37" data-appear="rotateInUpRight">
-								Crave
-							</h2>
-
-							<div class="wrap-btn-slide1 animated visible-false" data-appear="rotateIn">
-								<!-- Button1 -->
-								<a href="menu.html" class="btn1 flex-c-m size1 txt3 trans-0-4">
-									Look Menu
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
+	<!-- Hero Section -->
+	<section class="hero">
+		<div class="hero-bg" style="background-image: url(images/cover_page.jpeg);"></div>
+		<div class="hero-overlay"></div>
+		<div class="hero-content">
+			<h1 class="hero-headline">Experience Luxury Dining in Every Bite</h1>
+			<p class="hero-subheading">Fresh. Premium. Unforgettable.</p>
+			<div class="hero-buttons">
+				<a href="https://wa.me/233550020788?text=Hi%20Crave%2C%20I%E2%80%99d%20like%20to%20place%20an%20order" class="btn-hero btn-primary" target="_blank">Order Now</a>
+				<a href="reservation.html" class="btn-hero btn-secondary">Reserve Table</a>
 			</div>
-
-			<button class="arrow-slick1 prev-slick1"><i class="fa-solid fa-angle-left" aria-hidden="true"></i></button>
-			<button class="arrow-slick1 next-slick1"><i class="fa-solid fa-angle-right" aria-hidden="true"></i></button>
-			<div class="wrap-slick1-dots"></div>
 		</div>
 	</section>
-		<div class="container">
+
+	<!-- Welcome Section -->
+	<div class="container">
 			<div class="row">
 				<div class="col-md-6 p-t-45 p-b-30">
 					<div class="wrap-text-welcome t-center">
@@ -254,86 +200,140 @@
 		</div>
 	</section>
 
-	<!-- Menu Showcase Section -->
-	<section class="section-ourmenu bg2-pattern p-t-115 p-b-120">
+	<!-- Menu Section -->
+	<section class="menu-section p-t-115 p-b-120">
 		<div class="container">
 			<div class="title-section-ourmenu t-center m-b-22">
 				<span class="tit2 t-center">Discover</span>
 				<h3 class="tit5 t-center m-t-2">Our Menu</h3>
 			</div>
 
-			<div class="t-center m-b-40">
-				<a href="order.html" class="btn1 flex-c-m size1 txt3 trans-0-4">Order Now</a>
+			<!-- Category Filter -->
+			<div class="menu-filter t-center m-b-40">
+				<button class="filter-btn active" data-filter="all">All</button>
+				<button class="filter-btn" data-filter="breakfast">Breakfast</button>
+				<button class="filter-btn" data-filter="lunch">Lunch</button>
+				<button class="filter-btn" data-filter="dinner">Dinner</button>
+				<button class="filter-btn" data-filter="drinks">Drinks</button>
 			</div>
 
-			<div class="row">
-				<div class="col-md-8">
-					<div class="row">
-						<div class="col-sm-6">
-							<div class="item-ourmenu bo-rad-10 hov-img-zoom pos-relative m-t-30">
-								<img src="images/tx-chick.jpeg" alt="Texas crispy fried chicken" loading="lazy">
-								<div class="btn-menu-wrap">
-									<a href="menu.html" class="btn2 flex-c-m txt5 size4">Texas crispy fried chicken</a>
-									<a href="order.html?cat=lunch" class="btn2 btn-order flex-c-m txt5 size4">Order Now</a>
-								</div>
-							</div>
+			<!-- Menu Grid -->
+			<div class="menu-grid">
+				<!-- Breakfast Items -->
+				<div class="menu-item" data-category="breakfast">
+					<div class="menu-card">
+						<div class="menu-image">
+							<img src="images/tx-chick.jpeg" alt="Avocado Toast">
+							<div class="menu-badge popular">Popular</div>
 						</div>
-
-						<div class="col-sm-6">
-							<div class="item-ourmenu bo-rad-10 hov-img-zoom pos-relative m-t-30">
-								<img src="images/meat.jpeg" alt="Main dish" loading="lazy">
-								<div class="btn-menu-wrap">
-									<a href="menu.html" class="btn2 flex-c-m txt5 size5">Main dish</a>
-									<a href="order.html?cat=dinner" class="btn2 btn-order flex-c-m txt5 size5">Order Now</a>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-12">
-							<div class="item-ourmenu bo-rad-10 hov-img-zoom pos-relative m-t-30">
-								<img src="images/smoothies.jpeg" alt="Smoothies" loading="lazy">
-								<div class="btn-menu-wrap">
-									<a href="menu.html" class="btn2 flex-c-m txt5 size6">Smoothies</a>
-									<a href="order.html?cat=happy" class="btn2 btn-order flex-c-m txt5 size6">Order Now</a>
-								</div>
-							</div>
+						<div class="menu-content">
+							<h4 class="menu-title">Avocado Toast</h4>
+							<p class="menu-description">Fresh avocado on artisanal bread with poached eggs and cherry tomatoes</p>
+							<div class="menu-price">$12.99</div>
 						</div>
 					</div>
 				</div>
 
-				<div class="col-md-4">
-					<div class="row">
-						<div class="col-12">
-							<div class="item-ourmenu bo-rad-10 hov-img-zoom pos-relative m-t-30">
-								<img src="images/jamaican.jpeg" alt="Jamaican kitchen" loading="lazy">
-								<div class="btn-menu-wrap">
-									<a href="menu.html" class="btn2 flex-c-m txt5 size7">Jamaican kitchen</a>
-									<a href="order.html?cat=drinks" class="btn2 btn-order flex-c-m txt5 size7">Order Now</a>
-								</div>
-							</div>
+				<div class="menu-item" data-category="breakfast">
+					<div class="menu-card">
+						<div class="menu-image">
+							<img src="images/pancakes.jpeg" alt="Fluffy Pancakes" onerror="this.src='images/placeholder.jpg'">
 						</div>
-
-						<div class="col-12">
-							<div class="item-ourmenu bo-rad-10 hov-img-zoom pos-relative m-t-30">
-								<img src="images/wrap-01.jpeg" alt="wraps" loading="lazy">
-								<div class="btn-menu-wrap">
-									<a href="menu.html" class="btn2 flex-c-m txt5 size8">wraps</a>
-									<a href="order.html?cat=starters" class="btn2 btn-order flex-c-m txt5 size8">Order Now</a>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-12">
-							<div class="item-ourmenu bo-rad-10 hov-img-zoom pos-relative m-t-30">
-								<img src="images/cupcake-03.jpeg" alt="Dessert" loading="lazy">
-								<div class="btn-menu-wrap">
-									<a href="menu.html" class="btn2 flex-c-m txt5 size9">Dessert</a>
-									<a href="order.html?cat=dessert" class="btn2 btn-order flex-c-m txt5 size9">Order Now</a>
-								</div>
-							</div>
+						<div class="menu-content">
+							<h4 class="menu-title">Fluffy Pancakes</h4>
+							<p class="menu-description">Light and fluffy pancakes served with maple syrup and fresh berries</p>
+							<div class="menu-price">$9.99</div>
 						</div>
 					</div>
 				</div>
+
+				<!-- Lunch Items -->
+				<div class="menu-item" data-category="lunch">
+					<div class="menu-card">
+						<div class="menu-image">
+							<img src="images/meat.jpeg" alt="Grilled Chicken Salad">
+							<div class="menu-badge popular">Popular</div>
+						</div>
+						<div class="menu-content">
+							<h4 class="menu-title">Grilled Chicken Salad</h4>
+							<p class="menu-description">Grilled chicken breast over mixed greens with balsamic vinaigrette</p>
+							<div class="menu-price">$15.99</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="menu-item" data-category="lunch">
+					<div class="menu-card">
+						<div class="menu-image">
+							<img src="images/wrap-01.jpeg" alt="Turkey Club Wrap">
+						</div>
+						<div class="menu-content">
+							<h4 class="menu-title">Turkey Club Wrap</h4>
+							<p class="menu-description">Sliced turkey, bacon, lettuce, and tomato in a whole wheat wrap</p>
+							<div class="menu-price">$11.99</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Dinner Items -->
+				<div class="menu-item" data-category="dinner">
+					<div class="menu-card">
+						<div class="menu-image">
+							<img src="images/steak.jpeg" alt="Grilled Ribeye Steak" onerror="this.src='images/placeholder.jpg'">
+							<div class="menu-badge popular">Popular</div>
+						</div>
+						<div class="menu-content">
+							<h4 class="menu-title">Grilled Ribeye Steak</h4>
+							<p class="menu-description">8oz ribeye steak grilled to perfection with garlic mashed potatoes</p>
+							<div class="menu-price">$28.99</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="menu-item" data-category="dinner">
+					<div class="menu-card">
+						<div class="menu-image">
+							<img src="images/pasta.jpeg" alt="Truffle Pasta" onerror="this.src='images/placeholder.jpg'">
+						</div>
+						<div class="menu-content">
+							<h4 class="menu-title">Truffle Pasta</h4>
+							<p class="menu-description">House-made pasta with black truffle oil, parmesan, and fresh herbs</p>
+							<div class="menu-price">$22.99</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Drinks Items -->
+				<div class="menu-item" data-category="drinks">
+					<div class="menu-card">
+						<div class="menu-image">
+							<img src="images/smoothies.jpeg" alt="Fresh Smoothie">
+						</div>
+						<div class="menu-content">
+							<h4 class="menu-title">Fresh Smoothie</h4>
+							<p class="menu-description">Blend of seasonal fruits with yogurt and honey</p>
+							<div class="menu-price">$6.99</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="menu-item" data-category="drinks">
+					<div class="menu-card">
+						<div class="menu-image">
+							<img src="images/coffee.jpeg" alt="Artisan Coffee" onerror="this.src='images/placeholder.jpg'">
+							<div class="menu-badge popular">Popular</div>
+						</div>
+						<div class="menu-content">
+							<h4 class="menu-title">Artisan Coffee</h4>
+							<p class="menu-description">Single-origin coffee beans roasted in-house</p>
+							<div class="menu-price">$4.99</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="t-center m-t-40">
+				<a href="menu.html" class="btn1 flex-c-m size1 txt3 trans-0-4">View Full Menu</a>
 			</div>
 		</div>
 	</section>
