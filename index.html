@@ -210,17 +210,20 @@
 
 			<!-- Category Filter -->
 			<div class="menu-filter t-center m-b-40">
-				<button class="filter-btn active" data-filter="all">All</button>
-				<button class="filter-btn" data-filter="breakfast">Breakfast</button>
-				<button class="filter-btn" data-filter="lunch">Lunch</button>
-				<button class="filter-btn" data-filter="dinner">Dinner</button>
-				<button class="filter-btn" data-filter="drinks">Drinks</button>
+				<button class="filter-btn active" data-filter="popular">Most Popular</button>
+				<button class="filter-btn" data-filter="fries">Loaded Fries + Cheesy Fries</button>
+				<button class="filter-btn" data-filter="chicken">Texas Crispy Fried Chicken</button>
+				<button class="filter-btn" data-filter="smoothies">Smoothies</button>
+				<button class="filter-btn" data-filter="milkshakes">Milkshakes</button>
+				<button class="filter-btn" data-filter="jamaican">Jamaican Kitchen</button>
+				<button class="filter-btn" data-filter="cupcakes">Cupcakes</button>
+				<button class="filter-btn" data-filter="cake-shakes">Cake and Shakes</button>
 			</div>
 
 			<!-- Menu Grid -->
 			<div class="menu-grid">
-				<!-- Breakfast Items -->
-				<div class="menu-item" data-category="breakfast">
+				<!-- Loaded Fries + Cheesy Fries Items -->
+				<div class="menu-item" data-category="fries">
 					<div class="menu-card">
 						<div class="menu-image">
 							<img src="images/tx-chick.jpeg" alt="Avocado Toast">
@@ -234,7 +237,7 @@
 					</div>
 				</div>
 
-				<div class="menu-item" data-category="breakfast">
+				<div class="menu-item" data-category="fries">
 					<div class="menu-card">
 						<div class="menu-image">
 							<img src="images/pancakes.jpeg" alt="Fluffy Pancakes" onerror="this.src='images/placeholder.jpg'">
@@ -247,8 +250,8 @@
 					</div>
 				</div>
 
-				<!-- Lunch Items -->
-				<div class="menu-item" data-category="lunch">
+				<!-- Texas Crispy Fried Chicken Items -->
+				<div class="menu-item" data-category="chicken">
 					<div class="menu-card">
 						<div class="menu-image">
 							<img src="images/meat.jpeg" alt="Grilled Chicken Salad">
@@ -262,7 +265,7 @@
 					</div>
 				</div>
 
-				<div class="menu-item" data-category="lunch">
+				<div class="menu-item" data-category="chicken">
 					<div class="menu-card">
 						<div class="menu-image">
 							<img src="images/wrap-01.jpeg" alt="Turkey Club Wrap">
@@ -275,8 +278,8 @@
 					</div>
 				</div>
 
-				<!-- Dinner Items -->
-				<div class="menu-item" data-category="dinner">
+				<!-- Smoothies Items -->
+				<div class="menu-item" data-category="smoothies">
 					<div class="menu-card">
 						<div class="menu-image">
 							<img src="images/steak.jpeg" alt="Grilled Ribeye Steak" onerror="this.src='images/placeholder.jpg'">
@@ -290,7 +293,7 @@
 					</div>
 				</div>
 
-				<div class="menu-item" data-category="dinner">
+				<div class="menu-item" data-category="smoothies">
 					<div class="menu-card">
 						<div class="menu-image">
 							<img src="images/pasta.jpeg" alt="Truffle Pasta" onerror="this.src='images/placeholder.jpg'">
@@ -303,8 +306,8 @@
 					</div>
 				</div>
 
-				<!-- Drinks Items -->
-				<div class="menu-item" data-category="drinks">
+				<!-- Milkshakes Items -->
+				<div class="menu-item" data-category="milkshakes">
 					<div class="menu-card">
 						<div class="menu-image">
 							<img src="images/smoothies.jpeg" alt="Fresh Smoothie">
@@ -317,7 +320,7 @@
 					</div>
 				</div>
 
-				<div class="menu-item" data-category="drinks">
+				<div class="menu-item" data-category="milkshakes">
 					<div class="menu-card">
 						<div class="menu-image">
 							<img src="images/coffee.jpeg" alt="Artisan Coffee" onerror="this.src='images/placeholder.jpg'">
@@ -327,6 +330,90 @@
 							<h4 class="menu-title">Artisan Coffee</h4>
 							<p class="menu-description">Single-origin coffee beans roasted in-house</p>
 							<div class="menu-price">$4.99</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Jamaican Kitchen Items -->
+				<div class="menu-item" data-category="jamaican">
+					<div class="menu-card">
+						<div class="menu-image">
+							<img src="images/tx-chick.jpeg" alt="Jerk Chicken" onerror="this.src='images/placeholder.jpg'">
+							<div class="menu-badge popular">Popular</div>
+						</div>
+						<div class="menu-content">
+							<h4 class="menu-title">Jerk Chicken</h4>
+							<p class="menu-description">Traditional Jamaican jerk-marinated chicken with authentic spices</p>
+							<div class="menu-price">$16.99</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="menu-item" data-category="jamaican">
+					<div class="menu-card">
+						<div class="menu-image">
+							<img src="images/pancakes.jpeg" alt="Ackee and Saltfish" onerror="this.src='images/placeholder.jpg'">
+						</div>
+						<div class="menu-content">
+							<h4 class="menu-title">Ackee and Saltfish</h4>
+							<p class="menu-description">Jamaica's national dish with fresh ackee fruit and salted cod</p>
+							<div class="menu-price">$14.99</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Cupcakes Items -->
+				<div class="menu-item" data-category="cupcakes">
+					<div class="menu-card">
+						<div class="menu-image">
+							<img src="images/cupcake.jpeg" alt="Red Velvet Cupcake" onerror="this.src='images/placeholder.jpg'">
+							<div class="menu-badge popular">Popular</div>
+						</div>
+						<div class="menu-content">
+							<h4 class="menu-title">Red Velvet Cupcake</h4>
+							<p class="menu-description">Classic red velvet with cream cheese frosting</p>
+							<div class="menu-price">$4.99</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="menu-item" data-category="cupcakes">
+					<div class="menu-card">
+						<div class="menu-image">
+							<img src="images/cupcake.jpeg" alt="Chocolate Cupcake" onerror="this.src='images/placeholder.jpg'">
+						</div>
+						<div class="menu-content">
+							<h4 class="menu-title">Chocolate Cupcake</h4>
+							<p class="menu-description">Rich chocolate cupcake with chocolate ganache</p>
+							<div class="menu-price">$4.99</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Cake and Shakes Items -->
+				<div class="menu-item" data-category="cake-shakes">
+					<div class="menu-card">
+						<div class="menu-image">
+							<img src="images/cupcake.jpeg" alt="Chocolate Cake" onerror="this.src='images/placeholder.jpg'">
+							<div class="menu-badge popular">Popular</div>
+						</div>
+						<div class="menu-content">
+							<h4 class="menu-title">Chocolate Cake</h4>
+							<p class="menu-description">Decadent chocolate cake with vanilla ice cream</p>
+							<div class="menu-price">$8.99</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="menu-item" data-category="cake-shakes">
+					<div class="menu-card">
+						<div class="menu-image">
+							<img src="images/smoothies.jpeg" alt="Vanilla Shake" onerror="this.src='images/placeholder.jpg'">
+						</div>
+						<div class="menu-content">
+							<h4 class="menu-title">Vanilla Shake</h4>
+							<p class="menu-description">Creamy vanilla milkshake with whipped cream</p>
+							<div class="menu-price">$5.99</div>
 						</div>
 					</div>
 				</div>

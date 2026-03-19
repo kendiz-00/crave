@@ -955,12 +955,24 @@ form button:hover {
 
   .menu-filter {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    white-space: nowrap;
+    padding-bottom: 10px;
+    margin-left: -10px;
+    margin-right: -10px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .menu-filter::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, and Opera */
   }
 
   .filter-btn {
-    margin: 5px;
+    flex-shrink: 0;
+    margin: 0 5px;
     padding: 8px 12px;
     font-size: 12px;
   }

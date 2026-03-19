@@ -163,7 +163,7 @@ function initMenuFilter() {
       menuItems.forEach(item => {
         const category = item.getAttribute('data-category');
         
-        if (filterValue === 'all' || category === filterValue) {
+        if (filterValue === 'popular' || category === filterValue) {
           item.classList.remove('hide');
         } else {
           item.classList.add('hide');
