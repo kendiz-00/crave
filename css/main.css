@@ -84,7 +84,6 @@ body {
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  margin-left: auto;
 }
 
 .logo-link {
@@ -110,6 +109,7 @@ body {
   align-items: center;
   flex-grow: 1;
   justify-content: flex-start;
+  margin-left: auto;
 }
 
 .navbar-menu-list {
@@ -1018,7 +1018,7 @@ form button:hover {
 
 .menu-image {
   position: relative;
-  height: 200px;
+  height: 180px;
   overflow: hidden;
 }
 
@@ -1076,7 +1076,7 @@ form button:hover {
 /* Responsive Menu */
 @media (max-width: 768px) {
   .menu-grid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
   }
 
