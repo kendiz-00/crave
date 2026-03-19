@@ -20,37 +20,38 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-	<!-- Header -->
-	<header>
-		<div class="wrap-menu-header gradient1 trans-0-4">
-			<div class="container h-full">
-				<div class="wrap_header trans-0-3">
-					<div class="logo">
-						<a href="index.html">
-							<img src="images/logo.png" alt="Crave Restaurant">
-						</a>
-					</div>
-
-					<div class="wrap_menu p-l-45 p-l-0-xl d-none d-md-block">
-						<nav class="menu">
-							<ul class="main_menu">
-								<li><a href="index.html">Home</a></li>
-								<li><a href="menu.html">Menu</a></li>
-								<li><a href="reservation.html">Reservation</a></li>
-								<li><a href="gallery.html">Gallery</a></li>
-								<li><a href="about.html">About</a></li>
-								<li><a href="blog.html">Blog</a></li>
-								<li><a href="contact.html">Contact</a></li>
-							</ul>
-						</nav>
-					</div>
-
-					<div class="flex-w flex-l-m">
-						<button class="btn-show-sidebar trans-0-4" style="min-width: 44px; min-height: 44px; font-size: 24px; padding: 8px 12px;"><i class="fa-solid fa-bars"></i></button>
-					</div>
+	<!-- Header/Navbar -->
+	<header class="navbar-header">
+		<nav class="navbar">
+			<div class="navbar-container">
+				<!-- Logo (Left) -->
+				<div class="navbar-logo">
+					<a href="index.html" class="logo-link">
+						<img src="images/logo.png" alt="Crave Restaurant" class="logo-img">
+					</a>
 				</div>
+
+				<!-- Navigation Menu (Center/Right) -->
+				<div class="navbar-menu" id="navbarMenu">
+					<ul class="navbar-menu-list">
+						<li class="navbar-menu-item"><a href="index.html" class="navbar-link">Home</a></li>
+						<li class="navbar-menu-item"><a href="menu.html" class="navbar-link">Menu</a></li>
+						<li class="navbar-menu-item"><a href="reservation.html" class="navbar-link">Reservation</a></li>
+						<li class="navbar-menu-item"><a href="gallery.html" class="navbar-link">Gallery</a></li>
+						<li class="navbar-menu-item"><a href="about.html" class="navbar-link">About</a></li>
+						<li class="navbar-menu-item"><a href="blog.html" class="navbar-link">Blog</a></li>
+						<li class="navbar-menu-item"><a href="contact.html" class="navbar-link">Contact</a></li>
+					</ul>
+				</div>
+
+				<!-- Mobile Menu Toggle -->
+				<button class="navbar-toggle" id="navbarToggle" aria-label="Toggle navigation">
+					<span class="hamburger-icon">
+						<i class="fa-solid fa-bars"></i>
+					</span>
+				</button>
 			</div>
-		</div>
+		</nav>
 	</header>
 
 	<!-- Sidebar -->

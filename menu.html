@@ -20,44 +20,45 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-	<!-- Header -->
-	<header>
-		<div class="wrap-menu-header gradient1 trans-0-4">
-			<div class="container h-full">
-				<div class="wrap_header trans-0-3">
-					<div class="logo">
-						<a href="cravee.html">
-							<img src="images/logo.png" alt="Crave Restaurant">
-						</a>
-					</div>
-
-					<div class="wrap_menu p-l-45">
-						<nav class="menu">
-							<ul class="main_menu">
-								<li><a href="cravee.html">Home</a></li>
-								<li><a href="menu.html">Menu</a></li>
-								<li><a href="reservation.html">Reservation</a></li>
-								<li><a href="gallery.html">Gallery</a></li>
-								<li><a href="about.html">About</a></li>
-								<li><a href="blog.html">Blog</a></li>
-								<li><a href="contact.html">Contact</a></li>
-							</ul>
-						</nav>
-					</div>
-
-					<div class="flex-w flex-l-m">
-						<button class="btn-show-sidebar trans-0-4">☰</button>
-					</div>
+	<!-- Header/Navbar -->
+	<header class="navbar-header">
+		<nav class="navbar">
+			<div class="navbar-container">
+				<!-- Logo (Left) -->
+				<div class="navbar-logo">
+					<a href="index.html" class="logo-link">
+						<img src="images/logo.png" alt="Crave Restaurant" class="logo-img">
+					</a>
 				</div>
+
+				<!-- Navigation Menu (Center/Right) -->
+				<div class="navbar-menu" id="navbarMenu">
+					<ul class="navbar-menu-list">
+						<li class="navbar-menu-item"><a href="index.html" class="navbar-link">Home</a></li>
+						<li class="navbar-menu-item"><a href="menu.html" class="navbar-link">Menu</a></li>
+						<li class="navbar-menu-item"><a href="reservation.html" class="navbar-link">Reservation</a></li>
+						<li class="navbar-menu-item"><a href="gallery.html" class="navbar-link">Gallery</a></li>
+						<li class="navbar-menu-item"><a href="about.html" class="navbar-link">About</a></li>
+						<li class="navbar-menu-item"><a href="blog.html" class="navbar-link">Blog</a></li>
+						<li class="navbar-menu-item"><a href="contact.html" class="navbar-link">Contact</a></li>
+					</ul>
+				</div>
+
+				<!-- Mobile Menu Toggle -->
+				<button class="navbar-toggle" id="navbarToggle" aria-label="Toggle navigation">
+					<span class="hamburger-icon">
+						<i class="fa-solid fa-bars"></i>
+					</span>
+				</button>
 			</div>
-		</div>
+		</nav>
 	</header>
 
 	<!-- Sidebar -->
 	<aside class="sidebar trans-0-4">
 		<button class="btn-hide-sidebar">✕</button>
 		<ul class="menu-sidebar p-t-95 p-b-70">
-			<li class="t-center m-b-13"><a href="cravee.html" class="txt19">Home</a></li>
+			<li class="t-center m-b-13"><a href="index.html" class="txt19">Home</a></li>
 			<li class="t-center m-b-13"><a href="menu.html" class="txt19">Menu</a></li>
 			<li class="t-center m-b-13"><a href="reservation.html" class="txt19">Reservation</a></li>
 			<li class="t-center m-b-13"><a href="gallery.html" class="txt19">Gallery</a></li>
@@ -68,99 +69,29 @@
 	</aside>
 
 	<!-- Menu Section -->
-	<section class="section-intro" style="padding: 80px 0;">
-		<div class="header-intro t-center p-t-50 p-b-50" style="background-color: rgba(0,0,0,0.5); color: #fff;">
-			<h2 class="tit1">Our Menu</h2>
-		</div>
+	<section class="menu-section p-t-115 p-b-120">
+		<div class="container">
+			<div class="title-section-ourmenu t-center m-b-22">
+				<span class="tit2 t-center">Discover</span>
+				<h3 class="tit5 t-center m-t-2">Our Menu</h3>
+			</div>
 
-		<div class="content-intro bg-white p-t-77 p-b-133">
-			<div class="container">
-
-				<!-- Anchor sections (targeted by menu filter links) -->
-				<div class="row">
-					<div class="col-12">
-						<section id="most-popular" class="m-b-60">
-							<h3 class="tit3 m-b-30">Most Popular</h3>
-							<div class="menu-item m-b-30">
-								<h4 class="txt5 m-b-10">Grilled Chicken Salad</h4>
-								<p class="m-b-5">Customer favorite made with fresh greens and house dressing.</p>
-								<p class="txt4">$15.99</p>
-							</div>
-							<div class="menu-item m-b-30">
-								<h4 class="txt5 m-b-10">Fresh Smoothie</h4>
-								<p class="m-b-5">Blend of seasonal fruits with yogurt and honey.</p>
-								<p class="txt4">$6.99</p>
-							</div>
-						</section>
-
-						<section id="loaded-fries" class="m-b-60">
-							<h3 class="tit3 m-b-30">Loaded Fries + Cheesy Fries</h3>
-							<div class="menu-item m-b-30">
-								<h4 class="txt5 m-b-10">Loaded Fries</h4>
-								<p class="m-b-5">Crispy fries topped with cheese, bacon and green onions.</p>
-								<p class="txt4">$9.99</p>
-							</div>
-						</section>
-
-						<section id="texas-chicken" class="m-b-60">
-							<h3 class="tit3 m-b-30">Texas Crispy Fried Chicken</h3>
-							<div class="menu-item m-b-30">
-								<h4 class="txt5 m-b-10">Crispy Chicken Plate</h4>
-								<p class="m-b-5">Buttermilk fried chicken served with coleslaw and fries.</p>
-								<p class="txt4">$14.99</p>
-							</div>
-						</section>
-
-						<section id="smoothies" class="m-b-60">
-							<h3 class="tit3 m-b-30">Smoothies</h3>
-							<div class="menu-item m-b-30">
-								<h4 class="txt5 m-b-10">Berry Blast Smoothie</h4>
-								<p class="m-b-5">Mixed berries, yogurt, and honey.</p>
-								<p class="txt4">$7.99</p>
-							</div>
-						</section>
-
-						<section id="milkshakes" class="m-b-60">
-							<h3 class="tit3 m-b-30">Milkshakes</h3>
-							<div class="menu-item m-b-30">
-								<h4 class="txt5 m-b-10">Vanilla Milkshake</h4>
-								<p class="m-b-5">Creamy vanilla shake topped with whipped cream.</p>
-								<p class="txt4">$5.99</p>
-							</div>
-						</section>
-
-						<section id="jamaican-kitchen" class="m-b-60">
-							<h3 class="tit3 m-b-30">Jamaican Kitchen</h3>
-							<div class="menu-item m-b-30">
-								<h4 class="txt5 m-b-10">Jerk Chicken</h4>
-								<p class="m-b-5">Spicy jerk-marinated chicken with rice & peas.</p>
-								<p class="txt4">$16.99</p>
-							</div>
-						</section>
-
-						<section id="cupcakes" class="m-b-60">
-							<h3 class="tit3 m-b-30">Cupcakes</h3>
-							<div class="menu-item m-b-30">
-								<h4 class="txt5 m-b-10">Red Velvet Cupcake</h4>
-								<p class="m-b-5">Classic red velvet cupcake with cream cheese frosting.</p>
-								<p class="txt4">$4.99</p>
-							</div>
-						</section>
-
-						<section id="cake-and-shakes" class="m-b-60">
-							<h3 class="tit3 m-b-30">Cake and Shakes</h3>
-							<div class="menu-item m-b-30">
-								<h4 class="txt5 m-b-10">Chocolate Cake Slice</h4>
-								<p class="m-b-5">Decadent chocolate cake served with your choice of shake.</p>
-								<p class="txt4">$10.99</p>
-							</div>
-						</section>
-					</div>
+			<!-- Sticky Category Navigation -->
+			<nav class="menu-sticky-nav">
+				<div class="sticky-nav-container">
+					<a class="sticky-nav-link active" href="#most-popular" data-section="most-popular">Most Popular</a>
+					<a class="sticky-nav-link" href="#loaded-fries" data-section="loaded-fries">Loaded Fries</a>
+					<a class="sticky-nav-link" href="#texas-chicken" data-section="texas-chicken">Texas Chicken</a>
+					<a class="sticky-nav-link" href="#smoothies" data-section="smoothies">Smoothies</a>
+					<a class="sticky-nav-link" href="#milkshakes" data-section="milkshakes">Milkshakes</a>
+					<a class="sticky-nav-link" href="#jamaican-kitchen" data-section="jamaican-kitchen">Jamaican</a>
+					<a class="sticky-nav-link" href="#cupcakes" data-section="cupcakes">Cupcakes</a>
+					<a class="sticky-nav-link" href="#cake-and-shakes" data-section="cake-and-shakes">Cake & Shakes</a>
 				</div>
+			</nav>
 
-				<div class="row">
-					<div class="col-md-6 p-t-30">
-						<h3 class="tit3 m-b-30">Lunch Menu</h3>
+			<!-- Menu Grid with Category Sections -->
+			<div class="menu-content-wrapper">
 						
 						<div class="menu-item m-b-30">
 							<h4 class="txt5 m-b-10">Pasta Carbonara</h4>
@@ -249,7 +180,285 @@
 							<p>3-course menu for 2 - $59.99</p>
 						</div>
 					</div>
-				</div>
+
+				<!-- Most Popular Section -->
+				<section id="most-popular" class="menu-category-section">
+					<h3 class="category-title">Most Popular</h3>
+					<div class="menu-grid">
+						<div class="menu-item" data-category="popular">
+							<div class="menu-card">
+								<div class="menu-image">
+									<img src="images/meat.jpeg" alt="Grilled Chicken Salad">
+									<div class="menu-badge popular">Popular</div>
+								</div>
+								<div class="menu-content">
+									<h4 class="menu-title">Grilled Chicken Salad</h4>
+									<p class="menu-description">Grilled chicken breast over mixed greens with balsamic vinaigrette</p>
+									<div class="menu-price">$15.99</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="menu-item" data-category="popular">
+							<div class="menu-card">
+								<div class="menu-image">
+									<img src="images/smoothies.jpeg" alt="Fresh Smoothie">
+									<div class="menu-badge popular">Popular</div>
+								</div>
+								<div class="menu-content">
+									<h4 class="menu-title">Fresh Smoothie</h4>
+									<p class="menu-description">Blend of seasonal fruits with yogurt and honey</p>
+									<div class="menu-price">$6.99</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="menu-item" data-category="popular">
+							<div class="menu-card">
+								<div class="menu-image">
+									<img src="images/coffee.jpeg" alt="Artisan Coffee" onerror="this.src='images/placeholder.jpg'">
+									<div class="menu-badge popular">Popular</div>
+								</div>
+								<div class="menu-content">
+									<h4 class="menu-title">Artisan Coffee</h4>
+									<p class="menu-description">Single-origin coffee beans roasted in-house</p>
+									<div class="menu-price">$4.99</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- Loaded Fries Section -->
+				<section id="loaded-fries" class="menu-category-section">
+					<h3 class="category-title">Loaded Fries + Cheesy Fries</h3>
+					<div class="menu-grid">
+						<div class="menu-item" data-category="fries">
+							<div class="menu-card">
+								<div class="menu-image">
+									<img src="images/tx-chick.jpeg" alt="Avocado Toast">
+									<div class="menu-badge popular">Popular</div>
+								</div>
+								<div class="menu-content">
+									<h4 class="menu-title">Avocado Toast</h4>
+									<p class="menu-description">Fresh avocado on artisanal bread with poached eggs and cherry tomatoes</p>
+									<div class="menu-price">$12.99</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="menu-item" data-category="fries">
+							<div class="menu-card">
+								<div class="menu-image">
+									<img src="images/pancakes.jpeg" alt="Fluffy Pancakes" onerror="this.src='images/placeholder.jpg'">
+								</div>
+								<div class="menu-content">
+									<h4 class="menu-title">Fluffy Pancakes</h4>
+									<p class="menu-description">Light and fluffy pancakes served with maple syrup and fresh berries</p>
+									<div class="menu-price">$9.99</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- Texas Chicken Section -->
+				<section id="texas-chicken" class="menu-category-section">
+					<h3 class="category-title">Texas Crispy Fried Chicken</h3>
+					<div class="menu-grid">
+						<div class="menu-item" data-category="chicken">
+							<div class="menu-card">
+								<div class="menu-image">
+									<img src="images/meat.jpeg" alt="Grilled Chicken Salad">
+									<div class="menu-badge popular">Popular</div>
+								</div>
+								<div class="menu-content">
+									<h4 class="menu-title">Grilled Chicken Salad</h4>
+									<p class="menu-description">Grilled chicken breast over mixed greens with balsamic vinaigrette</p>
+									<div class="menu-price">$15.99</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="menu-item" data-category="chicken">
+							<div class="menu-card">
+								<div class="menu-image">
+									<img src="images/wrap-01.jpeg" alt="Turkey Club Wrap">
+								</div>
+								<div class="menu-content">
+									<h4 class="menu-title">Turkey Club Wrap</h4>
+									<p class="menu-description">Sliced turkey, bacon, lettuce, and tomato in a whole wheat wrap</p>
+									<div class="menu-price">$11.99</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- Smoothies Section -->
+				<section id="smoothies" class="menu-category-section">
+					<h3 class="category-title">Smoothies</h3>
+					<div class="menu-grid">
+						<div class="menu-item" data-category="smoothies">
+							<div class="menu-card">
+								<div class="menu-image">
+									<img src="images/steak.jpeg" alt="Grilled Ribeye Steak" onerror="this.src='images/placeholder.jpg'">
+									<div class="menu-badge popular">Popular</div>
+								</div>
+								<div class="menu-content">
+									<h4 class="menu-title">Grilled Ribeye Steak</h4>
+									<p class="menu-description">8oz ribeye steak grilled to perfection with garlic mashed potatoes</p>
+									<div class="menu-price">$28.99</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="menu-item" data-category="smoothies">
+							<div class="menu-card">
+								<div class="menu-image">
+									<img src="images/pasta.jpeg" alt="Truffle Pasta" onerror="this.src='images/placeholder.jpg'">
+								</div>
+								<div class="menu-content">
+									<h4 class="menu-title">Truffle Pasta</h4>
+									<p class="menu-description">House-made pasta with black truffle oil, parmesan, and fresh herbs</p>
+									<div class="menu-price">$22.99</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- Milkshakes Section -->
+				<section id="milkshakes" class="menu-category-section">
+					<h3 class="category-title">Milkshakes</h3>
+					<div class="menu-grid">
+						<div class="menu-item" data-category="milkshakes">
+							<div class="menu-card">
+								<div class="menu-image">
+									<img src="images/smoothies.jpeg" alt="Fresh Smoothie">
+								</div>
+								<div class="menu-content">
+									<h4 class="menu-title">Fresh Smoothie</h4>
+									<p class="menu-description">Blend of seasonal fruits with yogurt and honey</p>
+									<div class="menu-price">$6.99</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="menu-item" data-category="milkshakes">
+							<div class="menu-card">
+								<div class="menu-image">
+									<img src="images/coffee.jpeg" alt="Artisan Coffee" onerror="this.src='images/placeholder.jpg'">
+									<div class="menu-badge popular">Popular</div>
+								</div>
+								<div class="menu-content">
+									<h4 class="menu-title">Artisan Coffee</h4>
+									<p class="menu-description">Single-origin coffee beans roasted in-house</p>
+									<div class="menu-price">$4.99</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- Jamaican Kitchen Section -->
+				<section id="jamaican-kitchen" class="menu-category-section">
+					<h3 class="category-title">Jamaican Kitchen</h3>
+					<div class="menu-grid">
+						<div class="menu-item" data-category="jamaican">
+							<div class="menu-card">
+								<div class="menu-image">
+									<img src="images/tx-chick.jpeg" alt="Jerk Chicken" onerror="this.src='images/placeholder.jpg'">
+									<div class="menu-badge popular">Popular</div>
+								</div>
+								<div class="menu-content">
+									<h4 class="menu-title">Jerk Chicken</h4>
+									<p class="menu-description">Traditional Jamaican jerk-marinated chicken with authentic spices</p>
+									<div class="menu-price">$16.99</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="menu-item" data-category="jamaican">
+							<div class="menu-card">
+								<div class="menu-image">
+									<img src="images/pancakes.jpeg" alt="Ackee and Saltfish" onerror="this.src='images/placeholder.jpg'">
+								</div>
+								<div class="menu-content">
+									<h4 class="menu-title">Ackee and Saltfish</h4>
+									<p class="menu-description">Jamaica's national dish with fresh ackee fruit and salted cod</p>
+									<div class="menu-price">$14.99</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- Cupcakes Section -->
+				<section id="cupcakes" class="menu-category-section">
+					<h3 class="category-title">Cupcakes</h3>
+					<div class="menu-grid">
+						<div class="menu-item" data-category="cupcakes">
+							<div class="menu-card">
+								<div class="menu-image">
+									<img src="images/cupcake.jpeg" alt="Red Velvet Cupcake" onerror="this.src='images/placeholder.jpg'">
+									<div class="menu-badge popular">Popular</div>
+								</div>
+								<div class="menu-content">
+									<h4 class="menu-title">Red Velvet Cupcake</h4>
+									<p class="menu-description">Classic red velvet with cream cheese frosting</p>
+									<div class="menu-price">$4.99</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="menu-item" data-category="cupcakes">
+							<div class="menu-card">
+								<div class="menu-image">
+									<img src="images/cupcake.jpeg" alt="Chocolate Cupcake" onerror="this.src='images/placeholder.jpg'">
+								</div>
+								<div class="menu-content">
+									<h4 class="menu-title">Chocolate Cupcake</h4>
+									<p class="menu-description">Rich chocolate cupcake with chocolate ganache</p>
+									<div class="menu-price">$4.99</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- Cake and Shakes Section -->
+				<section id="cake-and-shakes" class="menu-category-section">
+					<h3 class="category-title">Cake and Shakes</h3>
+					<div class="menu-grid">
+						<div class="menu-item" data-category="cake-shakes">
+							<div class="menu-card">
+								<div class="menu-image">
+									<img src="images/cupcake.jpeg" alt="Chocolate Cake" onerror="this.src='images/placeholder.jpg'">
+									<div class="menu-badge popular">Popular</div>
+								</div>
+								<div class="menu-content">
+									<h4 class="menu-title">Chocolate Cake</h4>
+									<p class="menu-description">Decadent chocolate cake with vanilla ice cream</p>
+									<div class="menu-price">$8.99</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="menu-item" data-category="cake-shakes">
+							<div class="menu-card">
+								<div class="menu-image">
+									<img src="images/smoothies.jpeg" alt="Vanilla Shake" onerror="this.src='images/placeholder.jpg'">
+								</div>
+								<div class="menu-content">
+									<h4 class="menu-title">Vanilla Shake</h4>
+									<p class="menu-description">Creamy vanilla milkshake with whipped cream</p>
+									<div class="menu-price">$5.99</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
 			</div>
 		</div>
 	</section>

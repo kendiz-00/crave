@@ -1,6 +1,9 @@
 // Main JavaScript File
 
 document.addEventListener('DOMContentLoaded', function() {
+  // Navbar toggle and sticky behavior
+  initNavbarBehavior();
+  
   // Sidebar toggle
   initSidebar();
   
@@ -15,7 +18,56 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Menu filtering
   initMenuFilter();
+  
+  // Menu category scroll detection
+  initMenuCategoryScroll();
 });
+
+/**
+ * Initialize Navbar Behavior (toggle + sticky shadow)
+ */
+function initNavbarBehavior() {
+  const navbarToggle = document.getElementById('navbarToggle');
+  const navbarMenu = document.getElementById('navbarMenu');
+  const navbarHeader = document.querySelector('.navbar-header');
+  const navbarLinks = document.querySelectorAll('.navbar-link');
+  
+  // Mobile menu toggle
+  if (navbarToggle && navbarMenu) {
+    navbarToggle.addEventListener('click', function() {
+      navbarMenu.classList.toggle('active');
+      navbarToggle.setAttribute('aria-expanded', 
+        navbarMenu.classList.contains('active'));
+    });
+    
+    // Close menu when clicking on a link
+    navbarLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        navbarMenu.classList.remove('active');
+        navbarToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+      if (!event.target.closest('.navbar-container')) {
+        navbarMenu.classList.remove('active');
+        navbarToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+  
+  // Sticky navbar shadow on scroll
+  window.addEventListener('scroll', function() {
+    if (navbarHeader) {
+      if (window.scrollY > 10) {
+        navbarHeader.classList.add('scrolled');
+      } else {
+        navbarHeader.classList.remove('scrolled');
+      }
+    }
+  });
+}
 
 /**
  * Initialize Sidebar Toggle
@@ -152,9 +204,46 @@ function initSwiper() {
 // Swiper is initialized by swiper-custom.js when loaded (cravee.html)
 
 /**
- * Initialize Menu Filter
+ * Initialize Menu Category Section Scroll Detection
  */
-function initMenuFilter() {
+function initMenuCategoryScroll() {
+  const stickyNav = document.querySelector('.menu-sticky-nav');
+  const navLinks = document.querySelectorAll('.sticky-nav-link');
+  const sections = document.querySelectorAll('.menu-category-section');
+  
+  if (navLinks.length === 0 || sections.length === 0) return;
+  
+  window.addEventListener('scroll', function() {
+    let current = '';
+    
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop - 200; // Account for sticky nav height
+      if (scrollY >= sectionTop) {
+        current = section.getAttribute('id');
+      }
+    });
+    
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('data-section') === current) {
+        link.classList.add('active');
+        
+        // Scroll the sticky nav to show the active link
+        const linkLeft = link.offsetLeft;
+        const linkWidth = link.offsetWidth;
+        const containerWidth = link.parentElement.offsetWidth;
+        const scrollLeft = link.parentElement.scrollLeft;
+        
+        if (linkLeft < scrollLeft) {
+          link.parentElement.scrollLeft = linkLeft - 10;
+        } else if (linkLeft + linkWidth > scrollLeft + containerWidth) {
+          link.parentElement.scrollLeft = linkLeft + linkWidth - containerWidth + 10;
+        }
+      }
+    });
+  });
+}
+
   const filterButtons = document.querySelectorAll('.filter-btn');
   const menuItems = document.querySelectorAll('.menu-item');
   
