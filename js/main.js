@@ -63,6 +63,16 @@ function initSmoothScroll() {
       }
     });
   });
+
+  // Smooth scroll when landing on a page with a hash (e.g., menu.html#smoothies)
+  if (window.location.hash) {
+    const target = document.querySelector(window.location.hash);
+    if (target) {
+      setTimeout(() => {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+    }
+  }
 }
 
 /**

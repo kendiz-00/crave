@@ -12,6 +12,10 @@ img, picture, video, canvas, svg {
   display: block;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html, body {
   font-family: 'Arial', sans-serif;
   background-color: #fff;
@@ -805,6 +809,11 @@ form button:hover {
 }
 
 .filter-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+
   background: transparent;
   border: 2px solid #d4a574;
   color: #d4a574;
