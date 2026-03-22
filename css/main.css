@@ -145,6 +145,90 @@ body {
   border-bottom-color: #d4a574;
 }
 
+/* Global subtle fade/slide animations */
+.animated {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  will-change: opacity, transform;
+}
+
+.fadeInUp {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1);
+  transition: transform 15s linear;
+  will-change: transform;
+  animation: slowZoom 20s linear infinite alternate;
+}
+
+@keyframes slowZoom {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.03); }
+}
+
+.btn-hero, .btn1, .btn2, .btn3, .btn-order, .btn-add-cart {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+}
+
+.btn-hero:hover,
+.btn1:hover,
+.btn2:hover,
+.btn3:hover,
+.btn-order:hover,
+.btn-add-cart:hover,
+.mobile-order-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.16);
+  border-color: #d4a574;
+}
+
+.menu-card {
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.menu-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.18);
+}
+
+.menu-image img {
+  transition: transform 0.45s ease;
+}
+
+.menu-card:hover .menu-image img,
+.hero-content:hover .hero-headline,
+.hero-content:hover .hero-subheading {
+  transform: scale(1.05);
+}
+
+/* ensures enough CPU utilization with minimal layout thrashing */
+.hero-headline,
+.hero-subheading,
+.hero-pretitle,
+.hero-buttons {
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.hero-content.animated.visible-false {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.hero-content.fadeInUp {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* end global subtle animations */
+
 /* Mobile Menu Toggle */
 .navbar-toggle {
   display: none;

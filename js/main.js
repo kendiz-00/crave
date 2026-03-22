@@ -288,6 +288,39 @@ function initAnimations() {
   elements.forEach(el => observer.observe(el));
 }
 
+function initMenuScrollAnimations() {
+  const items = document.querySelectorAll('.menu-card, .testimonial-card, .hero-content, .menu-section, .testimonials-section, footer');
+  if (!items.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const target = entry.target;
+
+        let delay = 0;
+        if (target.dataset && typeof target.dataset.index !== 'undefined') {
+          delay = Number(target.dataset.index) * 0.12;
+        }
+
+        target.style.transitionDelay = `${delay}s`;
+        target.classList.add('fadeInUp');
+        target.classList.remove('visible-false');
+        observer.unobserve(target);
+      }
+    });
+  }, {
+    threshold: 0.15
+  });
+
+  items.forEach((item, index) => {
+    if (!item.classList.contains('visible-false')) {
+      item.classList.add('visible-false');
+    }
+    item.dataset.index = index;
+    observer.observe(item);
+  });
+}
+
 /**
  * Swiper initialization (if Swiper library is loaded)
  */
