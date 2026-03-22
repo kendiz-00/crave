@@ -21,6 +21,10 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Menu category scroll detection
   initMenuCategoryScroll();
+  
+  // Menu card generation and animations
+  initMenuCards();
+  initMenuScrollAnimations();
 });
 
 /**
@@ -298,4 +302,97 @@ function initMenuCategoryScroll() {
       });
     });
   });
+}
+
+/**
+ * Initialize Menu Cards Generation (reusable template)
+ */
+function initMenuCards() {
+  // Only run on menu.html
+  if (!window.location.pathname.includes('menu.html')) return;
+
+  const menuData = {
+    'most-popular': [
+      { img: 'images/meat.jpeg', alt: 'Grilled Chicken Salad', title: 'Grilled Chicken Salad', desc: 'Grilled chicken breast over mixed greens with balsamic vinaigrette', price: '$15.99', badge: '🔥 Popular' },
+      { img: 'images/smoothies.jpeg', alt: 'Fresh Smoothie', title: 'Fresh Smoothie', desc: 'Blend of seasonal fruits with yogurt and honey', price: '$6.99', badge: 'Best Seller' },
+      { img: 'images/coffee.jpeg', alt: 'Artisan Coffee', title: 'Artisan Coffee', desc: 'Single-origin coffee beans roasted in-house', price: '$4.99', badge: 'Popular' }
+    ],
+    'loaded-fries': [
+      { img: 'images/tx-chick.jpeg', alt: 'Avocado Toast', title: 'Avocado Toast', desc: 'Fresh avocado on artisanal bread with poached eggs and cherry tomatoes', price: '$12.99', badge: '🔥 Popular' },
+      { img: 'images/pancakes.jpeg', alt: 'Fluffy Pancakes', title: 'Fluffy Pancakes', desc: 'Light and fluffy pancakes served with maple syrup and fresh berries', price: '$9.99' }
+    ],
+    'texas-chicken': [
+      { img: 'images/meat.jpeg', alt: 'Grilled Chicken Salad', title: 'Grilled Chicken Salad', desc: 'Grilled chicken breast over mixed greens with balsamic vinaigrette', price: '$15.99', badge: '🔥 Popular' },
+      { img: 'images/wrap-01.jpeg', alt: 'Turkey Club Wrap', title: 'Turkey Club Wrap', desc: 'Sliced turkey, bacon, lettuce, and tomato in a whole wheat wrap', price: '$11.99' }
+    ],
+    'smoothies': [
+      { img: 'images/steak.jpeg', alt: 'Grilled Ribeye Steak', title: 'Grilled Ribeye Steak', desc: '8oz ribeye steak grilled to perfection with garlic mashed potatoes', price: '$28.99', badge: '🔥 Popular' },
+      { img: 'images/pasta.jpeg', alt: 'Truffle Pasta', title: 'Truffle Pasta', desc: 'House-made pasta with black truffle oil, parmesan, and fresh herbs', price: '$22.99' }
+    ],
+    'milkshakes': [
+      { img: 'images/smoothies.jpeg', alt: 'Fresh Smoothie', title: 'Fresh Smoothie', desc: 'Blend of seasonal fruits with yogurt and honey', price: '$6.99' },
+      { img: 'images/coffee.jpeg', alt: 'Artisan Coffee', title: 'Artisan Coffee', desc: 'Single-origin coffee beans roasted in-house', price: '$4.99', badge: 'Popular' }
+    ],
+    'jamaican-kitchen': [
+      { img: 'images/meat.jpeg', alt: 'Jerk Chicken', title: 'Jerk Chicken', desc: 'Spicy marinated chicken with traditional Jamaican spices', price: '$16.99', badge: '🔥 Popular' }
+    ],
+    'cupcakes': [
+      { img: 'images/cupcake.jpeg', alt: 'Red Velvet Cupcake', title: 'Red Velvet Cupcake', desc: 'Classic red velvet with cream cheese frosting', price: '$4.50' }
+    ],
+    'cake-and-shakes': [
+      { img: 'images/cupcake.jpeg', alt: 'Chocolate Cake', title: 'Chocolate Cake', desc: 'Rich chocolate cake with vanilla ice cream', price: '$7.99' }
+    ]
+  };
+
+  function createMenuCard(item) {
+    const badgeHtml = item.badge ? `<div class="menu-badge">${item.badge}</div>` : '';
+    return `
+      <div class="menu-item" data-category="${item.category || 'popular'}">
+        <div class="menu-card">
+          <div class="menu-image">
+            <img src="${item.img}" alt="${item.alt}" onerror="this.src='images/placeholder.jpg'">
+            ${badgeHtml}
+          </div>
+          <div class="menu-content">
+            <h4 class="menu-title">${item.title}</h4>
+            <p class="menu-description">${item.desc}</p>
+            <div class="menu-price">${item.price}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  Object.keys(menuData).forEach(sectionId => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      const grid = section.querySelector('.menu-grid');
+      if (grid) {
+        grid.innerHTML = menuData[sectionId].map(createMenuCard).join('');
+      }
+    }
+  });
+}
+
+/**
+ * Initialize Menu Scroll Animations (fade in on scroll)
+ */
+function initMenuScrollAnimations() {
+  const menuItems = document.querySelectorAll('.menu-item');
+  
+  if (menuItems.length === 0) return;
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('fade-in');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  });
+  
+  menuItems.forEach(item => observer.observe(item));
 }

@@ -981,9 +981,19 @@ form button:hover {
   }
 }
 
-/* Menu Section */
-.menu-section {
-  background: #f9f9f9;
+/* Menu Category Sections */
+.menu-category-section {
+  padding-top: 50px;
+  padding-bottom: 60px;
+}
+
+.category-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 25px;
+  text-align: center;
 }
 
 .menu-filter {
@@ -1032,6 +1042,16 @@ form button:hover {
   opacity: 0;
   transform: scale(0.8);
   pointer-events: none;
+}
+
+.menu-item.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.menu-item:not(.fade-in) {
+  opacity: 0;
+  transform: translateY(20px);
 }
 
 .menu-card {
