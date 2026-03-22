@@ -289,7 +289,7 @@ function initAnimations() {
 }
 
 function initMenuScrollAnimations() {
-  const items = document.querySelectorAll('.menu-card, .testimonial-card, .hero-content, .menu-section, .testimonials-section, footer');
+  const items = document.querySelectorAll('.menu-item, .testimonial-card, .hero-content, .menu-section, .testimonials-section, footer');
   if (!items.length) return;
 
   const observer = new IntersectionObserver((entries) => {
@@ -319,6 +319,17 @@ function initMenuScrollAnimations() {
     item.dataset.index = index;
     observer.observe(item);
   });
+
+  // Fallback for stale observers - trigger animation after 3 seconds if not already animated
+  setTimeout(() => {
+    items.forEach(item => {
+      if (item.classList.contains('visible-false')) {
+        item.classList.add('fadeInUp');
+        item.classList.remove('visible-false');
+        item.classList.add('cards-loading-fallback');
+      }
+    });
+  }, 3000);
 }
 
 /**
