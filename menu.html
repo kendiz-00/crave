@@ -42,7 +42,7 @@
 					<span class="navbar-toggle-bar"></span>
 				</button>
 
-				<div class="navbar-menu" id="navbarMenu">
+				<div class="navbar-menu" id="navbarMenu" aria-hidden="true" aria-label="Mobile navigation">
 					<ul class="navbar-menu-list">
 						<li class="navbar-menu-item"><a href="index.html" class="navbar-link" data-page="home">Home</a></li>
 						<li class="navbar-menu-item"><a href="menu.html" class="navbar-link" data-page="menu">Menu</a></li>
@@ -214,6 +214,36 @@
 		</div>
 	</section>
 
+	<!-- Testimonials Section -->
+	<section class="testimonials-section p-t-115 p-b-115">
+		<div class="container">
+			<div class="title-section-ourmenu t-center m-b-22">
+				<span class="tit2 t-center">What Our Customers Say</span>
+				<h3 class="tit5 t-center m-t-2">Real Reviews from Real Guests</h3>
+			</div>
+
+			<div class="testimonials-grid">
+				<div class="testimonial-card fade-in">
+					<div class="testimonial-stars">★★★★★</div>
+					<p class="testimonial-review">Best brunch spot in Accra. Everything was fresh and delicious!</p>
+					<div class="testimonial-author">— Kofi Mensah</div>
+				</div>
+
+				<div class="testimonial-card fade-in">
+					<div class="testimonial-stars">★★★★★</div>
+					<p class="testimonial-review">The jerk chicken is insane. I keep coming back!</p>
+					<div class="testimonial-author">— Ama Osei</div>
+				</div>
+
+				<div class="testimonial-card fade-in">
+					<div class="testimonial-stars">★★★★★</div>
+					<p class="testimonial-review">Amazing vibes, great food, and fast service.</p>
+					<div class="testimonial-author">— Nana Akua</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
 	<!-- Footer -->
 	<footer>
 		<div class="container">
@@ -227,6 +257,9 @@
 		</div>
 	</footer>
 
+	<div class="mobile-order-bar" id="mobileOrderBar">
+		<button id="mobileOrderNow" class="mobile-order-btn" type="button" aria-label="Order now on WhatsApp">Order Now via WhatsApp</button>
+	</div>
 	<script src="js/vendor-setup.js"></script>
 	<script src="js/main.js"></script>
 </body>

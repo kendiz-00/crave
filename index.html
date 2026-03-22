@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+    <link rel="preload" as="image" href="images/cover_page.jpeg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -42,7 +43,7 @@
 					<span class="navbar-toggle-bar"></span>
 				</button>
 
-				<div class="navbar-menu" id="navbarMenu">
+				<div class="navbar-menu" id="navbarMenu" aria-hidden="true" aria-label="Mobile navigation">
 					<ul class="navbar-menu-list">
 						<li class="navbar-menu-item"><a href="index.html" class="navbar-link" data-page="home">Home</a></li>
 						<li class="navbar-menu-item"><a href="menu.html" class="navbar-link" data-page="menu">Menu</a></li>
@@ -146,7 +147,7 @@
 
 				<div class="col-md-6 p-b-30">
 					<div class="wrap-pic-welcome size2 bo-rad-10 hov-img-zoom m-l-r-auto">
-						<img src="images/our-story-01.jpg" alt="Our Restaurant">
+						<img src="images/our-story-01.jpg" alt="Our Restaurant" loading="lazy">
 					</div>
 				</div>
 			</div>
@@ -811,6 +812,36 @@
 		</div>
 	</section>
 
+	<!-- Testimonials Section -->
+	<section class="testimonials-section p-t-115 p-b-115">
+		<div class="container">
+			<div class="title-section-ourmenu t-center m-b-22">
+				<span class="tit2 t-center">What Our Customers Say</span>
+				<h3 class="tit5 t-center m-t-2">Real Reviews from Real Guests</h3>
+			</div>
+
+			<div class="testimonials-grid">
+				<div class="testimonial-card fade-in">
+					<div class="testimonial-stars">★★★★★</div>
+					<p class="testimonial-review">Best brunch spot in Accra. Everything was fresh and delicious!</p>
+					<div class="testimonial-author">— Kofi Mensah</div>
+				</div>
+
+				<div class="testimonial-card fade-in">
+					<div class="testimonial-stars">★★★★★</div>
+					<p class="testimonial-review">The jerk chicken is insane. I keep coming back!</p>
+					<div class="testimonial-author">— Ama Osei</div>
+				</div>
+
+				<div class="testimonial-card fade-in">
+					<div class="testimonial-stars">★★★★★</div>
+					<p class="testimonial-review">Amazing vibes, great food, and fast service.</p>
+					<div class="testimonial-author">— Nana Akua</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
 	<!-- Booking Section -->
 	<section class="section-booking bg1-pattern p-t-100 p-b-110">
 		<div class="container">
@@ -1220,6 +1251,9 @@
 	</div>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/js/bootstrap.bundle.min.js"></script>
+	<div class="mobile-order-bar" id="mobileOrderBar">
+		<button id="mobileOrderNow" class="mobile-order-btn" type="button" aria-label="Order now on WhatsApp">Order Now via WhatsApp</button>
+	</div>
 	<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 	<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>

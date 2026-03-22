@@ -25,10 +25,23 @@ document.addEventListener('DOMContentLoaded', function() {
   // Menu card generation and animations
   initMenuCards();
   initMenuScrollAnimations();
+
+  // Protect flaky duplicate listener by resetting
+  initTestimonialsCarousel();
   
   // WhatsApp order actions
   initWhatsAppOrders();
   initMenuCart();
+
+  // Mobile quick order bar
+  initMobileOrderBar();
+
+  // Performance: idle-time preload hero background
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(preloadHeroBackground, { timeout: 2500 });
+  } else {
+    window.addEventListener('load', preloadHeroBackground);
+  }
 });
 
 /**
@@ -43,10 +56,43 @@ function initNavbarBehavior() {
   function closeMobileMenu() {
     if (navbarMenu) {
       navbarMenu.classList.remove('open');
+      navbarMenu.setAttribute('aria-hidden', 'true');
     }
     if (navbarToggle) {
       navbarToggle.classList.remove('open');
       navbarToggle.setAttribute('aria-expanded', 'false');
+      navbarToggle.focus();
+    }
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', trapTabKey);
+  }
+
+  function updateFocusTrap() {
+    const focusable = navbarMenu.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])');
+    const focusArray = Array.from(focusable);
+    return {
+      first: focusArray[0],
+      last: focusArray[focusArray.length - 1],
+    };
+  }
+
+  function trapTabKey(e) {
+    if (!navbarMenu.classList.contains('open')) return;
+    if (e.key !== 'Tab') return;
+
+    const { first, last } = updateFocusTrap();
+    if (!first || !last) return;
+
+    if (e.shiftKey) {
+      if (document.activeElement === first || document.activeElement === navbarToggle) {
+        e.preventDefault();
+        last.focus();
+      }
+    } else {
+      if (document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     }
   }
 
@@ -57,6 +103,16 @@ function initNavbarBehavior() {
       const isOpen = navbarMenu.classList.contains('open');
       navbarToggle.classList.toggle('open', isOpen);
       navbarToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      navbarMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+
+      if (isOpen) {
+        const { first } = updateFocusTrap();
+        if (first) first.focus();
+        document.addEventListener('keydown', trapTabKey);
+      } else {
+        document.removeEventListener('keydown', trapTabKey);
+      }
     });
 
     navbarLinks.forEach(link => {
@@ -102,6 +158,36 @@ function initNavbarBehavior() {
 
   window.addEventListener('scroll', updateHeaderShadow, { passive: true });
   updateHeaderShadow();
+  initAdaptiveMenuSizing();
+}
+
+function initAdaptiveMenuSizing() {
+  const mql = window.matchMedia('(max-width: 768px)');
+  const navbarLinks = document.querySelectorAll('.navbar-link');
+
+  function applySizing() {
+    const isCompact = mql.matches;
+    navbarLinks.forEach(link => {
+      link.style.fontSize = isCompact ? '16px' : '15px';
+      link.style.padding = isCompact ? '12px 18px' : '0.5rem 0.65rem';
+    });
+  }
+
+  mql.addEventListener('change', applySizing);
+  applySizing();
+}
+
+function preloadHeroBackground() {
+  const heroUrl = 'images/cover_page.jpeg';
+  if (!heroUrl) return;
+  const heroImg = new Image();
+  heroImg.src = heroUrl;
+  heroImg.onload = () => {
+    /* loaded */
+  };
+  heroImg.onerror = () => {
+    /* fallback or ignore */
+  };
 }
 
 
@@ -280,6 +366,7 @@ function initMenuCategoryScroll() {
   });
 }
 
+function initMenuFilter() {
   const filterButtons = document.querySelectorAll('.filter-btn');
   const menuItems = document.querySelectorAll('.menu-item');
   
@@ -354,7 +441,7 @@ function initMenuCards() {
       <div class="menu-item" data-category="${item.category || 'popular'}">
         <div class="menu-card">
           <div class="menu-image">
-            <img src="${item.img}" alt="${item.alt}" onerror="this.src='images/placeholder.jpg'">
+            <img src="${item.img}" alt="${item.alt}" loading="lazy" onerror="this.src='images/placeholder.jpg'">
             ${badgeHtml}
           </div>
           <div class="menu-content">
@@ -505,4 +592,108 @@ function initMenuCart() {
 
   updateCartSummary();
 }
+
+/**
+ * Initialize Mobile Sticky Order Bar
+ */
+function initMobileOrderBar() {
+  const orderBtn = document.getElementById('mobileOrderNow');
+  const phoneNumber = '233550020788';
+
+  if (!orderBtn) return;
+
+  orderBtn.addEventListener('click', function() {
+    const message = 'Hi Crave, I would like to place an order.';
+    const encoded = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encoded}`;
+    window.open(whatsappUrl, '_blank');
+  });
+}
+
+
+/**
+ * Initialize Testimonials Carousel Auto-Scroll + Dots
+ */
+function initTestimonialsCarousel() {
+  const sections = document.querySelectorAll('.testimonials-section');
+  if (!sections.length) return;
+
+  sections.forEach(section => {
+    const carousel = section.querySelector('.testimonials-grid');
+    const slides = carousel ? Array.from(carousel.querySelectorAll('.testimonial-card')) : [];
+    if (!carousel || !slides.length) return;
+
+    let currentSlide = 0;
+    let intervalId = null;
+
+    // Activate first slide
+    function updateSlides() {
+      slides.forEach((slide, index) => {
+        slide.classList.toggle('active', index === currentSlide);
+      });
+      const dots = section.querySelectorAll('.testimonial-dot');
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+      });
+    }
+
+    function moveTo(index) {
+      currentSlide = (index + slides.length) % slides.length;
+      updateSlides();
+      resetAutoScroll();
+    }
+
+    function prevSlide() {
+      moveTo(currentSlide - 1);
+    }
+
+    function nextSlide() {
+      moveTo(currentSlide + 1);
+    }
+
+    function resetAutoScroll() {
+      if (intervalId) clearInterval(intervalId);
+      intervalId = setInterval(nextSlide, 5000);
+    }
+
+    // Add controls
+    const controls = document.createElement('div');
+    controls.className = 'testimonial-controls';
+    controls.innerHTML = `
+      <button class="testimonial-arrow testimonial-prev" aria-label="Previous testimonial">⟨</button>
+      <button class="testimonial-arrow testimonial-next" aria-label="Next testimonial">⟩</button>
+    `;
+    section.appendChild(controls);
+
+    controls.querySelector('.testimonial-prev').addEventListener('click', prevSlide);
+    controls.querySelector('.testimonial-next').addEventListener('click', nextSlide);
+
+    // Add dots
+    const dotsContainer = document.createElement('div');
+    dotsContainer.className = 'testimonial-dots';
+
+    slides.forEach((_, idx) => {
+      const dot = document.createElement('span');
+      dot.className = 'testimonial-dot';
+      dot.setAttribute('aria-label', `Go to testimonial ${idx + 1}`);
+      dot.addEventListener('click', () => moveTo(idx));
+      dotsContainer.appendChild(dot);
+    });
+
+    section.appendChild(dotsContainer);
+
+    updateSlides();
+    resetAutoScroll();
+
+    section.addEventListener('mouseenter', function() {
+      if (intervalId) clearInterval(intervalId);
+    });
+
+    section.addEventListener('mouseleave', function() {
+      resetAutoScroll();
+    });
+  });
+}
+
+
 
