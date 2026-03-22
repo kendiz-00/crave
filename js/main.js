@@ -25,6 +25,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Menu card generation and animations
   initMenuCards();
   initMenuScrollAnimations();
+  
+  // WhatsApp order actions
+  initWhatsAppOrders();
+  initMenuCart();
 });
 
 /**
@@ -357,6 +361,13 @@ function initMenuCards() {
             <h4 class="menu-title">${item.title}</h4>
             <p class="menu-description">${item.desc}</p>
             <div class="menu-price">${item.price}</div>
+            <div class="qty-controls">
+              <button class="qty-btn" data-action="decrease" data-item="${item.title}" type="button">-</button>
+              <input class="qty-input" type="number" min="1" value="1" data-item="${item.title}" />
+              <button class="qty-btn" data-action="increase" data-item="${item.title}" type="button">+</button>
+            </div>
+            <button class="btn-add-cart" data-item="${item.title}" data-price="${item.price}">Add to Cart</button>
+            <button class="btn-order" data-item="${item.title}">Order This Item</button>
           </div>
         </div>
       </div>
@@ -375,24 +386,123 @@ function initMenuCards() {
 }
 
 /**
- * Initialize Menu Scroll Animations (fade in on scroll)
+ * Initialize WhatsApp Order Integration
  */
-function initMenuScrollAnimations() {
-  const menuItems = document.querySelectorAll('.menu-item');
-  
-  if (menuItems.length === 0) return;
-  
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('fade-in');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
+function initWhatsAppOrders() {
+  document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('btn-order')) {
+      event.preventDefault();
+      const itemName = event.target.getAttribute('data-item');
+      const phoneNumber = '233550020788';
+      const message = `Hi Crave, I'd like to order ${itemName}`;
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+      window.open(whatsappUrl, '_blank');
+    }
   });
-  
-  menuItems.forEach(item => observer.observe(item));
 }
+
+const cart = {};
+
+function getItemKey(itemTitle) {
+  return itemTitle.trim().toLowerCase().replace(/\s+/g, '-');
+}
+
+function parsePrice(value) {
+  const number = parseFloat(value.replace(/[^0-9.]/g, ''));
+  return Number.isNaN(number) ? 0 : number;
+}
+
+function updateCartSummary() {
+  const orderCount = Object.values(cart).reduce((total, item) => total + item.quantity, 0);
+  const orderSummary = document.getElementById('orderCount');
+  if (orderSummary) {
+    orderSummary.textContent = orderCount > 0 ? `Cart: ${orderCount} item${orderCount > 1 ? 's' : ''}` : 'Cart is empty';
+  }
+}
+
+function clearCart() {
+  Object.keys(cart).forEach(key => delete cart[key]);
+  updateCartSummary();
+}
+
+function buildWhatsAppCartMessage() {
+  const lines = Object.values(cart).map(item => `${item.quantity} x ${item.title} (${item.price})`);
+  if (lines.length === 0) return '';
+  return `Hi Crave, I'd like to order:\n${lines.join('\n')}`;
+}
+
+function initMenuCart() {
+  document.addEventListener('click', function(event) {
+    const target = event.target;
+
+    if (target.matches('.btn-add-cart')) {
+      event.preventDefault();
+      const itemTitle = target.getAttribute('data-item');
+      const itemPrice = target.getAttribute('data-price') || '$0';
+      const itemKey = getItemKey(itemTitle);
+      const qtyInput = document.querySelector(`.qty-input[data-item="${itemTitle}"]`);
+      const quantity = Math.max(1, Number(qtyInput ? qtyInput.value : 1));
+
+      if (!cart[itemKey]) {
+        cart[itemKey] = { title: itemTitle, price: itemPrice, quantity };
+      } else {
+        cart[itemKey].quantity += quantity;
+      }
+
+      updateCartSummary();
+      if (qtyInput) qtyInput.value = 1;
+      return;
+    }
+
+    if (target.matches('#checkoutOrder')) {
+      event.preventDefault();
+      const message = buildWhatsAppCartMessage();
+      if (!message) {
+        alert('Cart is empty. Add an item before checkout.');
+        return;
+      }
+      const phoneNumber = '233550020788';
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+      window.open(whatsappUrl, '_blank');
+      return;
+    }
+
+    if (target.matches('#clearCart')) {
+      event.preventDefault();
+      clearCart();
+      return;
+    }
+
+    if (target.matches('.qty-btn')) {
+      event.preventDefault();
+      const action = target.getAttribute('data-action');
+      const itemTitle = target.getAttribute('data-item');
+      const qtyInput = document.querySelector(`.qty-input[data-item="${itemTitle}"]`);
+      if (!qtyInput) return;
+
+      let currentQty = Number(qtyInput.value) || 1;
+      if (action === 'increase') {
+        currentQty += 1;
+      } else if (action === 'decrease') {
+        currentQty = Math.max(1, currentQty - 1);
+      }
+      qtyInput.value = currentQty;
+      return;
+    }
+  });
+
+  document.addEventListener('input', function(event) {
+    const target = event.target;
+    if (target.matches('.qty-input')) {
+      const value = Number(target.value);
+      if (Number.isNaN(value) || value < 1) {
+        target.value = 1;
+      }
+    }
+  });
+
+  updateCartSummary();
+}
+
