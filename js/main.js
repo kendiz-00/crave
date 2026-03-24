@@ -379,15 +379,30 @@ function initMenuCategoryScroll() {
   
   if (navLinks.length === 0 || sections.length === 0) return;
   
-  window.addEventListener('scroll', function() {
+  // Get navbar height for accurate offset calculation
+  const navbar = document.querySelector('.navbar-header');
+  const navbarHeight = navbar ? navbar.offsetHeight : 64;
+  const stickyNavHeight = stickyNav ? stickyNav.offsetHeight : 60;
+  const totalOffset = navbarHeight + stickyNavHeight + 20; // 20px extra buffer
+  
+  // Throttle function for better performance
+  let ticking = false;
+  function updateActiveCategory() {
     let current = '';
     
     sections.forEach(section => {
-      const sectionTop = section.offsetTop - 200; // Account for sticky nav height
-      if (scrollY >= sectionTop) {
+      const sectionTop = section.offsetTop - totalOffset;
+      const sectionBottom = sectionTop + section.offsetHeight;
+      
+      if (scrollY >= sectionTop && scrollY < sectionBottom) {
         current = section.getAttribute('id');
       }
     });
+    
+    // Handle case when scrolling above first section
+    if (scrollY < sections[0].offsetTop - totalOffset) {
+      current = sections[0].getAttribute('id');
+    }
     
     navLinks.forEach(link => {
       link.classList.remove('active');
@@ -407,7 +422,16 @@ function initMenuCategoryScroll() {
         }
       }
     });
-  });
+    
+    ticking = false;
+  }
+  
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      requestAnimationFrame(updateActiveCategory);
+      ticking = true;
+    }
+  }, { passive: true });
 }
 
 function initMenuFilter() {
