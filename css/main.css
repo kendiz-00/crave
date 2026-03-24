@@ -290,19 +290,20 @@ body {
     align-items: center;
     justify-content: flex-start; /* Start from left */
     padding: 15px 20px;
-    min-height: 64px; /* Ensure consistent height */
-    height: auto;
+    min-height: 64px;
+    overflow-x: auto; /* Allow horizontal scrolling if needed */
+    flex-wrap: nowrap; /* Prevent wrapping */
   }
 
   .navbar-logo {
-    margin-bottom: 0; /* Remove bottom margin */
-    margin-right: 30px; /* Space between logo and nav */
+    margin-bottom: 0;
+    margin-right: 25px; /* Space between logo and nav */
     flex-shrink: 0; /* Prevent shrinking */
   }
 
   .navbar-menu {
     position: static;
-    width: auto; /* Auto width */
+    width: auto;
     background-color: transparent;
     max-height: none;
     overflow: visible;
@@ -310,16 +311,18 @@ body {
     opacity: 1;
     border-top: none;
     order: unset;
-    flex: 1; /* Take remaining space */
+    flex: 1;
+    flex-shrink: 0; /* Prevent shrinking */
   }
 
   .navbar-menu-list {
     flex-direction: row; /* Horizontal layout */
-    flex-wrap: nowrap; /* Don't wrap */
-    gap: 20px; /* Consistent spacing */
-    width: 100%;
+    flex-wrap: nowrap; /* CRITICAL: Prevent wrapping */
+    gap: 15px; /* Reduced gap for mobile */
+    width: auto;
     align-items: center;
-    justify-content: flex-start; /* Align to left, next to logo */
+    justify-content: flex-start;
+    flex-shrink: 0; /* Prevent shrinking */
   }
 
   .navbar-menu-item {
@@ -331,13 +334,14 @@ body {
   }
 
   .navbar-link {
-    width: auto; /* Auto width */
-    padding: 8px 12px;
-    font-size: 14px;
+    width: auto;
+    padding: 6px 10px; /* Reduced padding */
+    font-size: 13px; /* Slightly smaller font */
     transition: color 0.2s ease;
     text-align: center;
     white-space: nowrap;
-    line-height: 1; /* Ensure same line height */
+    line-height: 1;
+    flex-shrink: 0; /* Prevent shrinking */
   }
 
   .navbar-link:hover {
@@ -349,11 +353,13 @@ body {
 @media (max-width: 480px) {
   .navbar-container {
     padding: 12px 15px;
-    min-height: 55px; /* Consistent smaller height */
+    min-height: 55px;
+    overflow-x: auto; /* Allow horizontal scrolling */
+    flex-wrap: nowrap; /* Prevent wrapping */
   }
 
   .navbar-logo {
-    margin-right: 20px; /* Adjusted spacing */
+    margin-right: 20px; /* Reduced spacing */
   }
 
   .logo-img {
@@ -361,13 +367,13 @@ body {
   }
 
   .navbar-menu-list {
-    gap: 12px; /* Consistent spacing */
+    gap: 10px; /* Even smaller gap */
   }
 
   .navbar-link {
-    font-size: 12px;
-    padding: 6px 8px; /* Tighter padding */
-    line-height: 1; /* Same line height */
+    font-size: 12px; /* Even smaller font */
+    padding: 5px 8px; /* Even tighter padding */
+    line-height: 1;
   }
 }
 
