@@ -288,20 +288,21 @@ body {
   .navbar-container {
     flex-direction: row; /* Keep horizontal layout */
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start; /* Start from left */
     padding: 15px 20px;
-    min-height: auto;
+    min-height: 64px; /* Ensure consistent height */
     height: auto;
   }
 
   .navbar-logo {
     margin-bottom: 0; /* Remove bottom margin */
-    margin-right: 20px; /* Space between logo and nav */
+    margin-right: 30px; /* Space between logo and nav */
+    flex-shrink: 0; /* Prevent shrinking */
   }
 
   .navbar-menu {
     position: static;
-    width: auto; /* Auto width instead of 100% */
+    width: auto; /* Auto width */
     background-color: transparent;
     max-height: none;
     overflow: visible;
@@ -314,11 +315,11 @@ body {
 
   .navbar-menu-list {
     flex-direction: row; /* Horizontal layout */
-    flex-wrap: wrap;
-    gap: 15px;
+    flex-wrap: nowrap; /* Don't wrap */
+    gap: 20px; /* Consistent spacing */
     width: 100%;
     align-items: center;
-    justify-content: flex-end; /* Align to right */
+    justify-content: flex-start; /* Align to left, next to logo */
   }
 
   .navbar-menu-item {
@@ -326,15 +327,17 @@ body {
     opacity: 1;
     transform: none;
     transition: none;
+    flex-shrink: 0; /* Prevent shrinking */
   }
 
   .navbar-link {
-    width: auto; /* Auto width for horizontal layout */
+    width: auto; /* Auto width */
     padding: 8px 12px;
     font-size: 14px;
     transition: color 0.2s ease;
     text-align: center;
     white-space: nowrap;
+    line-height: 1; /* Ensure same line height */
   }
 
   .navbar-link:hover {
@@ -346,10 +349,11 @@ body {
 @media (max-width: 480px) {
   .navbar-container {
     padding: 12px 15px;
+    min-height: 55px; /* Consistent smaller height */
   }
 
   .navbar-logo {
-    margin-right: 15px; /* Slightly smaller margin */
+    margin-right: 20px; /* Adjusted spacing */
   }
 
   .logo-img {
@@ -357,12 +361,13 @@ body {
   }
 
   .navbar-menu-list {
-    gap: 8px; /* Smaller gap for very small screens */
+    gap: 12px; /* Consistent spacing */
   }
 
   .navbar-link {
     font-size: 12px;
     padding: 6px 8px; /* Tighter padding */
+    line-height: 1; /* Same line height */
   }
 }
 
