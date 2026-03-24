@@ -28,13 +28,13 @@ body {
 
 @media (max-width: 768px) {
   body {
-    padding-top: 120px; /* Account for expanded navbar height */
+    padding-top: 70px; /* Account for single-line navbar */
   }
 }
 
 @media (max-width: 480px) {
   body {
-    padding-top: 100px; /* Slightly smaller for very small screens */
+    padding-top: 65px; /* Slightly smaller for very small screens */
   }
 }
 
@@ -286,20 +286,22 @@ body {
   }
 
   .navbar-container {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row; /* Keep horizontal layout */
+    align-items: center;
+    justify-content: space-between;
     padding: 15px 20px;
     min-height: auto;
     height: auto;
   }
 
   .navbar-logo {
-    margin-bottom: 15px;
+    margin-bottom: 0; /* Remove bottom margin */
+    margin-right: 20px; /* Space between logo and nav */
   }
 
   .navbar-menu {
     position: static;
-    width: 100%;
+    width: auto; /* Auto width instead of 100% */
     background-color: transparent;
     max-height: none;
     overflow: visible;
@@ -307,6 +309,7 @@ body {
     opacity: 1;
     border-top: none;
     order: unset;
+    flex: 1; /* Take remaining space */
   }
 
   .navbar-menu-list {
@@ -315,6 +318,7 @@ body {
     gap: 15px;
     width: 100%;
     align-items: center;
+    justify-content: flex-end; /* Align to right */
   }
 
   .navbar-menu-item {
@@ -345,7 +349,7 @@ body {
   }
 
   .navbar-logo {
-    margin-bottom: 12px;
+    margin-right: 15px; /* Slightly smaller margin */
   }
 
   .logo-img {
@@ -353,12 +357,12 @@ body {
   }
 
   .navbar-menu-list {
-    gap: 10px; /* Smaller gap for very small screens */
+    gap: 8px; /* Smaller gap for very small screens */
   }
 
   .navbar-link {
-    font-size: 13px;
-    padding: 6px 10px;
+    font-size: 12px;
+    padding: 6px 8px; /* Tighter padding */
   }
 }
 
