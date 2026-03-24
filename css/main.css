@@ -310,9 +310,11 @@ body {
   }
 
   .navbar-menu-list {
-    flex-direction: column;
-    gap: 8px;
+    flex-direction: row; /* Horizontal layout */
+    flex-wrap: wrap;
+    gap: 15px;
     width: 100%;
+    align-items: center;
   }
 
   .navbar-menu-item {
@@ -323,15 +325,16 @@ body {
   }
 
   .navbar-link {
-    width: 100%;
-    padding: 10px 0;
-    font-size: 15px;
+    width: auto; /* Auto width for horizontal layout */
+    padding: 8px 12px;
+    font-size: 14px;
     transition: color 0.2s ease;
-    text-align: left;
+    text-align: center;
+    white-space: nowrap;
   }
 
   .navbar-link:hover {
-    background-color: transparent;
+    background-color: rgba(212, 165, 116, 0.1);
     color: #d4a574;
   }
 }
@@ -349,9 +352,13 @@ body {
     height: 40px;
   }
 
+  .navbar-menu-list {
+    gap: 10px; /* Smaller gap for very small screens */
+  }
+
   .navbar-link {
-    font-size: 14px;
-    padding: 8px 0;
+    font-size: 13px;
+    padding: 6px 10px;
   }
 }
 
