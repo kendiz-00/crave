@@ -288,7 +288,7 @@ body {
   .navbar-container {
     flex-direction: row; /* Keep horizontal layout */
     align-items: center;
-    justify-content: flex-start; /* Start from left */
+    justify-content: space-between; /* CRITICAL: Logo left, nav right */
     padding: 15px 20px;
     min-height: 64px;
     overflow-x: auto; /* Allow horizontal scrolling if needed */
@@ -297,8 +297,9 @@ body {
 
   .navbar-logo {
     margin-bottom: 0;
-    margin-right: 25px; /* Space between logo and nav */
+    margin-right: 0; /* Remove margin since using space-between */
     flex-shrink: 0; /* Prevent shrinking */
+    order: 1; /* Ensure logo comes first */
   }
 
   .navbar-menu {
@@ -310,18 +311,17 @@ body {
     transform: none;
     opacity: 1;
     border-top: none;
-    order: unset;
-    flex: 1;
+    order: 2; /* Ensure nav comes second */
     flex-shrink: 0; /* Prevent shrinking */
   }
 
   .navbar-menu-list {
     flex-direction: row; /* Horizontal layout */
-    flex-wrap: nowrap; /* CRITICAL: Prevent wrapping */
+    flex-wrap: nowrap; /* Prevent wrapping */
     gap: 15px; /* Reduced gap for mobile */
     width: auto;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: flex-end; /* Align to right */
     flex-shrink: 0; /* Prevent shrinking */
   }
 
@@ -356,10 +356,11 @@ body {
     min-height: 55px;
     overflow-x: auto; /* Allow horizontal scrolling */
     flex-wrap: nowrap; /* Prevent wrapping */
+    justify-content: space-between; /* Keep logo left, nav right */
   }
 
   .navbar-logo {
-    margin-right: 20px; /* Reduced spacing */
+    margin-right: 0; /* Remove margin */
   }
 
   .logo-img {
@@ -368,6 +369,7 @@ body {
 
   .navbar-menu-list {
     gap: 10px; /* Even smaller gap */
+    justify-content: flex-end; /* Keep aligned to right */
   }
 
   .navbar-link {
