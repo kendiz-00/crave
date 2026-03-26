@@ -90,25 +90,60 @@
 			</nav>
 
 				<div id="orderSummary" class="order-summary">
-					<div class="cart-header">
-						<div class="cart-icon-wrapper">
-							<i class="fas fa-shopping-bag cart-icon"></i>
-							<span class="cart-badge" id="cartCount">0</span>
+					<div class="cart-container">
+						<div class="cart-header">
+							<div class="cart-icon-wrapper">
+								<i class="fas fa-shopping-bag cart-icon"></i>
+								<span class="cart-badge" id="cartCount">0</span>
+							</div>
+							<div class="cart-info">
+								<h3 class="cart-title">Your Cart</h3>
+								<p class="cart-status" id="orderCount">Your cart is empty 🛒</p>
+								<p class="cart-subtitle">Start adding delicious items from our menu</p>
+							</div>
 						</div>
-						<div class="cart-info">
-							<h3 class="cart-title">Your Cart</h3>
-							<p class="cart-status" id="orderCount">Your cart is empty</p>
+						
+						<div class="cart-content">
+							<div class="empty-state" id="emptyState">
+								<div class="empty-icon">
+									<i class="fas fa-utensils"></i>
+								</div>
+								<p class="empty-message">Ready to order something amazing?</p>
+								<a href="#most-popular" class="btn-browse-menu">
+									<i class="fas fa-search"></i>
+									Browse Menu
+								</a>
+							</div>
+							
+							<div class="cart-items" id="cartItems" style="display: none;">
+								<!-- Cart items will be dynamically added here -->
+							</div>
+							
+							<div class="cart-instructions">
+								<textarea 
+									id="specialInstructions" 
+									class="instructions-input" 
+									placeholder="Add special instructions (optional)"
+									rows="2"
+								></textarea>
+							</div>
+							
+							<div class="cart-actions">
+								<button id="checkoutOrder" class="btn-checkout-premium">
+									<i class="fab fa-whatsapp"></i>
+									<span>Checkout via WhatsApp</span>
+								</button>
+								<button id="clearCart" class="btn-clear-premium">
+									<i class="fas fa-trash-alt"></i>
+									<span>Clear Cart</span>
+								</button>
+							</div>
+							
+							<div class="trust-signal">
+								<i class="fas fa-shield-alt"></i>
+								<span>Secure checkout via WhatsApp</span>
+							</div>
 						</div>
-					</div>
-					<div class="cart-actions">
-						<button id="checkoutOrder" class="btn-checkout">
-							<i class="fab fa-whatsapp btn-icon"></i>
-							<span>Checkout</span>
-						</button>
-						<button id="clearCart" class="btn-clear">
-							<i class="fas fa-trash-alt btn-icon"></i>
-							<span>Clear</span>
-						</button>
 					</div>
 				</div>
 
