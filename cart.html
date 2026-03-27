@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - Crave Restaurant</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/util.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/cart.css">
+</head>
+<body>
+    
+    <!-- Header/Navbar -->
+    <header id="siteHeader" class="navbar-header">
+        <nav class="navbar">
+            <div class="navbar-container">
+                <div class="navbar-logo">
+                    <a href="index.html" class="logo-link">
+                        <img src="images/logo.png" alt="Crave Restaurant" class="logo-img">
+                    </a>
+                </div>
+
+                <button
+                    id="navbarToggle"
+                    class="navbar-toggle"
+                    aria-label="Toggle navigation"
+                    aria-expanded="false"
+                    aria-controls="navbarMenu"
+                >
+                    <span class="navbar-toggle-bar"></span>
+                    <span class="navbar-toggle-bar"></span>
+                    <span class="navbar-toggle-bar"></span>
+                </button>
+
+                <div class="navbar-menu" id="navbarMenu" aria-hidden="true" aria-label="Mobile navigation">
+                    <ul class="navbar-menu-list">
+                        <li class="navbar-menu-item"><a href="index.html" class="navbar-link" data-page="home">Home</a></li>
+                        <li class="navbar-menu-item"><a href="menu.html" class="navbar-link" data-page="menu">Menu</a></li>
+                        <li class="navbar-menu-item"><a href="about.html" class="navbar-link" data-page="about">About</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="cart-page">
+        <div class="container">
+            <div class="cart-header">
+                <h1 class="page-title">Your Cart</h1>
+                <div class="cart-summary">
+                    <span class="item-count" id="itemCount">0 items</span>
+                    <span class="separator">•</span>
+                    <span class="total-amount" id="totalAmount">GHS 0.00</span>
+                </div>
+            </div>
+
+            <div class="cart-content">
+                <!-- Empty State -->
+                <div class="empty-cart" id="emptyCart">
+                    <div class="empty-icon">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <h2 class="empty-title">Your cart is empty 🛒</h2>
+                    <p class="empty-subtitle">Start adding delicious items from our menu</p>
+                    <a href="menu.html" class="browse-menu-btn">
+                        <i class="fas fa-search"></i>
+                        Browse Menu
+                    </a>
+                </div>
+
+                <!-- Cart Items -->
+                <div class="cart-items" id="cartItems" style="display: none;">
+                    <!-- Cart items will be dynamically added here -->
+                </div>
+
+                <!-- Checkout Section -->
+                <div class="checkout-section" id="checkoutSection" style="display: none;">
+                    <div class="instructions-box">
+                        <label for="specialInstructions" class="instructions-label">
+                            <i class="fas fa-pen"></i>
+                            Add special instructions (optional)
+                        </label>
+                        <textarea 
+                            id="specialInstructions" 
+                            class="instructions-textarea" 
+                            placeholder="Let us know about any dietary restrictions, preferences, or special requests..."
+                            rows="3"
+                        ></textarea>
+                    </div>
+
+                    <div class="checkout-actions">
+                        <button id="clearCartBtn" class="clear-btn">
+                            <i class="fas fa-trash-alt"></i>
+                            Clear Cart
+                        </button>
+                        <button id="checkoutBtn" class="checkout-btn">
+                            <i class="fab fa-whatsapp"></i>
+                            Checkout via WhatsApp
+                        </button>
+                    </div>
+
+                    <div class="trust-badge">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Secure checkout via WhatsApp</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+    <script>
+        // Cart page specific functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCartItems();
+            updateCartDisplay();
+        });
+
+        function loadCartItems() {
+            const cart = JSON.parse(localStorage.getItem('craveCart')) || {};
+            const cartItemsContainer = document.getElementById('cartItems');
+            const emptyCart = document.getElementById('emptyCart');
+            const checkoutSection = document.getElementById('checkoutSection');
+            
+            const cartArray = Object.values(cart);
+            
+            if (cartArray.length === 0) {
+                emptyCart.style.display = 'block';
+                cartItemsContainer.style.display = 'none';
+                checkoutSection.style.display = 'none';
+                return;
+            }
+            
+            emptyCart.style.display = 'none';
+            cartItemsContainer.style.display = 'block';
+            checkoutSection.style.display = 'block';
+            
+            cartItemsContainer.innerHTML = cartArray.map(item => `
+                <div class="cart-item">
+                    <div class="item-info">
+                        <h3 class="item-name">${item.title}</h3>
+                        <p class="item-price">${item.price}</p>
+                    </div>
+                    <div class="item-controls">
+                        <button class="qty-btn minus" onclick="updateQuantity('${item.title}', -1)">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <span class="qty-display">${item.quantity}</span>
+                        <button class="qty-btn plus" onclick="updateQuantity('${item.title}', 1)">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateQuantity(itemTitle, change) {
+            const cart = JSON.parse(localStorage.getItem('craveCart')) || {};
+            const itemKey = itemTitle.trim().toLowerCase().replace(/\s+/g, '-');
+            
+            if (cart[itemKey]) {
+                cart[itemKey].quantity += change;
+                if (cart[itemKey].quantity <= 0) {
+                    delete cart[itemKey];
+                }
+            }
+            
+            localStorage.setItem('craveCart', JSON.stringify(cart));
+            loadCartItems();
+            updateCartDisplay();
+        }
+
+        function updateCartDisplay() {
+            const cart = JSON.parse(localStorage.getItem('craveCart')) || {};
+            const cartArray = Object.values(cart);
+            const itemCount = cartArray.reduce((total, item) => total + item.quantity, 0);
+            const totalAmount = cartArray.reduce((total, item) => {
+                const price = parseFloat(item.price.replace(/[^0-9.]/g, ''));
+                return total + (price * item.quantity);
+            }, 0);
+            
+            document.getElementById('itemCount').textContent = `${itemCount} item${itemCount !== 1 ? 's' : ''}`;
+            document.getElementById('totalAmount').textContent = `GHS ${totalAmount.toFixed(2)}`;
+        }
+
+        // Clear cart functionality
+        document.getElementById('clearCartBtn')?.addEventListener('click', function() {
+            if (confirm('Are you sure you want to clear your cart?')) {
+                localStorage.removeItem('craveCart');
+                loadCartItems();
+                updateCartDisplay();
+            }
+        });
+
+        // Checkout functionality
+        document.getElementById('checkoutBtn')?.addEventListener('click', function() {
+            const cart = JSON.parse(localStorage.getItem('craveCart')) || {};
+            const cartArray = Object.values(cart);
+            
+            if (cartArray.length === 0) {
+                alert('Your cart is empty. Add some items before checkout.');
+                return;
+            }
+            
+            const specialInstructions = document.getElementById('specialInstructions').value;
+            let message = '🍔 *Crave Restaurant Order*\n\n';
+            
+            cartArray.forEach(item => {
+                message += `• ${item.quantity}x ${item.title} (${item.price})\n`;
+            });
+            
+            const totalAmount = cartArray.reduce((total, item) => {
+                const price = parseFloat(item.price.replace(/[^0-9.]/g, ''));
+                return total + (price * item.quantity);
+            }, 0);
+            
+            message += `\n💰 *Total: GHS ${totalAmount.toFixed(2)}*`;
+            
+            if (specialInstructions.trim()) {
+                message += `\n\n📝 *Special Instructions:* ${specialInstructions}`;
+            }
+            
+            const phoneNumber = '233550020788';
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+            window.open(whatsappUrl, '_blank');
+        });
+    </script>
+</body>
+</html>

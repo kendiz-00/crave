@@ -7,6 +7,17 @@ document.addEventListener('DOMContentLoaded', function() {
   // Sidebar toggle
   initSidebar();
   
+  // Floating cart click handler
+  const floatingCart = document.getElementById('floatingCart');
+  if (floatingCart) {
+    floatingCart.addEventListener('click', function() {
+      window.location.href = 'cart.html';
+    });
+  }
+  
+  // Initialize floating cart badge
+  updateFloatingCartBadge();
+  
   // Smooth scrolling
   initSmoothScroll();
   
@@ -583,6 +594,13 @@ function updateCartSummary() {
       cartEmpty.textContent = 'Your cart is empty 🛒';
       cartEmptyText.textContent = 'Start adding delicious items from our menu';
     }
+  }
+  
+  // Update floating cart badge
+  const floatingBadge = document.getElementById('floatingCartBadge');
+  if (floatingBadge) {
+    floatingBadge.textContent = orderCount;
+    floatingBadge.style.display = orderCount > 0 ? 'block' : 'none';
   }
 }
 
