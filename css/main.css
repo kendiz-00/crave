@@ -1696,124 +1696,202 @@ form button:hover {
 
 /* Mini Cart Bar - Premium Design */
 .mini-cart-bar {
-  background: #111;
-  border: 1px solid rgba(212, 165, 116, 0.2);
-  border-radius: 16px;
-  padding: 16px 20px;
-  margin: 20px 0;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #0a0a0a 0%, #111 100%);
+  border: 1px solid rgba(212, 165, 116, 0.3);
+  border-radius: 20px;
+  padding: 20px 24px;
+  margin: 24px 0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 
+              0 4px 16px rgba(212, 165, 116, 0.1),
+              inset 0 1px 0 rgba(255, 255, 255, 0.05);
   position: relative;
   overflow: hidden;
+}
+
+.mini-cart-bar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    #d4a574 20%, 
+    #d4a574 80%, 
+    transparent 100%);
 }
 
 .mini-cart-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 400px;
+  max-width: 500px;
   margin: 0 auto;
 }
 
 .cart-status {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
 }
 
 .cart-icon {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   color: #d4a574;
+  filter: drop-shadow(0 2px 8px rgba(212, 165, 116, 0.3));
 }
 
 .cart-text {
   font-family: 'Poppins', sans-serif;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
   font-weight: 500;
+  letter-spacing: 0.5px;
 }
 
 .view-cart-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 20px;
+  gap: 10px;
+  padding: 14px 24px;
   background: linear-gradient(135deg, #d4a574 0%, #c19660 100%);
   color: #fff;
   text-decoration: none;
-  border-radius: 30px;
+  border-radius: 35px;
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(212, 165, 116, 0.3);
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 6px 20px rgba(212, 165, 116, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.view-cart-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s;
 }
 
 .view-cart-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(212, 165, 116, 0.4);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 28px rgba(212, 165, 116, 0.5);
+}
+
+.view-cart-btn:hover::before {
+  left: 100%;
 }
 
 .view-cart-btn i {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   transition: transform 0.3s ease;
 }
 
 .view-cart-btn:hover i {
-  transform: translateX(3px);
+  transform: translateX(4px);
 }
 
 /* Mobile Responsive for Mini Cart */
 @media (max-width: 768px) {
   .mini-cart-bar {
-    margin: 15px 0;
-    padding: 12px 16px;
+    margin: 18px 0;
+    padding: 16px 20px;
+    border-radius: 16px;
   }
   
   .mini-cart-content {
     max-width: 100%;
+    padding: 0 8px;
   }
   
   .cart-icon {
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
   
   .cart-text {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
   }
   
   .view-cart-btn {
-    padding: 10px 16px;
-    font-size: 0.8rem;
+    padding: 12px 18px;
+    font-size: 0.85rem;
+  }
+  
+  .floating-cart-btn {
+    bottom: 25px;
+    right: 25px;
+    width: 58px;
+    height: 58px;
+  }
+  
+  .floating-cart-btn i {
+    font-size: 20px;
+  }
+  
+  .cart-badge {
+    font-size: 10px;
+    min-width: 22px;
+    padding: 3px 7px;
   }
 }
 
 @media (max-width: 480px) {
   .mini-cart-bar {
-    margin: 12px 0;
-    padding: 10px 14px;
+    margin: 15px 0;
+    padding: 14px 16px;
+    border-radius: 14px;
+  }
+  
+  .mini-cart-content {
+    gap: 12px;
   }
   
   .cart-icon {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
   }
   
   .cart-text {
-    font-size: 0.75rem;
+    font-size: 0.85rem;
   }
   
   .view-cart-btn {
-    padding: 8px 14px;
-    font-size: 0.75rem;
+    padding: 10px 16px;
+    font-size: 0.8rem;
+    gap: 8px;
+  }
+  
+  .floating-cart-btn {
+    bottom: 20px;
+    right: 20px;
+    width: 52px;
+    height: 52px;
+  }
+  
+  .floating-cart-btn i {
+    font-size: 18px;
+  }
+  
+  .cart-badge {
+    font-size: 9px;
+    min-width: 20px;
+    padding: 2px 6px;
   }
 }
 
-/* Simple Floating Cart Button - Safe Addition */
+/* Floating Cart Button - Premium Design */
 .floating-cart-btn {
   position: fixed;
-  bottom: 30px;
-  right: 30px;
-  width: 60px;
-  height: 60px;
+  bottom: 35px;
+  right: 35px;
+  width: 65px;
+  height: 65px;
   background: linear-gradient(135deg, #d4a574 0%, #c19660 100%);
   border-radius: 50%;
   display: flex;
@@ -1821,34 +1899,313 @@ form button:hover {
   justify-content: center;
   cursor: pointer;
   z-index: 9999;
-  box-shadow: 0 8px 25px rgba(212, 165, 116, 0.4);
-  transition: all 0.3s ease;
+  pointer-events: auto;
+  box-shadow: 0 12px 35px rgba(212, 165, 116, 0.5),
+              0 6px 20px rgba(0, 0, 0, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .floating-cart-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 12px 35px rgba(212, 165, 116, 0.5);
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 16px 45px rgba(212, 165, 116, 0.6),
+              0 8px 25px rgba(0, 0, 0, 0.4),
+              inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.floating-cart-btn:active {
+  transform: translateY(-2px) scale(1.04);
 }
 
 .floating-cart-btn i {
-  font-size: 20px;
+  font-size: 22px;
   color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.floating-cart-btn:hover i {
+  transform: scale(1.1) rotate(5deg);
 }
 
 .cart-badge {
   position: absolute;
-  top: -5px;
-  right: -5px;
-  background: #ff6b6b;
+  top: -6px;
+  right: -6px;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
   color: #fff;
   font-size: 11px;
   font-weight: 700;
-  padding: 3px 8px;
+  padding: 4px 9px;
   border-radius: 20px;
-  min-width: 24px;
+  min-width: 26px;
   text-align: center;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.5);
   border: 2px solid #111;
   font-family: 'Poppins', sans-serif;
+  letter-spacing: 0.5px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.5);
+  }
+  50% {
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.8);
+  }
+  100% {
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.5);
+  }
+}
+
+/* Premium Reservation Section */
+.reservation-section {
+  padding: 80px 0;
+  background: linear-gradient(135deg, #0a0a0a 0%, #111 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.reservation-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    #d4a574 20%, 
+    #d4a574 80%, 
+    transparent 100%);
+}
+
+.reservation-card {
+  max-width: 600px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(212, 165, 116, 0.15);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
+              0 8px 30px rgba(212, 165, 116, 0.15),
+              inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.reservation-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.reservation-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 8px 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.reservation-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  font-weight: 400;
+}
+
+.reservation-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group.full-width {
+  flex: 1 1 0;
+}
+
+.form-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-input {
+  background: #000;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 16px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  color: #fff;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #d4a574;
+  box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.2);
+  background: rgba(212, 165, 116, 0.05);
+}
+
+.form-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.reservation-btn {
+  background: linear-gradient(135deg, #d4a574 0%, #c19660 100%);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 18px 32px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 30px rgba(212, 165, 116, 0.4);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.reservation-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s;
+}
+
+.reservation-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 15px 40px rgba(212, 165, 116, 0.5);
+}
+
+.reservation-btn:hover::before {
+  left: 100%;
+}
+
+.btn-text {
+  position: relative;
+  z-index: 1;
+}
+
+.reservation-btn i {
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.reservation-btn:hover i {
+  transform: scale(1.1);
+}
+
+/* Mobile Responsive for Reservation */
+@media (max-width: 768px) {
+  .reservation-section {
+    padding: 60px 0;
+  }
+  
+  .reservation-card {
+    margin: 0 20px;
+    padding: 30px 20px;
+    border-radius: 20px;
+  }
+  
+  .reservation-title {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .form-group {
+    gap: 6px;
+  }
+  
+  .form-input {
+    padding: 14px;
+    font-size: 0.95rem;
+  }
+  
+  .reservation-btn {
+    padding: 16px 28px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .reservation-section {
+    padding: 40px 0;
+  }
+  
+  .reservation-card {
+    margin: 0 15px;
+    padding: 25px 15px;
+    border-radius: 16px;
+  }
+  
+  .reservation-title {
+    font-size: 1.6rem;
+    margin-bottom: 25px;
+  }
+  
+  .form-row {
+    gap: 12px;
+  }
+  
+  .form-group {
+    gap: 4px;
+  }
+  
+  .form-input {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+  
+  .reservation-btn {
+    padding: 14px 24px;
+    font-size: 0.95rem;
+  }
 }
 
 /* Mobile Responsive */

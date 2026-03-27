@@ -68,92 +68,52 @@
 	</aside>
 
 	<!-- Reservation Section -->
-	<section style="min-height: 100vh; padding: 60px 0; background-color: #f9f9f9;">
+	<section class="reservation-section">
 		<div class="container">
-			<div class="row m-b-50">
-				<div class="col-md-8" style="margin: 0 auto;">
-					<h2 class="tit3 t-center m-b-15">Make a Reservation</h2>
-					<p class="t-center m-b-40" style="font-size: 16px;">Book your table at Crave Restaurant</p>
-
-					<form id="reservationForm">
-						<div class="row">
-							<div class="col-md-6">
-								<label for="name" style="display: block; margin-bottom: 5px; font-weight: 600;">Full Name *</label>
-								<input type="text" id="name" name="name" required placeholder="Your full name">
-							</div>
-
-							<div class="col-md-6">
-								<label for="email" style="display: block; margin-bottom: 5px; font-weight: 600;">Email Address *</label>
-								<input type="email" id="email" name="email" required placeholder="your.email@example.com">
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-md-6">
-								<label for="phone" style="display: block; margin-bottom: 5px; font-weight: 600;">Phone Number *</label>
-								<input type="tel" id="phone" name="phone" required placeholder="(123) 456-7890">
-							</div>
-
-							<div class="col-md-6">
-								<label for="guests" style="display: block; margin-bottom: 5px; font-weight: 600;">Number of Guests *</label>
-								<select id="guests" name="guests" required>
-									<option value="">Select number of guests</option>
-									<option value="1">1 Guest</option>
-									<option value="2">2 Guests</option>
-									<option value="3">3 Guests</option>
-									<option value="4">4 Guests</option>
-									<option value="5">5 Guests</option>
-									<option value="6">6 Guests</option>
-									<option value="7">7 Guests</option>
-									<option value="8">8 Guests</option>
-									<option value="9">9+ Guests</option>
-								</select>
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-md-6">
-								<label for="date" style="display: block; margin-bottom: 5px; font-weight: 600;">Preferred Date *</label>
-								<input type="date" id="date" name="date" required>
-							</div>
-
-							<div class="col-md-6">
-								<label for="time" style="display: block; margin-bottom: 5px; font-weight: 600;">Preferred Time *</label>
-								<select id="time" name="time" required>
-									<option value="">Select time</option>
-									<option value="11:00">11:00 AM</option>
-									<option value="11:30">11:30 AM</option>
-									<option value="12:00">12:00 PM</option>
-									<option value="17:00">5:00 PM</option>
-									<option value="17:30">5:30 PM</option>
-									<option value="18:00">6:00 PM</option>
-									<option value="18:30">6:30 PM</option>
-									<option value="19:00">7:00 PM</option>
-									<option value="19:30">7:30 PM</option>
-									<option value="20:00">8:00 PM</option>
-									<option value="20:30">8:30 PM</option>
-									<option value="21:00">9:00 PM</option>
-								</select>
-							</div>
-						</div>
-
-						<div>
-							<label for="message" style="display: block; margin-bottom: 5px; font-weight: 600;">Special Requests</label>
-							<textarea id="message" name="message" rows="5" placeholder="Any special requests? (e.g., High chair, window seating, celebration)"></textarea>
-						</div>
-
-						<button type="submit" class="btn1" style="width: 100%; padding: 15px; font-size: 16px;">Confirm Reservation</button>
-					</form>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-md-4 p-t-30 t-center">
-					<h4 class="txt5 m-b-15">Phone</h4>
-					<p style="font-size: 16px;">(555) 123-4567</p>
+			<div class="reservation-card">
+				<div class="reservation-header">
+					<h2 class="reservation-title">Reserve Your Table</h2>
+					<p class="reservation-subtitle">Experience dining like never before</p>
 				</div>
 
-				<div class="col-md-4 p-t-30 t-center">
+				<form class="reservation-form" id="reservationForm">
+					<div class="form-row">
+						<div class="form-group">
+							<label for="name" class="form-label">Full Name</label>
+							<input type="text" id="name" name="name" class="form-input" placeholder="Enter your full name" required>
+						</div>
+						<div class="form-group">
+							<label for="phone" class="form-label">Phone Number</label>
+							<input type="tel" id="phone" name="phone" class="form-input" placeholder="(555) 123-4567" required>
+						</div>
+					</div>
+
+					<div class="form-row">
+						<div class="form-group">
+							<label for="date" class="form-label">Preferred Date</label>
+							<input type="date" id="date" name="date" class="form-input" required>
+						</div>
+						<div class="form-group">
+							<label for="time" class="form-label">Preferred Time</label>
+							<select id="time" name="time" class="form-input" required>
+								<option value="">Select time</option>
+								<option value="11:00">11:00 AM</option>
+								<option value="11:30">11:30 AM</option>
+								<option value="12:00">12:00 PM</option>
+								<option value="12:30">12:30 PM</option>
+								<option value="17:00">5:00 PM</option>
+								<option value="17:30">5:30 PM</option>
+								<option value="18:00">6:00 PM</option>
+								<option value="18:30">6:30 PM</option>
+								<option value="19:00">7:00 PM</option>
+								<option value="19:30">7:30 PM</option>
+								<option value="20:00">8:00 PM</option>
+								<option value="20:30">8:30 PM</option>
+								<option value="21:00">9:00 PM</option>
+								<option value="21:30">9:30 PM</option>
+							</select>
+						</div>
+					</div>
 					<h4 class="txt5 m-b-15">Email</h4>
 					<p style="font-size: 16px;"><a href="mailto:info@patoplace.com" class="txt4">info@patoplace.com</a></p>
 				</div>
