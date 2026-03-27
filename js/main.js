@@ -610,7 +610,7 @@ function initMenuCart() {
       return;
     }
 
-    if (target.matches('#checkoutOrder')) {
+    if (target.matches('#checkoutOrder') || target.matches('.checkout-btn')) {
       event.preventDefault();
       const message = buildWhatsAppCartMessage();
       if (!message) {
