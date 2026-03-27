@@ -21,11 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // Initialize menu cards generation
   initMenuCards();
   
-  // Initialize cart functionality
-  initAddToCart();
-  initCartActions();
-  initMenuCart();
-  initWhatsAppOrders();
+  // SIMPLE WORKING CART SYSTEM
+  initSimpleCart();
   
   // Initialize menu category scroll
   initMenuCategoryScroll();
@@ -585,8 +582,98 @@ function initWhatsAppOrders() {
   });
 }
 
-// Load cart from localStorage
-let cart = JSON.parse(localStorage.getItem('craveCart')) || {};
+/**
+ * SIMPLE WORKING CART SYSTEM
+ */
+function initSimpleCart() {
+  // Load cart from localStorage
+  let cart = JSON.parse(localStorage.getItem('craveCart')) || {};
+  
+  // Add to Cart
+  document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('btn-add-cart')) {
+      e.preventDefault();
+      
+      const title = e.target.getAttribute('data-item');
+      const price = e.target.getAttribute('data-price');
+      const qtyInput = document.querySelector(`.qty-input[data-item="${title}"]`);
+      const quantity = qtyInput ? parseInt(qtyInput.value) || 1 : 1;
+      
+      // Add to cart
+      const key = title.toLowerCase().replace(/\s+/g, '-');
+      if (cart[key]) {
+        cart[key].quantity += quantity;
+      } else {
+        cart[key] = { title, price, quantity };
+      }
+      
+      // Save to localStorage
+      localStorage.setItem('craveCart', JSON.stringify(cart));
+      
+      // Update displays
+      updateCartDisplay();
+      
+      // Reset quantity
+      if (qtyInput) qtyInput.value = 1;
+      
+      console.log('Added to cart:', title, quantity);
+    }
+  });
+  
+  // Order This Item (WhatsApp)
+  document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('btn-order')) {
+      e.preventDefault();
+      
+      const title = e.target.getAttribute('data-item');
+      const message = `Hi Crave, I'd like to order: ${title}`;
+      const whatsappUrl = `https://wa.me/233550020788?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
+    }
+  });
+  
+  // Quantity Controls
+  document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('qty-btn')) {
+      e.preventDefault();
+      
+      const action = e.target.getAttribute('data-action');
+      const itemTitle = e.target.getAttribute('data-item');
+      const qtyInput = document.querySelector(`.qty-input[data-item="${itemTitle}"]`);
+      
+      if (qtyInput) {
+        let value = parseInt(qtyInput.value) || 1;
+        if (action === 'increase') {
+          value = Math.min(value + 1, 99);
+        } else if (action === 'decrease') {
+          value = Math.max(value - 1, 1);
+        }
+        qtyInput.value = value;
+      }
+    }
+  });
+  
+  // Update cart displays
+  function updateCartDisplay() {
+    const itemCount = Object.values(cart).reduce((total, item) => total + item.quantity, 0);
+    
+    // Update mini cart text
+    const miniCartText = document.getElementById('miniCartText');
+    if (miniCartText) {
+      miniCartText.textContent = itemCount === 0 ? '0 items' : `${itemCount} item${itemCount !== 1 ? 's' : ''}`;
+    }
+    
+    // Update floating cart badge
+    const cartBadge = document.getElementById('cartBadge');
+    if (cartBadge) {
+      cartBadge.textContent = itemCount;
+      cartBadge.style.display = itemCount > 0 ? 'block' : 'none';
+    }
+  }
+  
+  // Initial update
+  updateCartDisplay();
+}
 
 function getItemKey(itemTitle) {
   return itemTitle.trim().toLowerCase().replace(/\s+/g, '-');
