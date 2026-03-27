@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // Menu filtering
   initMenuFilter();
   
+  // Initialize menu cards generation
+  initMenuCards();
+  
   // Initialize cart functionality
   initAddToCart();
   initCartActions();
@@ -43,9 +46,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const cart = JSON.parse(localStorage.getItem('craveCart')) || {};
     const itemCount = Object.values(cart).reduce((total, item) => total + item.quantity, 0);
     
+    // Update floating cart badge
     if (cartBadge) {
       cartBadge.textContent = itemCount;
       cartBadge.style.display = itemCount > 0 ? 'block' : 'none';
+    }
+    
+    // Update mini cart text
+    const miniCartText = document.getElementById('miniCartText');
+    if (miniCartText) {
+      miniCartText.textContent = itemCount === 0 ? '0 items' : `${itemCount} item${itemCount !== 1 ? 's' : ''}`;
     }
   }
   
