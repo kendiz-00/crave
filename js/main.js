@@ -24,6 +24,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // Initialize cart functionality
   initAddToCart();
   initCartActions();
+  initMenuCart();
+  initWhatsAppOrders();
   
   // Initialize menu category scroll
   initMenuCategoryScroll();
@@ -583,7 +585,8 @@ function initWhatsAppOrders() {
   });
 }
 
-const cart = {};
+// Load cart from localStorage
+let cart = JSON.parse(localStorage.getItem('craveCart')) || {};
 
 function getItemKey(itemTitle) {
   return itemTitle.trim().toLowerCase().replace(/\s+/g, '-');
@@ -604,6 +607,7 @@ function updateCartSummary() {
 
 function clearCart() {
   Object.keys(cart).forEach(key => delete cart[key]);
+  localStorage.setItem('craveCart', JSON.stringify(cart));
   updateCartSummary();
 }
 
@@ -617,13 +621,18 @@ function initMenuCart() {
   document.addEventListener('click', function(event) {
     const target = event.target;
 
+    // Add to Cart functionality
     if (target.matches('.btn-add-cart')) {
       event.preventDefault();
+      console.log('Add to Cart clicked!'); // Debug log
+      
       const itemTitle = target.getAttribute('data-item');
       const itemPrice = target.getAttribute('data-price') || '$0';
       const itemKey = getItemKey(itemTitle);
       const qtyInput = document.querySelector(`.qty-input[data-item="${itemTitle}"]`);
       const quantity = Math.max(1, Number(qtyInput ? qtyInput.value : 1));
+
+      console.log('Adding item:', itemTitle, quantity); // Debug log
 
       if (!cart[itemKey]) {
         cart[itemKey] = { title: itemTitle, price: itemPrice, quantity };
@@ -631,11 +640,17 @@ function initMenuCart() {
         cart[itemKey].quantity += quantity;
       }
 
+      // Save cart to localStorage
+      localStorage.setItem('craveCart', JSON.stringify(cart));
+      
+      console.log('Cart saved:', cart); // Debug log
+      
       updateCartSummary();
       if (qtyInput) qtyInput.value = 1;
       return;
     }
 
+    // Checkout functionality
     if (target.matches('#checkoutOrder')) {
       event.preventDefault();
       const message = buildWhatsAppCartMessage();
@@ -650,41 +665,50 @@ function initMenuCart() {
       return;
     }
 
+    // Clear cart functionality
     if (target.matches('#clearCart')) {
       event.preventDefault();
-      clearCart();
+      if (confirm('Are you sure you want to clear your cart?')) {
+        clearCart();
+      }
       return;
     }
 
+    // Quantity controls
     if (target.matches('.qty-btn')) {
       event.preventDefault();
       const action = target.getAttribute('data-action');
       const itemTitle = target.getAttribute('data-item');
       const qtyInput = document.querySelector(`.qty-input[data-item="${itemTitle}"]`);
       if (!qtyInput) return;
-
-      let currentQty = Number(qtyInput.value) || 1;
+      
+      let currentValue = parseInt(qtyInput.value) || 1;
       if (action === 'increase') {
-        currentQty += 1;
+        currentValue = Math.min(currentValue + 1, 99);
       } else if (action === 'decrease') {
-        currentQty = Math.max(1, currentQty - 1);
+        currentValue = Math.max(currentValue - 1, 1);
       }
-      qtyInput.value = currentQty;
+      qtyInput.value = currentValue;
       return;
     }
   });
+}
 
-  document.addEventListener('input', function(event) {
-    const target = event.target;
-    if (target.matches('.qty-input')) {
-      const value = Number(target.value);
-      if (Number.isNaN(value) || value < 1) {
-        target.value = 1;
-      }
+/**
+ * Initialize WhatsApp Order Integration
+ */
+function initWhatsAppOrders() {
+  document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('btn-order')) {
+      event.preventDefault();
+      const itemName = event.target.getAttribute('data-item');
+      const phoneNumber = '233550020788';
+      const message = `Hi Crave, I'd like to order ${itemName}`;
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+      window.open(whatsappUrl, '_blank');
     }
   });
-
-  updateCartSummary();
 }
 
 /**
