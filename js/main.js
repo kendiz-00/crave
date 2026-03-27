@@ -24,29 +24,30 @@ document.addEventListener('DOMContentLoaded', function() {
   // Form handlers
   initForms();
   
-  // Animations
+  // Animations - Make sure content is visible
   initAnimations();
   
-  // Menu filtering
-  initMenuFilter();
-  
-  // Menu category scroll detection
-  initMenuCategoryScroll();
-  
-  // Menu card generation and animations
+  // Initialize all menu-related functionality
   initMenuCards();
+  initMenuFilter();
+  initMenuCategoryScroll();
   initMenuScrollAnimations();
-
-  // Protect flaky duplicate listener by resetting
+  initMenuCart();
+  
+  // Testimonials
   initTestimonialsCarousel();
   
-  // WhatsApp order actions
+  // WhatsApp orders
   initWhatsAppOrders();
-  initMenuCart();
-
-  // Mobile quick order bar
+  
+  // Mobile order bar
   initMobileOrderBar();
-
+  
+  // Reservation form
+  initReservationForm();
+  
+  // Protect flaky duplicate listener by resetting
+  
   // Performance: idle-time preload hero background
   if ('requestIdleCallback' in window) {
     requestIdleCallback(preloadHeroBackground, { timeout: 2500 });
@@ -282,6 +283,15 @@ function initForms() {
  */
 function initAnimations() {
   const elements = document.querySelectorAll('.animated.visible-false');
+  
+  // Immediate fallback for hero section
+  const heroSection = document.querySelector('.hero');
+  if (heroSection && heroSection.classList.contains('visible-false')) {
+    setTimeout(() => {
+      heroSection.classList.add('fadeInUp');
+      heroSection.classList.remove('visible-false');
+    }, 100);
+  }
   
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
