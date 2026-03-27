@@ -16,11 +16,230 @@
     <!-- CSS -->
     <link rel="stylesheet" href="css/util.css">
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/cart.css">
+    <style>
+        /* Cart Page Specific Styles - Won't interfere with main.css */
+        .cart-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a0a 0%, #111 100%);
+            padding: 100px 0 50px;
+        }
+
+        .cart-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .cart-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .cart-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .cart-subtitle {
+            font-family: 'Poppins', sans-serif;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .cart-content {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(212, 165, 116, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            color: rgba(212, 165, 116, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .empty-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            color: #fff;
+            margin: 0 0 10px 0;
+        }
+
+        .empty-text {
+            font-family: 'Poppins', sans-serif;
+            color: rgba(255, 255, 255, 0.6);
+            margin: 0 0 30px 0;
+        }
+
+        .browse-menu-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #d4a574 0%, #c19660 100%);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 30px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .browse-menu-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 165, 116, 0.4);
+        }
+
+        .cart-items {
+            margin-bottom: 30px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(212, 165, 116, 0.1);
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            color: #fff;
+            margin: 0 0 5px 0;
+        }
+
+        .item-price {
+            font-family: 'Poppins', sans-serif;
+            color: #d4a574;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .item-quantity {
+            font-family: 'Poppins', sans-serif;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .cart-actions {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(212, 165, 116, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .instructions-input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 165, 116, 0.2);
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 20px;
+            resize: vertical;
+        }
+
+        .instructions-input:focus {
+            outline: none;
+            border-color: #d4a574;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #d4a574 0%, #c19660 100%);
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 165, 116, 0.4);
+        }
+
+        .clear-btn {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .clear-btn:hover {
+            background: rgba(255, 107, 107, 0.1);
+            border-color: rgba(255, 107, 107, 0.3);
+            color: #ff6b6b;
+        }
+
+        .trust-badge {
+            text-align: center;
+            margin-top: 20px;
+            font-family: 'Poppins', sans-serif;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+        }
+
+        .trust-badge i {
+            color: #d4a574;
+            margin-right: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .cart-page {
+                padding: 80px 0 40px;
+            }
+            
+            .cart-title {
+                font-size: 2rem;
+            }
+            
+            .cart-content {
+                padding: 25px;
+            }
+            
+            .cart-actions {
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
     
-    <!-- Header/Navbar -->
+    <!-- Header/Navbar - Same as other pages -->
     <header id="siteHeader" class="navbar-header">
         <nav class="navbar">
             <div class="navbar-container">
@@ -53,16 +272,12 @@
         </nav>
     </header>
 
-    <!-- Main Content -->
+    <!-- Main Cart Content -->
     <main class="cart-page">
-        <div class="container">
+        <div class="cart-container">
             <div class="cart-header">
-                <h1 class="page-title">Your Cart</h1>
-                <div class="cart-summary">
-                    <span class="item-count" id="itemCount">0 items</span>
-                    <span class="separator">•</span>
-                    <span class="total-amount" id="totalAmount">GHS 0.00</span>
-                </div>
+                <h1 class="cart-title">Your Cart</h1>
+                <p class="cart-subtitle">Review your order before checkout</p>
             </div>
 
             <div class="cart-content">
@@ -72,63 +287,57 @@
                         <i class="fas fa-shopping-bag"></i>
                     </div>
                     <h2 class="empty-title">Your cart is empty 🛒</h2>
-                    <p class="empty-subtitle">Start adding delicious items from our menu</p>
+                    <p class="empty-text">Start adding delicious items from our menu</p>
                     <a href="menu.html" class="browse-menu-btn">
                         <i class="fas fa-search"></i>
                         Browse Menu
                     </a>
                 </div>
 
-                <!-- Cart Items -->
+                <!-- Cart Items (Hidden by default) -->
                 <div class="cart-items" id="cartItems" style="display: none;">
-                    <!-- Cart items will be dynamically added here -->
+                    <!-- Items will be dynamically added here -->
                 </div>
+            </div>
 
-                <!-- Checkout Section -->
-                <div class="checkout-section" id="checkoutSection" style="display: none;">
-                    <div class="instructions-box">
-                        <label for="specialInstructions" class="instructions-label">
-                            <i class="fas fa-pen"></i>
-                            Add special instructions (optional)
-                        </label>
-                        <textarea 
-                            id="specialInstructions" 
-                            class="instructions-textarea" 
-                            placeholder="Let us know about any dietary restrictions, preferences, or special requests..."
-                            rows="3"
-                        ></textarea>
-                    </div>
-
-                    <div class="checkout-actions">
-                        <button id="clearCartBtn" class="clear-btn">
-                            <i class="fas fa-trash-alt"></i>
-                            Clear Cart
-                        </button>
-                        <button id="checkoutBtn" class="checkout-btn">
-                            <i class="fab fa-whatsapp"></i>
-                            Checkout via WhatsApp
-                        </button>
-                    </div>
-
-                    <div class="trust-badge">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>Secure checkout via WhatsApp</span>
-                    </div>
+            <!-- Checkout Section (Hidden by default) -->
+            <div class="cart-actions" id="checkoutSection" style="display: none;">
+                <textarea 
+                    id="specialInstructions" 
+                    class="instructions-input" 
+                    placeholder="Add special instructions (optional)"
+                    rows="3"
+                ></textarea>
+                
+                <button id="checkoutBtn" class="checkout-btn">
+                    <i class="fab fa-whatsapp"></i>
+                    Checkout via WhatsApp
+                </button>
+                
+                <button id="clearCartBtn" class="clear-btn">
+                    <i class="fas fa-trash-alt"></i>
+                    Clear Cart
+                </button>
+                
+                <div class="trust-badge">
+                    <i class="fas fa-shield-alt"></i>
+                    Secure checkout via WhatsApp
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- JavaScript -->
+    <!-- JavaScript - Non-invasive approach -->
     <script src="js/main.js"></script>
     <script>
-        // Cart page specific functionality
+        // Cart page specific functionality - Won't interfere with main.js
         document.addEventListener('DOMContentLoaded', function() {
             loadCartItems();
             updateCartDisplay();
         });
 
         function loadCartItems() {
+            // Get cart from localStorage (same as menu.html uses)
             const cart = JSON.parse(localStorage.getItem('craveCart')) || {};
             const cartItemsContainer = document.getElementById('cartItems');
             const emptyCart = document.getElementById('emptyCart');
@@ -153,46 +362,21 @@
                         <h3 class="item-name">${item.title}</h3>
                         <p class="item-price">${item.price}</p>
                     </div>
-                    <div class="item-controls">
-                        <button class="qty-btn minus" onclick="updateQuantity('${item.title}', -1)">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <span class="qty-display">${item.quantity}</span>
-                        <button class="qty-btn plus" onclick="updateQuantity('${item.title}', 1)">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
+                    <div class="item-quantity">Qty: ${item.quantity}</div>
                 </div>
             `).join('');
         }
 
-        function updateQuantity(itemTitle, change) {
-            const cart = JSON.parse(localStorage.getItem('craveCart')) || {};
-            const itemKey = itemTitle.trim().toLowerCase().replace(/\s+/g, '-');
-            
-            if (cart[itemKey]) {
-                cart[itemKey].quantity += change;
-                if (cart[itemKey].quantity <= 0) {
-                    delete cart[itemKey];
-                }
-            }
-            
-            localStorage.setItem('craveCart', JSON.stringify(cart));
-            loadCartItems();
-            updateCartDisplay();
-        }
-
         function updateCartDisplay() {
+            // This function can be used to update totals if needed
             const cart = JSON.parse(localStorage.getItem('craveCart')) || {};
             const cartArray = Object.values(cart);
             const itemCount = cartArray.reduce((total, item) => total + item.quantity, 0);
-            const totalAmount = cartArray.reduce((total, item) => {
-                const price = parseFloat(item.price.replace(/[^0-9.]/g, ''));
-                return total + (price * item.quantity);
-            }, 0);
             
-            document.getElementById('itemCount').textContent = `${itemCount} item${itemCount !== 1 ? 's' : ''}`;
-            document.getElementById('totalAmount').textContent = `GHS ${totalAmount.toFixed(2)}`;
+            // Update page title with item count if needed
+            if (itemCount > 0) {
+                document.title = `Cart (${itemCount}) - Crave Restaurant`;
+            }
         }
 
         // Clear cart functionality

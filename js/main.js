@@ -1,5 +1,4 @@
-// Main JavaScript File
-
+// Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
   // Navbar toggle and sticky behavior
   initNavbarBehavior();
@@ -7,53 +6,58 @@ document.addEventListener('DOMContentLoaded', function() {
   // Sidebar toggle
   initSidebar();
   
-  // Floating cart click handler
-  const floatingCart = document.getElementById('floatingCart');
-  if (floatingCart) {
-    floatingCart.addEventListener('click', function() {
-      window.location.href = 'cart.html';
-    });
-  }
-  
-  // Initialize floating cart badge
-  updateFloatingCartBadge();
-  
   // Smooth scrolling
   initSmoothScroll();
   
   // Form handlers
   initForms();
   
-  // Animations - Make sure content is visible
+  // Animations
   initAnimations();
   
-  // Initialize all menu-related functionality
-  initMenuCards();
+  // Menu filtering
   initMenuFilter();
+  
+  // Initialize cart functionality
+  initAddToCart();
+  initCartActions();
+  
+  // Initialize menu category scroll
   initMenuCategoryScroll();
-  initMenuScrollAnimations();
-  initMenuCart();
   
-  // Testimonials
-  initTestimonialsCarousel();
-  
-  // WhatsApp orders
-  initWhatsAppOrders();
-  
-  // Mobile order bar
-  initMobileOrderBar();
-  
-  // Reservation form
+  // Initialize reservation form
   initReservationForm();
   
-  // Protect flaky duplicate listener by resetting
+  // SAFE: Floating Cart Button Functionality
+  const floatingCartBtn = document.getElementById('floatingCartBtn');
+  const cartBadge = document.getElementById('cartBadge');
   
-  // Performance: idle-time preload hero background
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(preloadHeroBackground, { timeout: 2500 });
-  } else {
-    window.addEventListener('load', preloadHeroBackground);
+  if (floatingCartBtn) {
+    floatingCartBtn.addEventListener('click', function() {
+      window.location.href = 'cart.html';
+    });
   }
+  
+  // SAFE: Update cart badge function
+  function updateCartBadge() {
+    const cart = JSON.parse(localStorage.getItem('craveCart')) || {};
+    const itemCount = Object.values(cart).reduce((total, item) => total + item.quantity, 0);
+    
+    if (cartBadge) {
+      cartBadge.textContent = itemCount;
+      cartBadge.style.display = itemCount > 0 ? 'block' : 'none';
+    }
+  }
+  
+  // Update badge on page load
+  updateCartBadge();
+  
+  // SAFE: Override original updateCartSummary to also update badge
+  const originalUpdateCartSummary = updateCartSummary;
+  updateCartSummary = function() {
+    originalUpdateCartSummary();
+    updateCartBadge();
+  };
 });
 
 /**
@@ -283,15 +287,6 @@ function initForms() {
  */
 function initAnimations() {
   const elements = document.querySelectorAll('.animated.visible-false');
-  
-  // Immediate fallback for hero section
-  const heroSection = document.querySelector('.hero');
-  if (heroSection && heroSection.classList.contains('visible-false')) {
-    setTimeout(() => {
-      heroSection.classList.add('fadeInUp');
-      heroSection.classList.remove('visible-false');
-    }, 100);
-  }
   
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -591,26 +586,9 @@ function parsePrice(value) {
 
 function updateCartSummary() {
   const orderCount = Object.values(cart).reduce((total, item) => total + item.quantity, 0);
-  
-  // Update cart empty state display
-  const cartEmpty = document.querySelector('.cart-empty h3');
-  const cartEmptyText = document.querySelector('.cart-empty p');
-  
-  if (cartEmpty && cartEmptyText) {
-    if (orderCount > 0) {
-      cartEmpty.textContent = `Your Cart (${orderCount} item${orderCount > 1 ? 's' : ''})`;
-      cartEmptyText.textContent = 'Ready to checkout?';
-    } else {
-      cartEmpty.textContent = 'Your cart is empty 🛒';
-      cartEmptyText.textContent = 'Start adding delicious items from our menu';
-    }
-  }
-  
-  // Update floating cart badge
-  const floatingBadge = document.getElementById('floatingCartBadge');
-  if (floatingBadge) {
-    floatingBadge.textContent = orderCount;
-    floatingBadge.style.display = orderCount > 0 ? 'block' : 'none';
+  const orderSummary = document.getElementById('orderCount');
+  if (orderSummary) {
+    orderSummary.textContent = orderCount > 0 ? `Cart: ${orderCount} item${orderCount > 1 ? 's' : ''}` : 'Cart is empty';
   }
 }
 
@@ -648,7 +626,7 @@ function initMenuCart() {
       return;
     }
 
-    if (target.matches('#checkoutOrder') || target.matches('.checkout-btn')) {
+    if (target.matches('#checkoutOrder')) {
       event.preventDefault();
       const message = buildWhatsAppCartMessage();
       if (!message) {
