@@ -1569,21 +1569,47 @@ form button:hover {
 /* Sticky Category Navigation */
 .menu-sticky-nav {
   position: sticky;
-  top: 64px;
-  background: #fff;
-  z-index: 99;
+  top: 0;
+  background: #111;
+  z-index: 999;
   border-bottom: 2px solid #d4a574;
   margin: 0 0 40px 0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  padding: 0;
 }
 
 .sticky-nav-container {
   display: flex;
   overflow-x: auto;
   scrollbar-width: thin;
-  scrollbar-color: #d4a574 #f5f5f5;
-  padding: 15px 0;
-  gap: 0;
+  scrollbar-color: #d4a574 #111;
+  padding: 0;
+  background: #111;
+}
+
+.sticky-nav-link {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+}
+
+.sticky-nav-link:hover {
+  color: #d4a574;
+  background: rgba(212, 165, 116, 0.1);
+}
+
+.sticky-nav-link.active {
+  color: #d4a574;
+  border-bottom-color: #d4a574;
+  background: rgba(212, 165, 116, 0.15);
 }
 
 .sticky-nav-container::-webkit-scrollbar {
@@ -1591,7 +1617,7 @@ form button:hover {
 }
 
 .sticky-nav-container::-webkit-scrollbar-track {
-  background: #f5f5f5;
+  background: #111;
 }
 
 .sticky-nav-container::-webkit-scrollbar-thumb {
@@ -1599,18 +1625,42 @@ form button:hover {
   border-radius: 3px;
 }
 
-.sticky-nav-link {
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 16px;
-  margin: 0 8px;
-  color: #666;
-  text-decoration: none;
-  font-weight: 500;
-  border-bottom: 3px solid transparent;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-  font-size: 14px;
+/* Responsive Menu */
+@media (max-width: 768px) {
+  .menu-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+
+  .menu-image {
+    height: 150px;
+  }
+
+  .menu-content {
+    padding: 15px;
+  }
+
+  .menu-title {
+    font-size: 18px;
+  }
+
+  .menu-description {
+    font-size: 13px;
+  }
+
+  .menu-price {
+    font-size: 16px;
+  }
+
+  .filter-btn {
+    padding: 8px 16px;
+    margin: 0 3px;
+    font-size: 13px;
+  }
+
+  .menu-sticky-nav {
+    top: 55px;
+  }
 }
 
 .sticky-nav-link:hover {

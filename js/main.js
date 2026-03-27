@@ -570,9 +570,19 @@ function parsePrice(value) {
 
 function updateCartSummary() {
   const orderCount = Object.values(cart).reduce((total, item) => total + item.quantity, 0);
-  const orderSummary = document.getElementById('orderCount');
-  if (orderSummary) {
-    orderSummary.textContent = orderCount > 0 ? `Cart: ${orderCount} item${orderCount > 1 ? 's' : ''}` : 'Cart is empty';
+  
+  // Update cart empty state display
+  const cartEmpty = document.querySelector('.cart-empty h3');
+  const cartEmptyText = document.querySelector('.cart-empty p');
+  
+  if (cartEmpty && cartEmptyText) {
+    if (orderCount > 0) {
+      cartEmpty.textContent = `Your Cart (${orderCount} item${orderCount > 1 ? 's' : ''})`;
+      cartEmptyText.textContent = 'Ready to checkout?';
+    } else {
+      cartEmpty.textContent = 'Your cart is empty 🛒';
+      cartEmptyText.textContent = 'Start adding delicious items from our menu';
+    }
   }
 }
 
