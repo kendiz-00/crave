@@ -1986,6 +1986,31 @@ form button:hover {
     transparent 100%);
 }
 
+.reservation-section::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(212, 165, 116, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: pulse-bg 4s ease-in-out infinite;
+}
+
+@keyframes pulse-bg {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0.5;
+  }
+}
+
 .reservation-card {
   max-width: 600px;
   margin: 0 auto;
@@ -1998,11 +2023,26 @@ form button:hover {
               inset 0 1px 0 rgba(255, 255, 255, 0.05);
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.reservation-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(212, 165, 116, 0.5) 50%, 
+    transparent 100%);
 }
 
 .reservation-header {
   text-align: center;
   margin-bottom: 40px;
+  position: relative;
 }
 
 .reservation-title {
@@ -2013,6 +2053,7 @@ form button:hover {
   margin: 0 0 8px 0;
   text-transform: uppercase;
   letter-spacing: 2px;
+  text-shadow: 0 2px 10px rgba(212, 165, 116, 0.3);
 }
 
 .reservation-subtitle {
@@ -2021,6 +2062,7 @@ form button:hover {
   color: rgba(255, 255, 255, 0.7);
   margin: 0;
   font-weight: 400;
+  letter-spacing: 0.5px;
 }
 
 .reservation-form {
@@ -2066,17 +2108,62 @@ form button:hover {
   transition: all 0.3s ease;
   width: 100%;
   box-sizing: border-box;
+  position: relative;
+}
+
+.form-input:hover {
+  border-color: rgba(212, 165, 116, 0.5);
+  background: rgba(212, 165, 116, 0.02);
 }
 
 .form-input:focus {
   outline: none;
   border-color: #d4a574;
-  box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.2);
+  box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.2),
+              0 4px 12px rgba(212, 165, 116, 0.15);
   background: rgba(212, 165, 116, 0.05);
+  transform: translateY(-1px);
 }
 
 .form-input::placeholder {
   color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+}
+
+/* Select dropdown styling */
+select.form-input {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a574' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 20px;
+  padding-right: 40px;
+}
+
+select.form-input:hover {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a574' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+}
+
+/* Textarea styling */
+textarea.form-input {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Date input styling */
+input[type="date"].form-input {
+  color-scheme: dark;
+}
+
+input[type="date"].form-input::-webkit-calendar-picker-indicator {
+  filter: invert(0.8);
+  cursor: pointer;
+}
+
+/* Phone input styling */
+input[type="tel"].form-input {
+  letter-spacing: 1px;
 }
 
 .reservation-btn {

@@ -114,14 +114,37 @@
 							</select>
 						</div>
 					</div>
-					<h4 class="txt5 m-b-15">Email</h4>
-					<p style="font-size: 16px;"><a href="mailto:info@patoplace.com" class="txt4">info@patoplace.com</a></p>
-				</div>
 
-				<div class="col-md-4 p-t-30 t-center">
-					<h4 class="txt5 m-b-15">Hours</h4>
-					<p style="font-size: 16px;">Mon-Thu: 11AM - 10PM<br>Fri-Sat: 11AM - 11PM<br>Sun: 10AM - 9PM</p>
-				</div>
+					<div class="form-row">
+						<div class="form-group">
+							<label for="guests" class="form-label">Number of Guests</label>
+							<select id="guests" name="guests" class="form-input" required>
+								<option value="">Select number of guests</option>
+								<option value="1">1 Guest</option>
+								<option value="2">2 Guests</option>
+								<option value="3">3 Guests</option>
+								<option value="4">4 Guests</option>
+								<option value="5">5 Guests</option>
+								<option value="6">6 Guests</option>
+								<option value="7">7 Guests</option>
+								<option value="8">8 Guests</option>
+								<option value="9">9+ Guests</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-row">
+						<div class="form-group full-width">
+							<label for="message" class="form-label">Special Requests</label>
+							<textarea id="message" name="message" class="form-input" rows="4" placeholder="Any special requests? (e.g., high chair, window seating, celebration)"></textarea>
+						</div>
+					</div>
+
+					<button type="submit" class="reservation-btn">
+						<span class="btn-text">Reserve Table</span>
+						<i class="fas fa-check"></i>
+					</button>
+				</form>
 			</div>
 		</div>
 	</section>
