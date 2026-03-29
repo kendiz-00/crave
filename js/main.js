@@ -395,7 +395,7 @@ function initSwiper() {
 // Swiper is initialized by swiper-custom.js when loaded (cravee.html)
 
 /**
- * Initialize Menu Category Section Scroll Detection
+ * Initialize Menu Category Section Scroll Detection - Enhanced
  */
 function initMenuCategoryScroll() {
   const stickyNav = document.querySelector('.menu-sticky-nav');
@@ -414,19 +414,25 @@ function initMenuCategoryScroll() {
   let ticking = false;
   function updateActiveCategory() {
     let current = '';
+    let scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
     
     sections.forEach(section => {
       const sectionTop = section.offsetTop - totalOffset;
       const sectionBottom = sectionTop + section.offsetHeight;
       
-      if (scrollY >= sectionTop && scrollY < sectionBottom) {
+      if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
         current = section.getAttribute('id');
       }
     });
     
     // Handle case when scrolling above first section
-    if (scrollY < sections[0].offsetTop - totalOffset) {
+    if (scrollPosition < sections[0].offsetTop - totalOffset) {
       current = sections[0].getAttribute('id');
+    }
+    
+    // Handle case when scrolling past last section
+    if (scrollPosition >= sections[sections.length - 1].offsetTop + sections[sections.length - 1].offsetHeight - totalOffset) {
+      current = sections[sections.length - 1].getAttribute('id');
     }
     
     navLinks.forEach(link => {
@@ -435,15 +441,16 @@ function initMenuCategoryScroll() {
         link.classList.add('active');
         
         // Scroll the sticky nav to show the active link
+        const container = link.parentElement;
         const linkLeft = link.offsetLeft;
         const linkWidth = link.offsetWidth;
-        const containerWidth = link.parentElement.offsetWidth;
-        const scrollLeft = link.parentElement.scrollLeft;
+        const containerWidth = container.offsetWidth;
+        const containerScrollLeft = container.scrollLeft;
         
-        if (linkLeft < scrollLeft) {
-          link.parentElement.scrollLeft = linkLeft - 10;
-        } else if (linkLeft + linkWidth > scrollLeft + containerWidth) {
-          link.parentElement.scrollLeft = linkLeft + linkWidth - containerWidth + 10;
+        if (linkLeft < containerScrollLeft) {
+          container.scrollLeft = linkLeft - 10;
+        } else if (linkLeft + linkWidth > containerScrollLeft + containerWidth) {
+          container.scrollLeft = linkLeft + linkWidth - containerWidth + 10;
         }
       }
     });
@@ -451,12 +458,33 @@ function initMenuCategoryScroll() {
     ticking = false;
   }
   
+  // Initial update
+  updateActiveCategory();
+  
+  // Scroll event listener with throttling
   window.addEventListener('scroll', function() {
     if (!ticking) {
       requestAnimationFrame(updateActiveCategory);
       ticking = true;
     }
   }, { passive: true });
+  
+  // Click event for smooth scrolling
+  navLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const targetId = link.getAttribute('data-section');
+      const targetSection = document.getElementById(targetId);
+      
+      if (targetSection) {
+        const targetPosition = targetSection.offsetTop - totalOffset + 1;
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
 }
 
 function initMenuFilter() {
