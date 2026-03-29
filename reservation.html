@@ -68,34 +68,175 @@
 	</aside>
 
 	<!-- Reservation Section -->
-	<section class="reservation-section">
+	<section class="reservation-section" style="
+		padding: 80px 0;
+		background: linear-gradient(135deg, #0a0a0a 0%, #111 100%);
+		position: relative;
+		overflow: hidden;
+	">
 		<div class="container">
-			<div class="reservation-card">
-				<div class="reservation-header">
-					<h2 class="reservation-title">Reserve Your Table</h2>
-					<p class="reservation-subtitle">Experience dining like never before</p>
+			<div class="reservation-card" style="
+				max-width: 600px;
+				margin: 0 auto;
+				background: rgba(255, 255, 255, 0.03);
+				border: 1px solid rgba(212, 165, 116, 0.15);
+				border-radius: 24px;
+				padding: 40px;
+				box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
+				            0 8px 30px rgba(212, 165, 116, 0.15),
+				            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+				position: relative;
+				overflow: hidden;
+				backdrop-filter: blur(10px);
+			">
+				<div class="reservation-header" style="
+					text-align: center;
+					margin-bottom: 40px;
+					position: relative;
+				">
+					<h2 class="reservation-title" style="
+						font-family: 'Poppins', sans-serif;
+						font-size: 2.2rem;
+						font-weight: 700;
+						color: #fff;
+						margin: 0 0 8px 0;
+						text-transform: uppercase;
+						letter-spacing: 2px;
+						text-shadow: 0 2px 10px rgba(212, 165, 116, 0.3);
+					">Reserve Your Table</h2>
+					<p class="reservation-subtitle" style="
+						font-family: 'Poppins', sans-serif;
+						font-size: 1rem;
+						color: rgba(255, 255, 255, 0.7);
+						margin: 0;
+						font-weight: 400;
+						letter-spacing: 0.5px;
+					">Experience dining like never before</p>
 				</div>
 
-				<form class="reservation-form" id="reservationForm">
-					<div class="form-row">
-						<div class="form-group">
-							<label for="name" class="form-label">Full Name</label>
-							<input type="text" id="name" name="name" class="form-input" placeholder="Enter your full name" required>
+				<form class="reservation-form" id="reservationForm" style="
+					display: flex;
+					flex-direction: column;
+					gap: 24px;
+				">
+					<div class="form-row" style="
+						display: flex;
+						gap: 20px;
+					">
+						<div class="form-group" style="
+							flex: 1;
+							display: flex;
+							flex-direction: column;
+							gap: 8px;
+						">
+							<label for="name" class="form-label" style="
+								font-family: 'Poppins', sans-serif;
+								font-size: 0.9rem;
+								color: rgba(255, 255, 255, 0.8);
+								font-weight: 500;
+								text-transform: uppercase;
+								letter-spacing: 0.5px;
+							">Full Name</label>
+							<input type="text" id="name" name="name" class="form-input" placeholder="Enter your full name" required style="
+								background: #000;
+								border: 1px solid #333;
+								border-radius: 12px;
+								padding: 16px;
+								font-family: 'Poppins', sans-serif;
+								font-size: 1rem;
+								color: #fff;
+								transition: all 0.3s ease;
+								width: 100%;
+								box-sizing: border-box;
+							">
 						</div>
-						<div class="form-group">
-							<label for="phone" class="form-label">Phone Number</label>
-							<input type="tel" id="phone" name="phone" class="form-input" placeholder="(555) 123-4567" required>
+						<div class="form-group" style="
+							flex: 1;
+							display: flex;
+							flex-direction: column;
+							gap: 8px;
+						">
+							<label for="phone" class="form-label" style="
+								font-family: 'Poppins', sans-serif;
+								font-size: 0.9rem;
+								color: rgba(255, 255, 255, 0.8);
+								font-weight: 500;
+								text-transform: uppercase;
+								letter-spacing: 0.5px;
+							">Phone Number</label>
+							<input type="tel" id="phone" name="phone" class="form-input" placeholder="(555) 123-4567" required style="
+								background: #000;
+								border: 1px solid #333;
+								border-radius: 12px;
+								padding: 16px;
+								font-family: 'Poppins', sans-serif;
+								font-size: 1rem;
+								color: #fff;
+								transition: all 0.3s ease;
+								width: 100%;
+								box-sizing: border-box;
+							">
 						</div>
 					</div>
 
-					<div class="form-row">
-						<div class="form-group">
-							<label for="date" class="form-label">Preferred Date</label>
-							<input type="date" id="date" name="date" class="form-input" required>
+					<div class="form-row" style="
+						display: flex;
+						gap: 20px;
+					">
+						<div class="form-group" style="
+							flex: 1;
+							display: flex;
+							flex-direction: column;
+							gap: 8px;
+						">
+							<label for="date" class="form-label" style="
+								font-family: 'Poppins', sans-serif;
+								font-size: 0.9rem;
+								color: rgba(255, 255, 255, 0.8);
+								font-weight: 500;
+								text-transform: uppercase;
+								letter-spacing: 0.5px;
+							">Preferred Date</label>
+							<input type="date" id="date" name="date" class="form-input" required style="
+								background: #000;
+								border: 1px solid #333;
+								border-radius: 12px;
+								padding: 16px;
+								font-family: 'Poppins', sans-serif;
+								font-size: 1rem;
+								color: #fff;
+								transition: all 0.3s ease;
+								width: 100%;
+								box-sizing: border-box;
+							">
 						</div>
-						<div class="form-group">
-							<label for="time" class="form-label">Preferred Time</label>
-							<select id="time" name="time" class="form-input" required>
+						<div class="form-group" style="
+							flex: 1;
+							display: flex;
+							flex-direction: column;
+							gap: 8px;
+						">
+							<label for="time" class="form-label" style="
+								font-family: 'Poppins', sans-serif;
+								font-size: 0.9rem;
+								color: rgba(255, 255, 255, 0.8);
+								font-weight: 500;
+								text-transform: uppercase;
+								letter-spacing: 0.5px;
+							">Preferred Time</label>
+							<select id="time" name="time" class="form-input" required style="
+								background: #000;
+								border: 1px solid #333;
+								border-radius: 12px;
+								padding: 16px;
+								font-family: 'Poppins', sans-serif;
+								font-size: 1rem;
+								color: #fff;
+								transition: all 0.3s ease;
+								width: 100%;
+								box-sizing: border-box;
+								cursor: pointer;
+							">
 								<option value="">Select time</option>
 								<option value="11:00">11:00 AM</option>
 								<option value="11:30">11:30 AM</option>
@@ -115,10 +256,37 @@
 						</div>
 					</div>
 
-					<div class="form-row">
-						<div class="form-group">
-							<label for="guests" class="form-label">Number of Guests</label>
-							<select id="guests" name="guests" class="form-input" required>
+					<div class="form-row" style="
+						display: flex;
+						gap: 20px;
+					">
+						<div class="form-group" style="
+							flex: 1;
+							display: flex;
+							flex-direction: column;
+							gap: 8px;
+						">
+							<label for="guests" class="form-label" style="
+								font-family: 'Poppins', sans-serif;
+								font-size: 0.9rem;
+								color: rgba(255, 255, 255, 0.8);
+								font-weight: 500;
+								text-transform: uppercase;
+								letter-spacing: 0.5px;
+							">Number of Guests</label>
+							<select id="guests" name="guests" class="form-input" required style="
+								background: #000;
+								border: 1px solid #333;
+								border-radius: 12px;
+								padding: 16px;
+								font-family: 'Poppins', sans-serif;
+								font-size: 1rem;
+								color: #fff;
+								transition: all 0.3s ease;
+								width: 100%;
+								box-sizing: border-box;
+								cursor: pointer;
+							">
 								<option value="">Select number of guests</option>
 								<option value="1">1 Guest</option>
 								<option value="2">2 Guests</option>
@@ -133,16 +301,65 @@
 						</div>
 					</div>
 
-					<div class="form-row">
-						<div class="form-group full-width">
-							<label for="message" class="form-label">Special Requests</label>
-							<textarea id="message" name="message" class="form-input" rows="4" placeholder="Any special requests? (e.g., high chair, window seating, celebration)"></textarea>
+					<div class="form-row" style="
+						display: flex;
+						gap: 20px;
+					">
+						<div class="form-group full-width" style="
+							flex: 1 1 0;
+							display: flex;
+							flex-direction: column;
+							gap: 8px;
+						">
+							<label for="message" class="form-label" style="
+								font-family: 'Poppins', sans-serif;
+								font-size: 0.9rem;
+								color: rgba(255, 255, 255, 0.8);
+								font-weight: 500;
+								text-transform: uppercase;
+								letter-spacing: 0.5px;
+							">Special Requests</label>
+							<textarea id="message" name="message" class="form-input" rows="4" placeholder="Any special requests? (e.g., high chair, window seating, celebration)" style="
+								background: #000;
+								border: 1px solid #333;
+								border-radius: 12px;
+								padding: 16px;
+								font-family: 'Poppins', sans-serif;
+								font-size: 1rem;
+								color: #fff;
+								transition: all 0.3s ease;
+								width: 100%;
+								box-sizing: border-box;
+								resize: vertical;
+								min-height: 100px;
+							"></textarea>
 						</div>
 					</div>
 
-					<button type="submit" class="reservation-btn">
-						<span class="btn-text">Reserve Table</span>
-						<i class="fas fa-check"></i>
+					<button type="submit" class="reservation-btn" style="
+						background: linear-gradient(135deg, #d4a574 0%, #c19660 100%);
+						color: #fff;
+						border: none;
+						border-radius: 50px;
+						padding: 18px 32px;
+						font-family: 'Poppins', sans-serif;
+						font-size: 1.1rem;
+						font-weight: 600;
+						cursor: pointer;
+						text-transform: uppercase;
+						letter-spacing: 1px;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						gap: 10px;
+						position: relative;
+						overflow: hidden;
+						width: 100%;
+						box-shadow: 0 10px 30px rgba(212, 165, 116, 0.4);
+						transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+					">
+						<span class="btn-text" style="position: relative; z-index: 1;">Reserve Table</span>
+						<i class="fas fa-check" style="font-size: 1rem; transition: transform 0.3s ease;"></i>
 					</button>
 				</form>
 			</div>
