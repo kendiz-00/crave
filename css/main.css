@@ -2468,22 +2468,21 @@ input[type="tel"].form-input {
   }
 }
 
-/* Sticky Category Navigation - Fixed */
+/* Sticky Category Navigation - Fully Fixed */
 .menu-sticky-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  position: sticky;
+  top: 70px; /* Position below navbar */
   background: #111;
-  z-index: 9999;
+  z-index: 1000;
   border-bottom: 2px solid #d4a574;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   padding: 0;
+  margin: 0;
 }
 
-/* Add space for fixed nav */
-.menu-section {
-  padding-top: 70px;
+/* Ensure navbar has higher z-index */
+.navbar-header {
+  z-index: 1100;
 }
 
 .sticky-nav-container {
@@ -2494,6 +2493,23 @@ input[type="tel"].form-input {
   background: #111;
   max-width: 1200px;
   margin: 0 auto;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: thin;
+  scrollbar-color: #d4a574 #111;
+}
+
+.sticky-nav-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.sticky-nav-container::-webkit-scrollbar-track {
+  background: #111;
+}
+
+.sticky-nav-container::-webkit-scrollbar-thumb {
+  background: #d4a574;
+  border-radius: 3px;
 }
 
 .sticky-nav-link {
@@ -2510,6 +2526,7 @@ input[type="tel"].form-input {
   transition: all 0.3s ease;
   white-space: nowrap;
   border-bottom: 3px solid transparent;
+  flex-shrink: 0;
 }
 
 .sticky-nav-link:hover {
@@ -2522,6 +2539,16 @@ input[type="tel"].form-input {
   background: rgba(212, 165, 116, 0.15);
   border-bottom-color: #d4a574;
   font-weight: 600;
+}
+
+/* Remove conflicting styles */
+.menu-section {
+  padding-top: 0; /* Remove extra padding */
+}
+
+/* Ensure parent containers don't have overflow issues */
+.menu-content, .menu-container, .menu-wrapper {
+  overflow: visible !important;
 }
 
 .sticky-nav-container::-webkit-scrollbar {
