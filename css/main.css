@@ -3534,7 +3534,728 @@ body.menu-page,
   }
 }
 
-/* Premium Homepage Styles */
+/* Premium Design System - Sections Below Reservation */
+
+/* Base Section Styling */
+.reservation-section,
+.event-section,
+.testimonials-section,
+.review-slider-section,
+.video-section,
+.blog-section,
+.signup-section,
+.footer-section {
+  background: #111;
+  padding: 60px 0;
+  position: relative;
+}
+
+/* Glass Card Component */
+.card-glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(212, 165, 116, 0.1);
+  border-radius: 16px;
+  padding: 30px;
+  color: #fff;
+}
+
+/* Premium Button - Universal */
+.btn-premium {
+  background: linear-gradient(135deg, #d4a574, #b88a5a);
+  color: #111;
+  border: none;
+  border-radius: 30px;
+  padding: 12px 28px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(212, 165, 116, 0.3);
+}
+
+.btn-premium:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(212, 165, 116, 0.4);
+  background: linear-gradient(135deg, #c19660, #a67c52);
+}
+
+/* Premium Form Inputs */
+.form-input-premium {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  color: #fff;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.form-input-premium::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.form-input-premium:focus {
+  outline: none;
+  border-color: #d4a574;
+  box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.2);
+  background: rgba(212, 165, 116, 0.05);
+}
+
+/* Reservation Section Upgrade */
+.reservation-section .wrap-form-booking {
+  background: #1a1a1a;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.reservation-section .booking-title {
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+}
+
+.reservation-section .booking-subtitle {
+  color: #d4a574;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 30px;
+}
+
+.reservation-section .txt9 {
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.reservation-section .wrap-inputdate,
+.reservation-section .wrap-inputtime,
+.reservation-section .wrap-inputpeople,
+.reservation-section .wrap-inputname,
+.reservation-section .wrap-inputphone,
+.reservation-section .wrap-inputemail {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+}
+
+.reservation-section .wrap-inputdate input,
+.reservation-section .wrap-inputtime select,
+.reservation-section .wrap-inputpeople select,
+.reservation-section .wrap-inputname input,
+.reservation-section .wrap-inputphone input,
+.reservation-section .wrap-inputemail input {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.reservation-section .wrap-inputdate input::placeholder,
+.reservation-section .wrap-inputname input::placeholder,
+.reservation-section .wrap-inputphone input::placeholder,
+.reservation-section .wrap-inputemail input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.reservation-section .btn-calendar {
+  color: #d4a574;
+}
+
+.reservation-section .wrap-btn-booking {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.reservation-section .trust-text {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  margin-top: 15px;
+}
+
+/* Event Section Upgrade */
+.event-section .section-event {
+  background: #111;
+}
+
+.event-section .item-slick2 {
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+.event-section .item-slick2::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(212, 165, 116, 0.3) 100%);
+  z-index: 1;
+}
+
+.event-section .wrap-content-slide2 {
+  position: relative;
+  z-index: 2;
+}
+
+.event-section .title-event {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(212, 165, 116, 0.1);
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.event-section .title-event .tit2 {
+  color: #d4a574;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.event-section .title-event .tit6 {
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.event-section .wrap-btn-slide2 {
+  text-align: center;
+}
+
+/* Testimonials Section Upgrade */
+.testimonials-section {
+  background: #111;
+}
+
+.testimonials-section .title-section-ourmenu {
+  margin-bottom: 60px;
+}
+
+.testimonials-section .tit2 {
+  color: #d4a574;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.testimonials-section .tit5 {
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.testimonials-section .testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.testimonials-section .testimonial-card {
+  background: #1a1a1a;
+  border: 1px solid rgba(212, 165, 116, 0.2);
+  border-radius: 16px;
+  padding: 30px;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.testimonials-section .testimonial-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(212, 165, 116, 0.3);
+  border-color: rgba(212, 165, 116, 0.4);
+}
+
+.testimonials-section .testimonial-stars {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
+.testimonials-section .testimonial-stars i {
+  color: #d4a574;
+  font-size: 1.2rem;
+}
+
+.testimonials-section .testimonial-review {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 25px 0;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.testimonials-section .testimonial-author {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  color: #d4a574;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Review Slider Section */
+.review-slider-section {
+  background: #111;
+}
+
+.review-slider-section .review-card {
+  background: #1a1a1a;
+  border: 1px solid rgba(212, 165, 116, 0.2);
+  border-radius: 16px;
+  padding: 30px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.review-slider-section .review-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(212, 165, 116, 0.3);
+}
+
+/* Video Section Upgrade */
+.video-section {
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  position: relative;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(212, 165, 116, 0.4) 100%);
+}
+
+.video-section .content-video {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 600px;
+  padding: 0 20px;
+}
+
+.video-section .tit2 {
+  color: #d4a574;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+  display: block;
+}
+
+.video-section .tit4 {
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0 0 40px 0;
+}
+
+.video-section .btn-play {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #d4a574, #b88a5a);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  box-shadow: 0 15px 35px rgba(212, 165, 116, 0.5);
+  transition: all 0.3s ease;
+  animation: pulse-glow 2s ease-in-out infinite;
+  cursor: pointer;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 15px 35px rgba(212, 165, 116, 0.5);
+  }
+  50% {
+    box-shadow: 0 20px 45px rgba(212, 165, 116, 0.7);
+  }
+}
+
+.video-section .btn-play:hover {
+  transform: scale(1.1);
+  box-shadow: 0 20px 45px rgba(212, 165, 116, 0.6);
+}
+
+.video-section .btn-play i {
+  color: #111;
+  font-size: 1.5rem;
+  margin-left: 3px;
+}
+
+/* Blog Section Upgrade */
+.blog-section {
+  background: #111;
+}
+
+.blog-section .title-section-ourmenu {
+  margin-bottom: 60px;
+}
+
+.blog-section .tit2 {
+  color: #d4a574;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.blog-section .tit5 {
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.blog-section .blo1 {
+  background: #1a1a1a;
+  border: 1px solid rgba(212, 165, 116, 0.2);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.blog-section .blo1:hover {
+  transform: scale(1.02);
+  box-shadow: 0 15px 40px rgba(212, 165, 116, 0.3);
+  border-color: rgba(212, 165, 116, 0.4);
+}
+
+.blog-section .wrap-pic-blo1 {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.blog-section .wrap-pic-blo1 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.blog-section .blo1:hover .wrap-pic-blo1 img {
+  transform: scale(1.1);
+}
+
+.blog-section .time-blog {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: linear-gradient(135deg, #d4a574, #b88a5a);
+  color: #111;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.blog-section .wrap-text-blo1 {
+  padding: 25px;
+}
+
+.blog-section .wrap-text-blo1 .txt5 {
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 15px 0;
+}
+
+.blog-section .wrap-text-blo1 p {
+  color: rgba(255, 255, 255, 0.7);
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.6;
+  margin: 0 0 20px 0;
+}
+
+.blog-section .wrap-text-blo1 .txt4 {
+  color: #d4a574;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.blog-section .wrap-text-blo1 .txt4:hover {
+  color: #fff;
+  transform: translateX(5px);
+}
+
+/* Signup Section Upgrade */
+.signup-section {
+  background: #111;
+  text-align: center;
+  position: relative;
+}
+
+.signup-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #d4a574 20%, #d4a574 80%, transparent 100%);
+}
+
+.signup-section .wrap-form-signup {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px;
+  background: #1a1a1a;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.signup-section .txt5 {
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+  display: block;
+}
+
+.signup-section .wrap-input-signup {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 30px;
+  padding: 15px 20px;
+  margin: 20px 0;
+  position: relative;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.signup-section .wrap-input-signup input {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  width: calc(100% - 40px);
+  padding-right: 40px;
+}
+
+.signup-section .wrap-input-signup input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.signup-section .wrap-input-signup i {
+  color: #d4a574;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.signup-section .btn3 {
+  background: linear-gradient(135deg, #d4a574, #b88a5a);
+  color: #111;
+  border: none;
+  border-radius: 30px;
+  padding: 15px 30px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(212, 165, 116, 0.4);
+  margin: 20px auto;
+  display: inline-block;
+}
+
+.signup-section .btn3:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(212, 165, 116, 0.5);
+}
+
+/* Footer Section Upgrade */
+.footer-section {
+  background: #111;
+  padding: 60px 0 30px;
+}
+
+.footer-section .txt13 {
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 25px;
+}
+
+.footer-section .txt14 {
+  color: rgba(255, 255, 255, 0.8);
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.footer-section .txt14 a {
+  color: #d4a574;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-section .txt14 a:hover {
+  color: #fff;
+}
+
+.footer-section .txt15 {
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-section .txt15:hover {
+  color: #d4a574;
+}
+
+.footer-section .txt16 {
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+}
+
+.footer-section .end-footer {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 20px 0;
+  margin-top: 40px;
+}
+
+.footer-section .txt17 {
+  color: rgba(255, 255, 255, 0.7);
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+}
+
+.footer-section .fs-15 {
+  color: #fff;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.footer-section .fs-15:hover {
+  color: #d4a574;
+  transform: translateY(-2px);
+}
+
+/* Mobile Responsive for Premium Sections */
+@media (max-width: 768px) {
+  .reservation-section,
+  .event-section,
+  .testimonials-section,
+  .review-slider-section,
+  .video-section,
+  .blog-section,
+  .signup-section,
+  .footer-section {
+    padding: 40px 0;
+  }
+  
+  .reservation-section .booking-title,
+  .signup-section .txt5 {
+    font-size: 2rem;
+  }
+  
+  .testimonials-section .testimonials-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .video-section .btn-play {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .signup-section .wrap-form-signup {
+    padding: 30px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reservation-section .booking-title,
+  .signup-section .txt5 {
+    font-size: 1.8rem;
+  }
+  
+  .video-section .btn-play {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .video-section .btn-play i {
+    font-size: 1.2rem;
+  }
+}
 
 /* Enhanced Hero Section */
 .hero {

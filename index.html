@@ -811,25 +811,28 @@
 			<div class="wrap-slick2-dots"></div>
 		</div>
 	</section>
+		<!-- Reservation Section -->
+	<section class="reservation-section">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-6 p-b-30">
 					<div class="t-center">
-						<span class="tit2 t-center">Reservation</span>
-						<h3 class="tit3 t-center m-b-35 m-t-2">Book Table</h3>
+						<span class="booking-subtitle">Reservation</span>
+						<h3 class="booking-title">Reserve Your Table Now</h3>
+						<p class="booking-trust">Secure your spot in seconds</p>
 					</div>
 
 					<form class="wrap-form-booking" action="#" method="post">
 						<div class="row">
 							<div class="col-md-6">
 								<span class="txt9">Date</span>
-								<div class="wrap-inputdate pos-relative txt10 size12 bo2 bo-rad-10 m-t-3 m-b-23">
-									<input class="my-calendar bo-rad-10 sizefull txt10 p-l-20" type="text" name="date" placeholder="Select date">
-									<i class="btn-calendar fa-solid fa-calendar ab-r-m hov-pointer m-r-18" aria-hidden="true"></i>
+								<div class="wrap-inputdate">
+									<input class="my-calendar" type="text" name="date" placeholder="Select date">
+									<i class="btn-calendar fa-solid fa-calendar" aria-hidden="true"></i>
 								</div>
 
 								<span class="txt9">Time</span>
-								<div class="wrap-inputtime size12 bo2 bo-rad-10 m-t-3 m-b-23">
+								<div class="wrap-inputtime">
 									<select class="selection-1" name="time">
 										<option>11:00 AM</option>
 										<option>11:30 AM</option>
@@ -851,7 +854,7 @@
 								</div>
 
 								<span class="txt9">People</span>
-								<div class="wrap-inputpeople size12 bo2 bo-rad-10 m-t-3 m-b-23">
+								<div class="wrap-inputpeople">
 									<select class="selection-1" name="people">
 										<option>1 person</option>
 										<option>2 people</option>
@@ -869,270 +872,81 @@
 
 							<div class="col-md-6">
 								<span class="txt9">Name</span>
-								<div class="wrap-inputname size12 bo2 bo-rad-10 m-t-3 m-b-23">
-									<input class="bo-rad-10 sizefull txt10 p-l-20" type="text" name="name" placeholder="Your Name" required>
+								<div class="wrap-inputname">
+									<input type="text" name="name" placeholder="Your Name" required>
 								</div>
 
 								<span class="txt9">Phone</span>
-								<div class="wrap-inputphone size12 bo2 bo-rad-10 m-t-3 m-b-23">
-									<input class="bo-rad-10 sizefull txt10 p-l-20" type="tel" name="phone" placeholder="Phone Number" required>
+								<div class="wrap-inputphone">
+									<input type="tel" name="phone" placeholder="Phone Number" required>
 								</div>
 
 								<span class="txt9">Email</span>
-								<div class="wrap-inputemail size12 bo2 bo-rad-10 m-t-3 m-b-23">
-									<input class="bo-rad-10 sizefull txt10 p-l-20" type="email" name="email" placeholder="Email Address" required>
+								<div class="wrap-inputemail">
+									<input type="email" name="email" placeholder="Email Address" required>
 								</div>
 							</div>
 						</div>
 
-						<div class="wrap-btn-booking flex-c-m m-t-6">
-							<button type="submit" class="btn3 flex-c-m size13 txt11 trans-0-4">Book Table</button>
+						<div class="wrap-btn-booking">
+							<button type="submit" class="btn-premium">Reserve Your Table Now</button>
+							<p class="trust-text">Secure your spot in seconds</p>
 						</div>
 					</form>
 				</div>
 
 				<div class="col-lg-6 p-b-30 p-t-18">
-					<div class="wrap-pic-booking size2 bo-rad-10 hov-img-zoom m-l-r-auto">
-						<img src="images/booking-01.jpg" alt="Restaurant" loading="lazy">
-					</divs="container">
-			<div class="title-event t-center m-b-52">
-				<span class="tit2 p-l-15 p-r-15" style="color: #d4a574;">Upcomming</span>
-				<h3 class="tit6 t-center p-l-15 p-r-15 p-t-3" style="color: #fff;">Events</h3>
-			</div>
-
-			<div class="row">
-				<div class="col-md-6">
-					<div style="background-image: url(images/event-02.jpg); background-size: cover; background-position: center; height: 400px; border-radius: 10px;"></div>
-				</div>
-				<div class="col-md-6" style="display: flex; flex-direction: column; justify-content: center; padding: 40px;">
-					<h4 class="tit7" style="color: #fff; font-size: 24px; margin-bottom: 20px;">Wines during specific nights</h4>
-					<p style="color: #ccc; margin-bottom: 30px;">Join us for an exclusive wine tasting evening where we showcase the finest Italian wines paired with our signature dishes.</p>
-					<p style="color: #d4a574; font-size: 14px; font-weight: 600;">08:00 PM - Tuesday, Next Month</p>
-					<a href="reservation.html" class="btn1" style="display: inline-block; padding: 12px 30px; width: fit-content; margin-top: 20px;">Reserve Your Seat</a>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<!-- Testimonials Section -->
-	<section class="testimonials-section p-t-115 p-b-115 animated visible-false" data-appear="fadeInUp">
-		<div class="container">
-			<div class="title-section-ourmenu t-center m-b-22">
-				<span class="tit2 t-center">What Our Customers Say</span>
-				<h3 class="tit5 t-center m-t-2">Real Reviews from Real Guests</h3>
-			</div>
-			<div class="testimonials-grid">
-				<div class="testimonial-card">
-					<div class="testimonial-stars">
-						<i class="fas fa-star"></i>
-						<i class="fas fa-star"></i>
-						<i class="fas fa-star"></i>
-						<i class="fas fa-star"></i>
-						<i class="fas fa-star"></i>
-					</div>
-					<p class="testimonial-review">Best brunch spot in Accra. Everything was fresh and delicious!</p>
-					<div class="testimonial-author">— Nana Akua</div>
-				</div>
-				<div class="testimonial-card">
-					<div class="testimonial-stars">
-						<i class="fas fa-star"></i>
-						<i class="fas fa-star"></i>
-						<i class="fas fa-star"></i>
-						<i class="fas fa-star"></i>
-						<i class="fas fa-star"></i>
-					</div>
-					<p class="testimonial-review">Amazing vibes, great food, and fast service. Will definitely come back!</p>
-					<div class="testimonial-author">— Kwame Asante</div>
-				</div>
-				<div class="testimonial-card">
-					<div class="testimonial-stars">
-						<i class="fas fa-star"></i>
-						<i class="fas fa-star"></i>
-						<i class="fas fa-star"></i>
-						<i class="fas fa-star"></i>
-						<i class="fas fa-star"></i>
-					</div>
-					<p class="testimonial-review">The perfect place for date night. Romantic ambiance and excellent service.</p>
-					<div class="testimonial-author">— Adwoa Mensah</div>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<!-- Events Section -->
-	<section class="premium-events">
-		<div class="container">
-			<div class="events-header">
-				<span class="events-subtitle">Upcoming</span>
-				<h2 class="events-title">Events</h2>
-			</div>
-			<div class="swiper swiper-events">
+					<!-- Events Section -->
+	<section class="event-section section-event">
+		<div class="wrap-slick2">
+			<div class="swiper swiper-event">
 				<div class="swiper-wrapper">
-					<div class="swiper-slide event-slide" style="background-image: url(images/cover_page.jpeg);">
-						<div class="event-overlay"></div>
-						<div class="event-content">
-							<div class="event-card">
-								<span class="event-tag"> Limited Seats</span>
-								<h3 class="event-name">Wine Tasting Night</h3>
-								<p class="event-description">Join us for an exclusive evening of premium wines and gourmet pairings</p>
-								<p class="event-date">December 28, 2024 • 7:00 PM</p>
-								<a href="reservation.html" class="event-btn">Reserve Your Seat</a>
-							</div>
-						</div>
-					</div>
-					<div class="swiper-slide event-slide" style="background-image: url(images/inside.jpeg);">
-						<div class="event-overlay"></div>
-						<div class="event-content">
-							<div class="event-card">
-								<span class="event-tag"> Live Music</span>
-								<h3 class="event-name">Jazz Evening</h3>
-								<p class="event-description">Smooth jazz performances with our signature cocktail menu</p>
-								<p class="event-date">January 5, 2025 • 8:00 PM</p>
-								<a href="reservation.html" class="event-btn">Reserve Your Seat</a>
-							</div>
-						</div>
-					</div>
-					<div class="swiper-slide event-slide" style="background-image: url(images/tx-chick.jpeg);">
-						<div class="event-overlay"></div>
-						<div class="event-content">
-							<div class="event-card">
-								<span class="event-tag"> Chef's Table</span>
-								<h3 class="event-name">Exclusive Dinner</h3>
-								<p class="event-description">Multi-course tasting menu with wine pairing</p>
-								<p class="event-date">January 12, 2025 • 7:30 PM</p>
-								<a href="reservation.html" class="event-btn">Reserve Your Seat</a>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="swiper-pagination"></div>
-			</div>
-		</div>
-	</section>
+					<div class="swiper-slide item-slick2 item1-slick2" style="background-image: url(images/cover_page.jpeg);">
+						<div class="wrap-content-slide2 p-t-115 p-b-208">
+							<div class="container">
+								<div class="title-event card-glass">
+									<span class="tit2">Upcoming</span>
+									<h3 class="tit6">Events</h3>
+								</div>
 
-	<!-- Booking Section -->
-	<section class="premium-booking">
-		<div class="container">
-			<div class="booking-grid">
-				<div class="booking-form-section">
-					<div class="booking-header">
-						<span class="booking-subtitle">Reservation</span>
-						<h2 class="booking-title">Reserve Your Table Now</h2>
-						<p class="booking-trust">Secure your spot in seconds</p>
+								<div class="wrap-btn-slide2 w-size1 m-auto">
+									<a href="reservation.html" class="btn-premium">Reserve Your Seat</a>
+								</div>
+							</div>
+						</div>
 					</div>
-					<form class="booking-form">
-						<div class="form-row">
-							<div class="form-group">
-								<input type="text" class="form-input" placeholder="Your Name" required>
-							</div>
-							<div class="form-group">
-								<input type="email" class="form-input" placeholder="Email Address" required>
-							</div>
-						</div>
-						<div class="form-row">
-							<div class="form-group">
-								<input type="date" class="form-input" required>
-							</div>
-							<div class="form-group">
-								<input type="time" class="form-input" required>
-							</div>
-						</div>
-						<div class="form-row">
-							<div class="form-group">
-								<input type="number" class="form-input" placeholder="Number of Guests" min="1" max="20" required>
-							</div>
-							<div class="form-group">
-								<input type="tel" class="form-input" placeholder="Phone Number" required>
-							</div>
-						</div>
-						<div class="form-group">
-							<textarea class="form-input" placeholder="Special Requests (Optional)" rows="3"></textarea>
-						</div>
-						<button type="submit" class="booking-btn">Reserve Your Table Now</button>
-					</form>
-				</div>
-				<div class="booking-image-section">
-					<div class="booking-image">
-						<img src="images/booking-01.jpg" alt="Restaurant" loading="lazy">
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
 
-	<!-- Video Section -->
-	<section class="premium-video" style="background-image: url(images/bg-cover-video-02.jpg);">
-		<div class="video-overlay"></div>
-		<div class="video-content">
-			<div class="video-header">
-				<span class="video-subtitle">Our Story</span>
-				<h2 class="video-title">Discover Crave</h2>
-			</div>
-			<div class="video-play-button" data-bs-toggle="modal" data-bs-target="#modal-video-01">
-				<div class="play-circle">
-					<i class="fas fa-play"></i>
-				</div>
-			</div>
-		</div>
-	</section>
+					<div class="swiper-slide item-slick2 item2-slick2" style="background-image: url(images/inside.jpeg);">
+						<div class="wrap-content-slide2 p-t-115 p-b-208">
+							<div class="container">
+								<div class="title-event card-glass">
+									<span class="tit2">Upcoming</span>
+									<h3 class="tit6">Events</h3>
+								</div>
 
-	<!-- Blog Section -->
-	<section class="premium-blog">
-		<div class="container">
-			<div class="blog-header">
-				<span class="blog-subtitle">Latest News</span>
-				<h2 class="blog-title">The Blog</h2>
-			</div>
-			<div class="blog-grid">
-				<div class="blog-card">
-					<div class="blog-image">
-						<img src="images/blog-01.jpg" alt="Blog" loading="lazy">
-						<div class="blog-date">21 Dec 2024</div>
+								<div class="wrap-btn-slide2 w-size1 m-auto">
+									<a href="reservation.html" class="btn-premium">Reserve Your Seat</a>
+								</div>
+							</div>
+						</div>
 					</div>
-					<div class="blog-content">
-						<h3 class="blog-title-card">Best Places for Wine</h3>
-						<p class="blog-excerpt">Discover our curated wine selection and pairing recommendations.</p>
-						<a href="blog.html" class="blog-link">Continue Reading <i class="fas fa-arrow-right"></i></a>
-					</div>
-				</div>
-				<div class="blog-card">
-					<div class="blog-image">
-						<img src="images/blog-02.jpg" alt="Blog" loading="lazy">
-						<div class="blog-date">15 Dec 2024</div>
-					</div>
-					<div class="blog-content">
-						<h3 class="blog-title-card">Seasonal Specials</h3>
-						<p class="blog-excerpt">Explore our winter menu featuring fresh, seasonal ingredients.</p>
-						<a href="blog.html" class="blog-link">Continue Reading <i class="fas fa-arrow-right"></i></a>
-					</div>
-				</div>
-				<div class="blog-card">
-					<div class="blog-image">
-						<img src="images/blog-03.jpg" alt="Blog" loading="lazy">
-						<div class="blog-date">12 Dec 2024</div>
-					</div>
-					<div class="blog-content">
-						<h3 class="blog-title-card">Private Events</h3>
-						<p class="blog-excerpt">Host your next celebration at Crave. Perfect for weddings and parties.</p>
-						<a href="blog.html" class="blog-link">Continue Reading <i class="fas fa-arrow-right"></i></a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
 
-	<!-- Signup Section -->
-	<section class="premium-signup">
-		<div class="container">
-			<div class="signup-content">
-				<h2 class="signup-title">Get Exclusive Offers & Updates</h2>
-				<p class="signup-subtitle">Join our community and be the first to know about special events and promotions</p>
-				<form class="signup-form">
-					<div class="signup-input-group">
-						<input type="email" class="signup-input" placeholder="Enter your email address" required>
-						<button type="submit" class="signup-btn">Subscribe</button>
+					<div class="swiper-slide item-slick2 item3-slick2" style="background-image: url(images/tx-chick.jpeg);">
+						<div class="wrap-content-slide2 p-t-115 p-b-208">
+							<div class="container">
+								<div class="title-event card-glass">
+									<span class="tit2">Upcoming</span>
+									<h3 class="tit6">Events</h3>
+								</div>
+
+								<div class="wrap-btn-slide2 w-size1 m-auto">
+									<a href="reservation.html" class="btn-premium">Reserve Your Seat</a>
+								</div>
+							</div>
+						</div>
 					</div>
-				</form>
+				</div>
+				<div class="wrap-slick2-dots"></div>
 			</div>
 		</div>
 	</section>
