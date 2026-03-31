@@ -20,52 +20,72 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-	<!-- Header -->
-	<header>
-		<div class="wrap-menu-header gradient1 trans-0-4">
-			<div class="container h-full">
-				<div class="wrap_header trans-0-3">
-					<div class="logo">
-						<a href="cravee.html">
-							<img src="images/logo.png" alt="Crave Restaurant">
-						</a>
-					</div>
+	<!-- Header/Navbar -->
+	<header id="siteHeader" class="navbar-header">
+		<nav class="navbar">
+			<div class="navbar-container">
+				<div class="navbar-logo">
+					<a href="index.html" class="logo-link">
+						<img src="images/logo.png" alt="Crave Restaurant" class="logo-img">
+					</a>
+				</div>
 
-					<div class="wrap_menu p-l-45">
-						<nav class="menu">
-							<ul class="main_menu">
-								<li><a href="cravee.html">Home</a></li>
-								<li><a href="menu.html">Menu</a></li>
-								<li><a href="reservation.html">Reservation</a></li>
-								<li><a href="gallery.html">Gallery</a></li>
-								<li><a href="about.html">About</a></li>
-								<li><a href="blog.html">Blog</a></li>
-								<li><a href="contact.html">Contact</a></li>
-							</ul>
-						</nav>
-					</div>
+				<button
+					id="navbarToggle"
+					class="navbar-toggle"
+					aria-label="Toggle navigation"
+					aria-expanded="false"
+					aria-controls="navbarMenu"
+				>
+					<span class="navbar-toggle-bar"></span>
+					<span class="navbar-toggle-bar"></span>
+					<span class="navbar-toggle-bar"></span>
+				</button>
 
-					<div class="flex-w flex-l-m">
-						<button class="btn-show-sidebar trans-0-4">☰</button>
-					</div>
+				<div class="navbar-menu" id="navbarMenu" aria-hidden="true" aria-label="Mobile navigation">
+					<ul class="navbar-menu-list">
+						<li class="navbar-menu-item"><a href="index.html" class="navbar-link" data-page="home">Home</a></li>
+						<li class="navbar-menu-item"><a href="menu.html" class="navbar-link" data-page="menu">Menu</a></li>
+						<li class="navbar-menu-item"><a href="about.html" class="navbar-link" data-page="about">About</a></li>
+					</ul>
 				</div>
 			</div>
-		</div>
+		</nav>
 	</header>
 
 	<!-- Sidebar -->
 	<aside class="sidebar trans-0-4">
-		<button class="btn-hide-sidebar">✕</button>
-		<ul class="menu-sidebar p-t-95 p-b-70">
-			<li class="t-center m-b-13"><a href="cravee.html" class="txt19">Home</a></li>
-			<li class="t-center m-b-13"><a href="menu.html" class="txt19">Menu</a></li>
-			<li class="t-center m-b-13"><a href="reservation.html" class="txt19">Reservation</a></li>
-			<li class="t-center m-b-13"><a href="gallery.html" class="txt19">Gallery</a></li>
-			<li class="t-center m-b-13"><a href="about.html" class="txt19">About</a></li>
-			<li class="t-center m-b-13"><a href="blog.html" class="txt19">Blog</a></li>
-			<li class="t-center m-b-33"><a href="contact.html" class="txt19">Contact</a></li>
+		<button class="btn-hide-sidebar color0-hov trans-0-4" style="min-width: 44px; min-height: 44px; font-size: 24px; padding: 8px 12px; display: block; background: none; border: none; color: #fff;"><i class="fa-solid fa-xmark"></i></button>
+
+		<ul class="menu-sidebar p-t-95 p-b-70" style="padding-top: 20px; padding-bottom: 20px;">
+			<li class="t-center m-b-13"><a href="index.html" class="txt19" style="display: block; padding: 12px;">Home</a></li>
+			<li class="t-center m-b-13"><a href="menu.html" class="txt19" style="display: block; padding: 12px;">Menu</a></li>
+			<li class="t-center m-b-13"><a href="gallery.html" class="txt19" style="display: block; padding: 12px;">Gallery</a></li>
+			<li class="t-center m-b-13"><a href="about.html" class="txt19" style="display: block; padding: 12px;">About</a></li>
+			<li class="t-center m-b-13"><a href="blog.html" class="txt19" style="display: block; padding: 12px;">Blog</a></li>
+			<li class="t-center m-b-33"><a href="contact.html" class="txt19" style="display: block; padding: 12px;">Contact</a></li>
+			<li class="t-center">
+				<a href="reservation.html" class="btn3 flex-c-m size13 txt11 trans-0-4 m-l-r-auto" style="min-height: 44px;">Reservation</a>
+			</li>
 		</ul>
-	</aside>
+
+		<div class="social-sidebar t-center p-t-30 p-b-30">
+			<a href="#" class="fs-18 color1-hov m-r-15" style="display: inline-block; width: 44px; height: 44px; line-height: 44px;"><i class="fa-brands fa-yelp" aria-hidden="true"></i></a>
+			<a href="#" class="fs-18 color1-hov m-r-15" style="display: inline-block; width: 44px; height: 44px; line-height: 44px;"><i class="fa-brands fa-google" aria-hidden="true"></i></a>
+			<a href="#" class="fs-18 color1-hov m-r-15" style="display: inline-block; width: 44px; height: 44px; line-height: 44px;"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+			<a href="#" class="fs-18 color1-hov m-r-15" style="display: inline-block; width: 44px; height: 44px; line-height: 44px;"><i class="fa-brands fa-facebook" aria-hidden="true"></i></a>
+			<a href="#" class="fs-18 color1-hov" style="display: inline-block; width: 44px; height: 44px; line-height: 44px;"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+		</div>
+
+		<div class="gallery-sidebar t-center p-l-30 p-r-30 p-b-40" style="padding-left: 15px; padding-right: 15px;">
+			<h4 class="txt20 m-b-33">Gallery</h4>
+			<div class="wrap-gallery-sidebar flex-w">
+				<a class="item-gallery-sidebar wrap-pic-w glightbox" href="images/photo-gallery-01.jpg" data-gallery="gallery-sidebar" style="flex: 0 0 calc(33.333% - 8px); margin: 4px;">
+					<img src="images/photo-gallery-thumb-01.jpg" alt="GALLERY" loading="lazy">
+				</a>
+				<a class="item-gallery-sidebar wrap-pic-w glightbox" href="images/photo-gallery-02.jpg" data-gallery="gallery-sidebar" style="flex: 0 0 calc(33.333% - 8px); margin: 4px;">
+					<img src="images/photo-gallery-thumb-02.jpg" alt="GALLERY" loading="lazy">
+				</a>
 
 	<!-- Reservation Section -->
 	<section class="reservation-section" style="
