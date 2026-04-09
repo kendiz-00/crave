@@ -1168,6 +1168,28 @@ form button:hover {
   color: white;
 }
 
+/* Category Tabs Layout */
+.category-tabs {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.category-tabs::-webkit-scrollbar {
+  height: 4px;
+}
+
+.category-tabs::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.category-tabs::-webkit-scrollbar-thumb {
+  background: #d4a574;
+  border-radius: 2px;
+}
+
 .menu-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
