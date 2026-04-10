@@ -49,11 +49,11 @@ body {
 .txt20 { font-size: 20px; color: #fff; }
 
 .tit1 { font-size: 90px; font-weight: 700; color: #fff; font-family: 'Poppins-Bold', 'Poppins', 'Montserrat', sans-serif; letter-spacing: 6px; text-transform: uppercase; }
-.tit2 { font-size: 16px; color: #d4a574; text-transform: uppercase; font-weight: 600; letter-spacing: 3px; }
-.tit3 { font-size: 32px; font-weight: bold; color: #333; }
-.tit4 { font-size: 42px; font-weight: bold; color: #fff; }
-.tit5 { font-size: 32px; font-weight: bold; color: #333; }
-.tit6 { font-size: 42px; font-weight: bold; color: #fff; }
+.tit2 { font-size: 18px; color: #d4a574; text-transform: uppercase; font-weight: 600; letter-spacing: 3px; }
+.tit3 { font-size: 34px; font-weight: bold; color: #333; }
+.tit4 { font-size: 44px; font-weight: bold; color: #fff; }
+.tit5 { font-size: 38px; font-weight: bold; color: #333; }
+.tit6 { font-size: 44px; font-weight: bold; color: #fff; }
 
 /* Header/Navbar */
 .navbar-header {
@@ -2346,6 +2346,7 @@ body.menu-page,
   overflow: hidden;
   transition: all 0.4s ease;
   position: relative;
+  height: 420px;
   box-shadow: 0 0 30px rgba(212, 165, 116, 0.3),
               0 10px 30px rgba(0, 0, 0, 0.4) !important;
 }
@@ -2395,7 +2396,7 @@ body.menu-page,
 
 .menu-card img {
   width: 100%;
-  height: 200px;
+  height: 260px;
   object-fit: cover;
   transition: transform 0.5s ease;
 }
@@ -2411,17 +2412,17 @@ body.menu-page,
 
 .menu-card-title {
   font-family: 'Poppins', sans-serif;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: #fff;
-  margin: 0 0 10px 0;
+  margin: 0 0 12px 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .menu-card-price {
   font-family: 'Poppins', sans-serif;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: #d4a574;
   margin: 0 0 15px 0;
@@ -2430,6 +2431,7 @@ body.menu-page,
 
 .menu-card-description {
   font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.7);
   margin: 0 0 20px 0;
