@@ -701,32 +701,33 @@
 	<section class="reservation-section">
 		<div class="container-fluid px-3">
 			<div class="row">
-				<div class="col-lg-6 p-b-30">
+				<div class="col-lg-8 mx-auto">
 					<div class="t-center">
 						<span class="booking-subtitle">Reservation</span>
 						<h3 class="booking-title">Reserve Your Table Now</h3>
 						<p class="booking-trust">Secure your spot in seconds</p>
 					</div>
 
-					<form class="wrap-form-booking" action="#" method="post">
+					<form id="reservationForm" class="wrap-form-booking" method="post">
 						<div class="row">
 							<div class="col-md-6">
 								<span class="txt9">Date</span>
 								<div class="wrap-inputdate">
-									<input class="my-calendar" type="text" name="date" placeholder="Select date">
+									<input class="my-calendar" type="date" name="date" placeholder="Select date" required>
 									<i class="btn-calendar fa-solid fa-calendar" aria-hidden="true"></i>
 								</div>
+							</div>
 
+							<div class="col-md-6">
 								<span class="txt9">Time</span>
 								<div class="wrap-inputtime">
-									<select class="selection-1" name="time">
+									<select class="selection-1" name="time" required>
 										<option>11:00 AM</option>
 										<option>11:30 AM</option>
 										<option>12:00 PM</option>
 										<option>12:30 PM</option>
 										<option>1:00 PM</option>
 										<option>1:30 PM</option>
-										<option>2:00 PM</option>
 										<option>5:00 PM</option>
 										<option>5:30 PM</option>
 										<option>6:00 PM</option>
@@ -736,12 +737,15 @@
 										<option>8:00 PM</option>
 										<option>8:30 PM</option>
 										<option>9:00 PM</option>
+										<option>9:30 PM</option>
 									</select>
 								</div>
+							</div>
 
+							<div class="col-md-6">
 								<span class="txt9">People</span>
 								<div class="wrap-inputpeople">
-									<select class="selection-1" name="people">
+									<select class="selection-1" name="people" required>
 										<option>1 person</option>
 										<option>2 people</option>
 										<option>3 people</option>
@@ -761,12 +765,16 @@
 								<div class="wrap-inputname">
 									<input type="text" name="name" placeholder="Your Name" required>
 								</div>
+							</div>
 
+							<div class="col-md-6">
 								<span class="txt9">Phone</span>
 								<div class="wrap-inputphone">
 									<input type="tel" name="phone" placeholder="Phone Number" required>
 								</div>
+							</div>
 
+							<div class="col-md-6">
 								<span class="txt9">Email</span>
 								<div class="wrap-inputemail">
 									<input type="email" name="email" placeholder="Email Address" required>
@@ -775,11 +783,41 @@
 						</div>
 
 						<div class="wrap-btn-booking">
-							<button type="submit" class="btn-premium">Reserve Your Table Now</button>
-							<p class="trust-text">Secure your spot in seconds</p>
+							<button type="submit" id="submitBtn" class="btn-premium">
+								<span id="btnText">Reserve Your Table Now</span>
+								<span id="btnLoader" class="btn-loader" style="display: none;">
+									<i class="fa-solid fa-spinner fa-spin"></i>
+								</span>
+							</button>
+							<p class="trust-text">⚡ Takes less than 30 seconds</p>
 						</div>
 					</form>
+
+					<!-- Success Message -->
+					<div id="successMessage" class="reservation-success" style="display: none;">
+						<div class="success-icon">
+							<i class="fa-solid fa-check-circle"></i>
+						</div>
+						<div class="success-content">
+							<h4>🎉 Reservation confirmed!</h4>
+							<p>We'll contact you shortly.</p>
+						</div>
+					</div>
+
+					<!-- Error Message -->
+					<div id="errorMessage" class="reservation-error" style="display: none;">
+						<div class="error-icon">
+							<i class="fa-solid fa-exclamation-circle"></i>
+						</div>
+						<div class="error-content">
+							<h4>Oops! Something went wrong</h4>
+							<p id="errorText">Please check your details and try again.</p>
+						</div>
+					</div>
 				</div>
+			</div>
+		</div>
+	</section>
 
 				<div class="col-lg-6 p-b-30 p-t-18">
 					<!-- Events Section -->
@@ -1010,16 +1048,14 @@
 			if (btnShowSidebar && sidebar) {
 				btnShowSidebar.addEventListener('click', function(e) {
 					e.preventDefault();
-					sidebar.classList.add('show');
-					document.body.style.overflow = 'hidden';
+					sidebar.classList.add('show-sidebar');
 				});
 			}
 
 			if (btnHideSidebar && sidebar) {
 				btnHideSidebar.addEventListener('click', function(e) {
 					e.preventDefault();
-					sidebar.classList.remove('show');
-					document.body.style.overflow = 'auto';
+					sidebar.classList.remove('show-sidebar');
 				});
 			}
 

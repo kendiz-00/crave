@@ -2338,7 +2338,7 @@ body.menu-page,
   background-color: #111 !important;
 }
 
-/* Enhanced Menu Cards with Permanent Golden Glow */
+/* Enhanced Menu Cards with Better Layout */
 .menu-card {
   background: #1a1a1a !important;
   border: 1px solid rgba(212, 165, 116, 0.4) !important;
@@ -2346,9 +2346,19 @@ body.menu-page,
   overflow: hidden;
   transition: all 0.4s ease;
   position: relative;
-  height: 420px;
+  height: 450px;
   box-shadow: 0 0 30px rgba(212, 165, 116, 0.3),
               0 10px 30px rgba(0, 0, 0, 0.4) !important;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 0 50px rgba(212, 165, 116, 0.5),
+              0 20px 40px rgba(212, 165, 116, 0.3),
+              0 10px 30px rgba(0, 0, 0, 0.4) !important;
+  border-color: rgba(212, 165, 116, 0.6) !important;
 }
 
 /* Permanent golden glow effect */
@@ -2381,61 +2391,65 @@ body.menu-page,
   }
 }
 
-.menu-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 0 50px rgba(212, 165, 116, 0.5),
-              0 20px 40px rgba(212, 165, 116, 0.3),
-              0 10px 30px rgba(0, 0, 0, 0.4) !important;
-  border-color: rgba(212, 165, 116, 0.6) !important;
-}
-
 .menu-card:hover::before {
   opacity: 1;
   box-shadow: 0 0 60px rgba(212, 165, 116, 0.8);
 }
 
-.menu-card img {
+.menu-image {
+  height: 220px;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.menu-image img {
   width: 100%;
-  height: 260px;
+  height: 100%;
   object-fit: cover;
   transition: transform 0.5s ease;
 }
 
 .menu-card:hover img {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
-.menu-card-content {
-  padding: 20px;
+.menu-content {
+  padding: 25px;
   background: #1a1a1a !important;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .menu-card-title {
   font-family: 'Poppins', sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 600;
   color: #fff;
-  margin: 0 0 12px 0;
+  margin: 0 0 15px 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  line-height: 1.3;
 }
 
 .menu-card-price {
   font-family: 'Poppins', sans-serif;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   font-weight: 700;
   color: #d4a574;
-  margin: 0 0 15px 0;
   text-shadow: 0 0 10px rgba(212, 165, 116, 0.5);
+  margin: 0;
 }
 
 .menu-card-description {
   font-family: 'Poppins', sans-serif;
-  font-size: 1.1rem;
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
   margin: 0 0 20px 0;
   line-height: 1.6;
+  flex: 1;
 }
 
 /* Psychological Tags */
