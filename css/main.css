@@ -49,10 +49,10 @@ body {
 .txt20 { font-size: 20px; color: #fff; }
 
 .tit1 { font-size: 90px; font-weight: 700; color: #fff; font-family: 'Poppins-Bold', 'Poppins', 'Montserrat', sans-serif; letter-spacing: 6px; text-transform: uppercase; }
-.tit2 { font-size: 18px; color: #d4a574; text-transform: uppercase; font-weight: 600; letter-spacing: 3px; }
+.tit2 { font-size: 22px; color: #d4a574; text-transform: uppercase; font-weight: 600; letter-spacing: 3px; }
 .tit3 { font-size: 34px; font-weight: bold; color: #333; }
 .tit4 { font-size: 44px; font-weight: bold; color: #fff; }
-.tit5 { font-size: 38px; font-weight: bold; color: #333; }
+.tit5 { font-size: 2.8rem; color: #333; font-weight: bold; } /* Match Ready to Taste the Difference */
 .tit6 { font-size: 44px; font-weight: bold; color: #fff; }
 
 /* Header/Navbar */
