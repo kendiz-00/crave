@@ -2338,22 +2338,23 @@ body.menu-page,
   background-color: #111 !important;
 }
 
-/* Enhanced Menu Cards with Better Layout */
-.menu-card {
+/* Homepage Menu Cards - Match Most Loved By Customers Size */
+.section-menu .menu-card {
   background: #1a1a1a !important;
   border: 1px solid rgba(212, 165, 116, 0.4) !important;
   border-radius: 20px !important;
   overflow: hidden;
   transition: all 0.4s ease;
   position: relative;
-  height: 450px;
+  height: auto;
+  min-height: 400px;
   box-shadow: 0 0 30px rgba(212, 165, 116, 0.3),
               0 10px 30px rgba(0, 0, 0, 0.4) !important;
   display: flex;
   flex-direction: column;
 }
 
-.menu-card:hover {
+.section-menu .menu-card:hover {
   transform: translateY(-8px) scale(1.02);
   box-shadow: 0 0 50px rgba(212, 165, 116, 0.5),
               0 20px 40px rgba(212, 165, 116, 0.3),
@@ -2362,7 +2363,7 @@ body.menu-page,
 }
 
 /* Permanent golden glow effect */
-.menu-card::before {
+.section-menu .menu-card::before {
   content: '';
   position: absolute;
   top: -2px;
@@ -2391,31 +2392,31 @@ body.menu-page,
   }
 }
 
-.menu-card:hover::before {
+.section-menu .menu-card:hover::before {
   opacity: 1;
   box-shadow: 0 0 60px rgba(212, 165, 116, 0.8);
 }
 
-.menu-image {
-  height: 220px;
+.section-menu .menu-image {
+  height: 200px; /* Match Most Loved By Customers */
   overflow: hidden;
   position: relative;
   flex-shrink: 0;
 }
 
-.menu-image img {
+.section-menu .menu-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.5s ease;
 }
 
-.menu-card:hover img {
+.section-menu .menu-card:hover img {
   transform: scale(1.05);
 }
 
-.menu-content {
-  padding: 25px;
+.section-menu .menu-content {
+  padding: 25px; /* Match Most Loved By Customers */
   background: #1a1a1a !important;
   flex: 1;
   display: flex;
@@ -2423,33 +2424,42 @@ body.menu-page,
   justify-content: space-between;
 }
 
-.menu-card-title {
+.section-menu .menu-card-title {
   font-family: 'Poppins', sans-serif;
-  font-size: 1.6rem;
+  font-size: 1.3rem; /* Match Most Loved By Customers */
   font-weight: 600;
   color: #fff;
-  margin: 0 0 15px 0;
+  margin: 0 0 10px 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   line-height: 1.3;
 }
 
-.menu-card-price {
+.section-menu .menu-card-price {
   font-family: 'Poppins', sans-serif;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: #d4a574;
   text-shadow: 0 0 10px rgba(212, 165, 116, 0.5);
   margin: 0;
 }
 
-.menu-card-description {
+.section-menu .menu-card-description {
   font-family: 'Poppins', sans-serif;
-  font-size: 1rem;
+  font-size: 1rem; /* Match Most Loved By Customers */
   color: rgba(255, 255, 255, 0.9);
   margin: 0 0 20px 0;
   line-height: 1.6;
   flex: 1;
+}
+
+/* Update homepage menu grid to match Most Loved By Customers */
+.section-menu .menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Match Most Loved By Customers */
+  gap: 30px;
+  margin-bottom: 40px;
+  width: 100%;
 }
 
 /* Psychological Tags */
