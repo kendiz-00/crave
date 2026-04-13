@@ -2338,7 +2338,8 @@ body.menu-page,
   background-color: #111 !important;
 }
 
-/* Homepage Menu Cards - Match Most Loved By Customers Size */
+/* All Menu Cards - Dark Golden Theme (Homepage & Menu Page) */
+.menu-card,
 .section-menu .menu-card {
   background: #1a1a1a !important;
   border: 1px solid rgba(212, 165, 116, 0.4) !important;
@@ -2354,6 +2355,7 @@ body.menu-page,
   flex-direction: column;
 }
 
+.menu-card:hover,
 .section-menu .menu-card:hover {
   transform: translateY(-8px) scale(1.02);
   box-shadow: 0 0 50px rgba(212, 165, 116, 0.5),
@@ -2362,7 +2364,8 @@ body.menu-page,
   border-color: rgba(212, 165, 116, 0.6) !important;
 }
 
-/* Permanent golden glow effect */
+/* Permanent golden glow effect for all menu cards */
+.menu-card::before,
 .section-menu .menu-card::before {
   content: '';
   position: absolute;
@@ -2392,18 +2395,21 @@ body.menu-page,
   }
 }
 
+.menu-card:hover::before,
 .section-menu .menu-card:hover::before {
   opacity: 1;
   box-shadow: 0 0 60px rgba(212, 165, 116, 0.8);
 }
 
+.menu-image,
 .section-menu .menu-image {
-  height: 200px; /* Match Most Loved By Customers */
+  height: 200px;
   overflow: hidden;
   position: relative;
   flex-shrink: 0;
 }
 
+.menu-image img,
 .section-menu .menu-image img {
   width: 100%;
   height: 100%;
@@ -2411,12 +2417,14 @@ body.menu-page,
   transition: transform 0.5s ease;
 }
 
+.menu-card:hover img,
 .section-menu .menu-card:hover img {
   transform: scale(1.05);
 }
 
+.menu-content,
 .section-menu .menu-content {
-  padding: 25px; /* Match Most Loved By Customers */
+  padding: 25px;
   background: #1a1a1a !important;
   flex: 1;
   display: flex;
@@ -2424,9 +2432,10 @@ body.menu-page,
   justify-content: space-between;
 }
 
+.menu-title,
 .section-menu .menu-card-title {
   font-family: 'Poppins', sans-serif;
-  font-size: 1.3rem; /* Match Most Loved By Customers */
+  font-size: 1.3rem;
   font-weight: 600;
   color: #fff;
   margin: 0 0 10px 0;
@@ -2435,6 +2444,7 @@ body.menu-page,
   line-height: 1.3;
 }
 
+.menu-price,
 .section-menu .menu-card-price {
   font-family: 'Poppins', sans-serif;
   font-size: 1.3rem;
@@ -2444,9 +2454,10 @@ body.menu-page,
   margin: 0;
 }
 
+.menu-description,
 .section-menu .menu-card-description {
   font-family: 'Poppins', sans-serif;
-  font-size: 1rem; /* Match Most Loved By Customers */
+  font-size: 1rem;
   color: rgba(255, 255, 255, 0.9);
   margin: 0 0 20px 0;
   line-height: 1.6;
