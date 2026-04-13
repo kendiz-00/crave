@@ -183,6 +183,16 @@
 									<h4 class="menu-title">Jerk Chicken</h4>
 									<p class="menu-description">Traditional Jamaican jerk-marinated chicken with authentic spices</p>
 									<div class="menu-price">$16.99</div>
+									<div class="menu-cta-container">
+										<a href="#" class="menu-cta-btn menu-cta-primary" onclick="addToCart('Jerk Chicken', 16.99)">
+											<i class="fas fa-shopping-cart"></i>
+											Add to Cart
+										</a>
+										<a href="https://wa.me/233550020788?text=Hi%20Crave%2C%20I%E2%80%99d%20like%20to%20order%20Jerk%20Chicken" class="menu-cta-btn menu-cta-whatsapp" target="_blank">
+											<i class="fab fa-whatsapp"></i>
+											Order Now
+										</a>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -196,6 +206,16 @@
 									<h4 class="menu-title">Ackee and Saltfish</h4>
 									<p class="menu-description">Jamaica's national dish with fresh ackee fruit and salted cod</p>
 									<div class="menu-price">$14.99</div>
+									<div class="menu-cta-container">
+										<a href="#" class="menu-cta-btn menu-cta-primary" onclick="addToCart('Ackee and Saltfish', 14.99)">
+											<i class="fas fa-shopping-cart"></i>
+											Add to Cart
+										</a>
+										<a href="https://wa.me/233550020788?text=Hi%20Crave%2C%20I%E2%80%99d%20like%20to%20order%20Ackee%20and%20Saltfish" class="menu-cta-btn menu-cta-whatsapp" target="_blank">
+											<i class="fab fa-whatsapp"></i>
+											Order Now
+										</a>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -271,5 +291,113 @@
 	</footer>
 	<script src="js/vendor-setup.js"></script>
 	<script src="js/main.js"></script>
+	
+	<!-- Cart Functionality -->
+	<script>
+		let cartItems = [];
+		let cartCount = 0;
+
+		function addToCart(itemName, price) {
+			const item = {
+				name: itemName,
+				price: price,
+				quantity: 1,
+				timestamp: new Date().toISOString()
+			};
+			
+			cartItems.push(item);
+			cartCount++;
+			updateCartBadge();
+			
+			// Show success feedback
+			showCartFeedback(itemName);
+		}
+
+		function updateCartBadge() {
+			const badge = document.getElementById('cartBadge');
+			if (badge) {
+				badge.textContent = cartCount;
+				badge.style.display = cartCount > 0 ? 'flex' : 'none';
+			}
+		}
+
+		function showCartFeedback(itemName) {
+			// Create temporary feedback element
+			const feedback = document.createElement('div');
+			feedback.className = 'cart-feedback';
+			feedback.innerHTML = `
+				<div class="cart-feedback-content">
+					<i class="fas fa-check-circle"></i>
+					<span>${itemName} added to cart!</span>
+				</div>
+			`;
+			
+			document.body.appendChild(feedback);
+			
+			// Animate in
+			setTimeout(() => {
+				feedback.classList.add('show');
+			}, 100);
+			
+			// Remove after 2 seconds
+			setTimeout(() => {
+				feedback.classList.remove('show');
+				setTimeout(() => {
+					document.body.removeChild(feedback);
+				}, 300);
+			}, 2000);
+		}
+
+		// Initialize cart on page load
+		document.addEventListener('DOMContentLoaded', function() {
+			updateCartBadge();
+		});
+	</script>
+
+	<!-- Cart Feedback Styles -->
+	<style>
+		.cart-feedback {
+			position: fixed;
+			top: 20px;
+			right: 20px;
+			background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+			color: white;
+			padding: 15px 20px;
+			border-radius: 12px;
+			box-shadow: 0 10px 30px rgba(74, 222, 128, 0.4);
+			z-index: 9999;
+			transform: translateX(400px);
+			transition: all 0.3s ease;
+			font-weight: 600;
+		}
+
+		.cart-feedback.show {
+			transform: translateX(0);
+		}
+
+		.cart-feedback-content {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.cart-feedback i {
+			font-size: 1.2rem;
+		}
+
+		@media (max-width: 768px) {
+			.cart-feedback {
+				top: 10px;
+				right: 10px;
+				left: 10px;
+				right: auto;
+				transform: translateY(-100px);
+			}
+
+			.cart-feedback.show {
+				transform: translateY(0);
+			}
+		}
+	</style>
 </body>
 </html>
