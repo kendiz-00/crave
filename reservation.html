@@ -80,326 +80,497 @@
 		<div class="gallery-sidebar t-center p-l-30 p-r-30 p-b-40" style="padding-left: 15px; padding-right: 15px;">
 			<h4 class="txt20 m-b-33">Gallery</h4>
 			<div class="wrap-gallery-sidebar flex-w">
-				<a class="item-gallery-sidebar wrap-pic-w glightbox" href="images/photo-gallery-01.jpg" data-gallery="gallery-sidebar" style="flex: 0 0 calc(33.333% - 8px); margin: 4px;">
-					<img src="images/photo-gallery-thumb-01.jpg" alt="GALLERY" loading="lazy">
-				</a>
-				<a class="item-gallery-sidebar wrap-pic-w glightbox" href="images/photo-gallery-02.jpg" data-gallery="gallery-sidebar" style="flex: 0 0 calc(33.333% - 8px); margin: 4px;">
-					<img src="images/photo-gallery-thumb-02.jpg" alt="GALLERY" loading="lazy">
-				</a>
 
-	<!-- Reservation Section -->
-	<section class="reservation-section" style="
-		padding: 80px 0;
-		background: linear-gradient(135deg, #0a0a0a 0%, #111 100%);
-		position: relative;
-		overflow: hidden;
-	">
-		<div class="container">
-			<div class="reservation-card" style="
-				max-width: 600px;
-				margin: 0 auto;
-				background: rgba(255, 255, 255, 0.03);
-				border: 1px solid rgba(212, 165, 116, 0.15);
-				border-radius: 24px;
-				padding: 40px;
-				box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
-				            0 8px 30px rgba(212, 165, 116, 0.15),
-				            inset 0 1px 0 rgba(255, 255, 255, 0.05);
-				position: relative;
-				overflow: hidden;
-				backdrop-filter: blur(10px);
-			">
-				<div class="reservation-header" style="
-					text-align: center;
-					margin-bottom: 40px;
-					position: relative;
-				">
-					<h2 class="reservation-title" style="
-						font-family: 'Poppins', sans-serif;
-						font-size: 2.2rem;
-						font-weight: 700;
-						color: #fff;
-						margin: 0 0 8px 0;
-						text-transform: uppercase;
-						letter-spacing: 2px;
-						text-shadow: 0 2px 10px rgba(212, 165, 116, 0.3);
-					">Reserve Your Table</h2>
-					<p class="reservation-subtitle" style="
-						font-family: 'Poppins', sans-serif;
-						font-size: 1rem;
-						color: rgba(255, 255, 255, 0.7);
-						margin: 0;
-						font-weight: 400;
-						letter-spacing: 0.5px;
-					">Experience dining like never before</p>
-				</div>
+    <!-- Reservation Section -->
+    <section class="reservation-section">
+        <div class="container-fluid px-3">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="t-center">
+                        <span class="booking-subtitle">Reservation</span>
+                        <h3 class="booking-title">Reserve Your Table Now</h3>
+                        <p class="booking-trust">Secure your spot in seconds</p>
+                    </div>
 
-				<form class="reservation-form" id="reservationForm" style="
-					display: flex;
-					flex-direction: column;
-					gap: 24px;
-				">
-					<div class="form-row" style="
-						display: flex;
-						gap: 20px;
-					">
-						<div class="form-group" style="
-							flex: 1;
-							display: flex;
-							flex-direction: column;
-							gap: 8px;
-						">
-							<label for="name" class="form-label" style="
-								font-family: 'Poppins', sans-serif;
-								font-size: 0.9rem;
-								color: rgba(255, 255, 255, 0.8);
-								font-weight: 500;
-								text-transform: uppercase;
-								letter-spacing: 0.5px;
-							">Full Name</label>
-							<input type="text" id="name" name="name" class="form-input" placeholder="Enter your full name" required style="
-								background: #000;
-								border: 1px solid #333;
-								border-radius: 12px;
-								padding: 16px;
-								font-family: 'Poppins', sans-serif;
-								font-size: 1rem;
-								color: #fff;
-								transition: all 0.3s ease;
-								width: 100%;
-								box-sizing: border-box;
-							">
-						</div>
-						<div class="form-group" style="
-							flex: 1;
-							display: flex;
-							flex-direction: column;
-							gap: 8px;
-						">
-							<label for="phone" class="form-label" style="
-								font-family: 'Poppins', sans-serif;
-								font-size: 0.9rem;
-								color: rgba(255, 255, 255, 0.8);
-								font-weight: 500;
-								text-transform: uppercase;
-								letter-spacing: 0.5px;
-							">Phone Number</label>
-							<input type="tel" id="phone" name="phone" class="form-input" placeholder="(555) 123-4567" required style="
-								background: #000;
-								border: 1px solid #333;
-								border-radius: 12px;
-								padding: 16px;
-								font-family: 'Poppins', sans-serif;
-								font-size: 1rem;
-								color: #fff;
-								transition: all 0.3s ease;
-								width: 100%;
-								box-sizing: border-box;
-							">
-						</div>
-					</div>
+                    <form id="reservationForm" class="wrap-form-booking" method="post">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <span class="txt9">Date</span>
+                                <div class="wrap-inputdate">
+                                    <input class="my-calendar" type="date" name="date" placeholder="Select date" required>
+                                    <i class="btn-calendar fa-solid fa-calendar" aria-hidden="true"></i>
+                                </div>
+                            </div>
 
-					<div class="form-row" style="
-						display: flex;
-						gap: 20px;
-					">
-						<div class="form-group" style="
-							flex: 1;
-							display: flex;
-							flex-direction: column;
-							gap: 8px;
-						">
-							<label for="date" class="form-label" style="
-								font-family: 'Poppins', sans-serif;
-								font-size: 0.9rem;
-								color: rgba(255, 255, 255, 0.8);
-								font-weight: 500;
-								text-transform: uppercase;
-								letter-spacing: 0.5px;
-							">Preferred Date</label>
-							<input type="date" id="date" name="date" class="form-input" required style="
-								background: #000;
-								border: 1px solid #333;
-								border-radius: 12px;
-								padding: 16px;
-								font-family: 'Poppins', sans-serif;
-								font-size: 1rem;
-								color: #fff;
-								transition: all 0.3s ease;
-								width: 100%;
-								box-sizing: border-box;
-							">
-						</div>
-						<div class="form-group" style="
-							flex: 1;
-							display: flex;
-							flex-direction: column;
-							gap: 8px;
-						">
-							<label for="time" class="form-label" style="
-								font-family: 'Poppins', sans-serif;
-								font-size: 0.9rem;
-								color: rgba(255, 255, 255, 0.8);
-								font-weight: 500;
-								text-transform: uppercase;
-								letter-spacing: 0.5px;
-							">Preferred Time</label>
-							<select id="time" name="time" class="form-input" required style="
-								background: #000;
-								border: 1px solid #333;
-								border-radius: 12px;
-								padding: 16px;
-								font-family: 'Poppins', sans-serif;
-								font-size: 1rem;
-								color: #fff;
-								transition: all 0.3s ease;
-								width: 100%;
-								box-sizing: border-box;
-								cursor: pointer;
-							">
-								<option value="">Select time</option>
-								<option value="11:00">11:00 AM</option>
-								<option value="11:30">11:30 AM</option>
-								<option value="12:00">12:00 PM</option>
-								<option value="12:30">12:30 PM</option>
-								<option value="17:00">5:00 PM</option>
-								<option value="17:30">5:30 PM</option>
-								<option value="18:00">6:00 PM</option>
-								<option value="18:30">6:30 PM</option>
-								<option value="19:00">7:00 PM</option>
-								<option value="19:30">7:30 PM</option>
-								<option value="20:00">8:00 PM</option>
-								<option value="20:30">8:30 PM</option>
-								<option value="21:00">9:00 PM</option>
-								<option value="21:30">9:30 PM</option>
-							</select>
-						</div>
-					</div>
+                            <div class="col-md-6">
+                                <span class="txt9">Time</span>
+                                <div class="wrap-inputtime">
+                                    <select class="selection-1" name="time" required>
+                                        <option>11:00 AM</option>
+                                        <option>11:30 AM</option>
+                                        <option>12:00 PM</option>
+                                        <option>12:30 PM</option>
+                                        <option>1:00 PM</option>
+                                        <option>1:30 PM</option>
+                                        <option>5:00 PM</option>
+                                        <option>5:30 PM</option>
+                                        <option>6:00 PM</option>
+                                        <option>6:30 PM</option>
+                                        <option>7:00 PM</option>
+                                        <option>7:30 PM</option>
+                                        <option>8:00 PM</option>
+                                        <option>8:30 PM</option>
+                                        <option>9:00 PM</option>
+                                        <option>9:30 PM</option>
+                                    </select>
+                                </div>
+                            </div>
 
-					<div class="form-row" style="
-						display: flex;
-						gap: 20px;
-					">
-						<div class="form-group" style="
-							flex: 1;
-							display: flex;
-							flex-direction: column;
-							gap: 8px;
-						">
-							<label for="guests" class="form-label" style="
-								font-family: 'Poppins', sans-serif;
-								font-size: 0.9rem;
-								color: rgba(255, 255, 255, 0.8);
-								font-weight: 500;
-								text-transform: uppercase;
-								letter-spacing: 0.5px;
-							">Number of Guests</label>
-							<select id="guests" name="guests" class="form-input" required style="
-								background: #000;
-								border: 1px solid #333;
-								border-radius: 12px;
-								padding: 16px;
-								font-family: 'Poppins', sans-serif;
-								font-size: 1rem;
-								color: #fff;
-								transition: all 0.3s ease;
-								width: 100%;
-								box-sizing: border-box;
-								cursor: pointer;
-							">
-								<option value="">Select number of guests</option>
-								<option value="1">1 Guest</option>
-								<option value="2">2 Guests</option>
-								<option value="3">3 Guests</option>
-								<option value="4">4 Guests</option>
-								<option value="5">5 Guests</option>
-								<option value="6">6 Guests</option>
-								<option value="7">7 Guests</option>
-								<option value="8">8 Guests</option>
-								<option value="9">9+ Guests</option>
-							</select>
-						</div>
-					</div>
+                            <div class="col-md-6">
+                                <span class="txt9">People</span>
+                                <div class="wrap-inputpeople">
+                                    <select class="selection-1" name="people" required>
+                                        <option>1 person</option>
+                                        <option>2 people</option>
+                                        <option>3 people</option>
+                                        <option>4 people</option>
+                                        <option>5 people</option>
+                                        <option>6 people</option>
+                                        <option>7 people</option>
+                                        <option>8 people</option>
+                                        <option>9 people</option>
+                                        <option>10+ people</option>
+                                    </select>
+                                </div>
+                            </div>
 
-					<div class="form-row" style="
-						display: flex;
-						gap: 20px;
-					">
-						<div class="form-group full-width" style="
-							flex: 1 1 0;
-							display: flex;
-							flex-direction: column;
-							gap: 8px;
-						">
-							<label for="message" class="form-label" style="
-								font-family: 'Poppins', sans-serif;
-								font-size: 0.9rem;
-								color: rgba(255, 255, 255, 0.8);
-								font-weight: 500;
-								text-transform: uppercase;
-								letter-spacing: 0.5px;
-							">Special Requests</label>
-							<textarea id="message" name="message" class="form-input" rows="4" placeholder="Any special requests? (e.g., high chair, window seating, celebration)" style="
-								background: #000;
-								border: 1px solid #333;
-								border-radius: 12px;
-								padding: 16px;
-								font-family: 'Poppins', sans-serif;
-								font-size: 1rem;
-								color: #fff;
-								transition: all 0.3s ease;
-								width: 100%;
-								box-sizing: border-box;
-								resize: vertical;
-								min-height: 100px;
-							"></textarea>
-						</div>
-					</div>
+                            <div class="col-md-6">
+                                <span class="txt9">Name</span>
+                                <div class="wrap-inputname">
+                                    <input type="text" name="name" placeholder="Your Name" required>
+                                </div>
+                            </div>
 
-					<button type="submit" class="reservation-btn" style="
-						background: linear-gradient(135deg, #d4a574 0%, #c19660 100%);
-						color: #fff;
-						border: none;
-						border-radius: 50px;
-						padding: 18px 32px;
-						font-family: 'Poppins', sans-serif;
-						font-size: 1.1rem;
-						font-weight: 600;
-						cursor: pointer;
-						text-transform: uppercase;
-						letter-spacing: 1px;
-						display: flex;
-						align-items: center;
-						justify-content: center;
-						gap: 10px;
-						position: relative;
-						overflow: hidden;
-						width: 100%;
-						box-shadow: 0 10px 30px rgba(212, 165, 116, 0.4);
-						transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-					">
-						<span class="btn-text" style="position: relative; z-index: 1;">Reserve Table</span>
-						<i class="fas fa-check" style="font-size: 1rem; transition: transform 0.3s ease;"></i>
-					</button>
-				</form>
-			</div>
-		</div>
-	</section>
+                            <div class="col-md-6">
+                                <span class="txt9">Phone</span>
+                                <div class="wrap-inputphone">
+                                    <input type="tel" name="phone" placeholder="Phone Number" required>
+                                </div>
+                            </div>
 
-	<!-- Footer -->
-	<footer>
-		<div class="container">
-			<p>&copy; 2024 Pato Place Restaurant. All rights reserved.</p>
-			<p>
-				<a href="cravee.html">Home</a> | 
-				<a href="menu.html">Menu</a> | 
-				<a href="reservation.html">Reservation</a> | 
-				<a href="contact.html">Contact</a>
-			</p>
-		</div>
-	</footer>
+                            <div class="col-md-6">
+                                <span class="txt9">Email</span>
+                                <div class="wrap-inputemail">
+                                    <input type="email" name="email" placeholder="Email Address" required>
+                                </div>
+                            </div>
+                        </div>
 
-	<script src="js/vendor-setup.js"></script>
-	<script src="js/main.js"></script>
+                        <div class="wrap-btn-booking">
+                            <button type="submit" id="submitBtn" class="btn-premium">
+                                <span id="btnText">Reserve Your Table Now</span>
+                                <span id="btnLoader" class="btn-loader" style="display: none;">
+                                    <i class="fa-solid fa-spinner fa-spin"></i>
+                                </span>
+                            </button>
+                            <p class="trust-text">⚡ Takes less than 30 seconds</p>
+                        </div>
+                    </form>
+
+                    <!-- Success Message -->
+                    <div id="successMessage" class="reservation-success" style="display: none;">
+                        <div class="success-icon">
+                            <i class="fa-solid fa-check-circle"></i>
+                        </div>
+                        <div class="success-content">
+                            <h4>🎉 Reservation confirmed!</h4>
+                            <p>We'll contact you shortly.</p>
+                        </div>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div id="errorMessage" class="reservation-error" style="display: none;">
+                        <div class="error-icon">
+                            <i class="fa-solid fa-exclamation-circle"></i>
+                        </div>
+                        <div class="error-content">
+                            <h4>Oops! Something went wrong</h4>
+                            <p id="errorText">Please check your details and try again.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg1">
+        <div class="container-fluid px-3 p-t-40 p-b-70">
+            <div class="row">
+                <div class="col-sm-6 col-md-4 p-t-50 m-b-30">
+                    <h4 class="txt13 m-b-33" style="font-size: clamp(16px, 3vw, 18px);">Contact Us</h4>
+                    <ul class="m-b-70">
+                        <li class="txt14 m-b-14" style="font-size: clamp(13px, 2vw, 14px);">
+                            <i class="fa-solid fa-location-dot fs-16 dis-inline-block size19" aria-hidden="true"></i>
+                            8th floor, 379 Hudson St, New York, NY 10018
+                        </li>
+                        <li class="txt14 m-b-14" style="font-size: clamp(13px, 2vw, 14px);">
+                            <i class="fa-solid fa-phone fs-16 dis-inline-block size19" aria-hidden="true"></i>
+                            <a href="tel:+19671668879">(+1) 96 716 6879</a>
+                        </li>
+                        <li class="txt14 m-b-14" style="font-size: clamp(13px, 2vw, 14px);">
+                            <i class="fa-solid fa-envelope fs-13 dis-inline-block size19" aria-hidden="true"></i>
+                            <a href="mailto:contact@crave-restaurant.com">contact@crave-restaurant.com</a>
+                        </li>
+                    </ul>
+
+                    <h4 class="txt13 m-b-32" style="font-size: clamp(16px, 3vw, 18px);">Opening Times</h4>
+                    <ul>
+                        <li class="txt14" style="font-size: clamp(13px, 2vw, 14px);">11:00 AM – 10:00 PM</li>
+                        <li class="txt14" style="font-size: clamp(13px, 2vw, 14px);">Every Day</li>
+                    </ul>
+                </div>
+
+                <div class="col-sm-6 col-md-4 p-t-50 m-b-30">
+                    <h4 class="txt13 m-b-33" style="font-size: clamp(16px, 3vw, 18px);">Latest Posts</h4>
+                    <div class="m-b-25">
+                        <a href="blog.html" class="txt15" style="font-size: clamp(13px, 2vw, 15px);">Best Places for Wine</a>
+                        <p class="txt14 m-b-18" style="font-size: clamp(12px, 2vw, 13px);">Discover our curated wine selection and pairing recommendations for the perfect dining experience.</p>
+                        <span class="txt16" style="font-size: clamp(11px, 2vw, 12px);">21 Dec 2024</span>
+                    </div>
+                    <div>
+                        <a href="blog.html" class="txt15" style="font-size: clamp(13px, 2vw, 15px);">Seasonal Specials</a>
+                        <p class="txt14 m-b-18" style="font-size: clamp(12px, 2vw, 13px);">Explore our winter menu featuring fresh, seasonal ingredients from local farms.</p>
+                        <span class="txt16" style="font-size: clamp(11px, 2vw, 12px);">15 Dec 2024</span>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 p-t-50 m-b-30">
+                    <h4 class="txt13 m-b-38" style="font-size: clamp(16px, 3vw, 18px);">Gallery</h4>
+                    <div class="wrap-gallery-footer flex-w">
+                        <a class="item-gallery-footer wrap-pic-w glightbox" href="images/photo-gallery-01.jpg" data-gallery="gallery-footer" style="min-width: 44px; min-height: 44px; display: inline-block;">
+                            <img src="images/photo-gallery-thumb-01.jpg" alt="GALLERY" loading="lazy" style="width: 100%; height: auto;">
+                        </a>
+                        <a class="item-gallery-footer wrap-pic-w glightbox" href="images/photo-gallery-02.jpg" data-gallery="gallery-footer" style="min-width: 44px; min-height: 44px; display: inline-block;">
+                            <img src="images/photo-gallery-thumb-02.jpg" alt="GALLERY" loading="lazy" style="width: 100%; height: auto;">
+                        </a>
+                        <a class="item-gallery-footer wrap-pic-w glightbox" href="images/photo-gallery-03.jpg" data-gallery="gallery-footer" style="min-width: 44px; min-height: 44px; display: inline-block;">
+                            <img src="images/photo-gallery-thumb-03.jpg" alt="GALLERY" loading="lazy" style="width: 100%; height: auto;">
+                        </a>
+                        <a class="item-gallery-footer wrap-pic-w glightbox" href="images/photo-gallery-04.jpg" data-gallery="gallery-footer" style="min-width: 44px; min-height: 44px; display: inline-block;">
+                            <img src="images/photo-gallery-thumb-04.jpg" alt="GALLERY" loading="lazy" style="width: 100%; height: auto;">
+                        </a>
+                        <a class="item-gallery-footer wrap-pic-w glightbox" href="images/photo-gallery-05.jpg" data-gallery="gallery-footer" style="min-width: 44px; min-height: 44px; display: inline-block;">
+                            <img src="images/photo-gallery-thumb-05.jpg" alt="GALLERY" loading="lazy" style="width: 100%; height: auto;">
+                        </a>
+                        <a class="item-gallery-footer wrap-pic-w glightbox" href="images/photo-gallery-06.jpg" data-gallery="gallery-footer" style="min-width: 44px; min-height: 44px; display: inline-block;">
+                            <img src="images/photo-gallery-thumb-06.jpg" alt="GALLERY" loading="lazy" style="width: 100%; height: auto;">
+                        </a>
+                        <a class="item-gallery-footer wrap-pic-w glightbox" href="images/photo-gallery-07.jpg" data-gallery="gallery-footer" style="min-width: 44px; min-height: 44px; display: inline-block;">
+                            <img src="images/photo-gallery-thumb-07.jpg" alt="GALLERY" loading="lazy" style="width: 100%; height: auto;">
+                        </a>
+                        <a class="item-gallery-footer wrap-pic-w glightbox" href="images/photo-gallery-08.jpg" data-gallery="gallery-footer" style="min-width: 44px; min-height: 44px; display: inline-block;">
+                            <img src="images/photo-gallery-thumb-08.jpg" alt="GALLERY" loading="lazy" style="width: 100%; height: auto;">
+                        </a>
+                        <a class="item-gallery-footer wrap-pic-w glightbox" href="images/photo-gallery-09.jpg" data-gallery="gallery-footer" style="min-width: 44px; min-height: 44px; display: inline-block;">
+                            <img src="images/photo-gallery-thumb-09.jpg" alt="GALLERY" loading="lazy" style="width: 100%; height: auto;">
+                        </a>
+                        <a class="item-gallery-footer wrap-pic-w glightbox" href="images/photo-gallery-10.jpg" data-gallery="gallery-footer" style="min-width: 44px; min-height: 44px; display: inline-block;">
+                            <img src="images/photo-gallery-thumb-10.jpg" alt="GALLERY" loading="lazy" style="width: 100%; height: auto;">
+                        </a>
+                        <a class="item-gallery-footer wrap-pic-w glightbox" href="images/photo-gallery-11.jpg" data-gallery="gallery-footer" style="min-width: 44px; min-height: 44px; display: inline-block;">
+                            <img src="images/photo-gallery-thumb-11.jpg" alt="GALLERY" loading="lazy" style="width: 100%; height: auto;">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="end-footer bg2">
+            <div class="container-fluid px-3">
+                <div class="flex-sb-m flex-w p-t-22 p-b-22" style="flex-direction: column; gap: 15px;">
+                    <div class="p-t-5 p-b-5">
+                        <a href="#" class="fs-15 c-white" style="min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center;"><i class="fa-brands fa-yelp" aria-hidden="true"></i></a>
+                        <a href="#" class="fs-15 c-white m-l-18" style="min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center;"><i class="fa-brands fa-google" aria-hidden="true"></i></a>
+                        <a href="#" class="fs-15 c-white m-l-18" style="min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center;"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+                        <a href="#" class="fs-15 c-white m-l-18" style="min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center;"><i class="fa-brands fa-facebook" aria-hidden="true"></i></a>
+                        <a href="#" class="fs-15 c-white m-l-18" style="min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center;"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+                    </div>
+                    <div class="txt17 p-r-20 p-t-5 p-b-5" style="font-size: clamp(12px, 2vw, 14px); text-align: center;">
+                        &copy; <span id="copyright-year">2025</span> Crave Restaurant. All rights reserved.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to top -->
+    <div class="btn-back-to-top bg0-hov" id="myBtn">
+        <span class="symbol-btn-back-to-top">
+            <i class="fa-solid fa-angles-up" aria-hidden="true"></i>
+        </span>
+    </div>
+
+    <!-- Modal Video -->
+    <div class="modal fade" id="modal-video-01" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document" data-bs-dismiss="modal">
+            <div class="close-mo-video-01 trans-0-4" data-bs-dismiss="modal" aria-label="Close">&times;</div>
+            <div class="wrap-video-mo-01">
+                <div class="w-full wrap-pic-w op-0-0"><img src="images/icons/video-16-9.jpg" alt="Video" loading="lazy"></div>
+                <div class="video-mo-01">
+                    <iframe src="https://www.youtube.com/embed/5k1hSu2gdKE?rel=0&amp;showinfo=0" allowfullscreen loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+    <script src="js/swiper-custom.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // Mobile Optimizations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Flatpickr for date picker
+            if (document.querySelector('.my-calendar')) {
+                flatpickr('.my-calendar', { 
+                    dateFormat: 'Y-m-d', 
+                    minDate: 'today',
+                    mobile: true
+                });
+            }
+
+            // Initialize GLightbox for gallery
+            if (typeof GLightbox !== 'undefined') {
+                GLightbox({ 
+                    selector: '.glightbox',
+                    touchNavigation: true,
+                    loop: true
+                });
+            }
+
+            // RESERVATION FORM FUNCTIONALITY
+            const reservationForm = document.getElementById('reservationForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoader = document.getElementById('btnLoader');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+
+            if (reservationForm) {
+                reservationForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Get form values
+                    const date = document.querySelector('input[name="date"]').value;
+                    const time = document.querySelector('select[name="time"]').value;
+                    const people = document.querySelector('select[name="people"]').value;
+                    const name = document.querySelector('input[name="name"]').value;
+                    const phone = document.querySelector('input[name="phone"]').value;
+                    const email = document.querySelector('input[name="email"]').value;
+
+                    // Validation
+                    if (!date || !time || !people || !name || !phone || !email) {
+                        showError('Please fill in all required fields.');
+                        return;
+                    }
+
+                    if (!validateEmail(email)) {
+                        showError('Please enter a valid email address.');
+                        return;
+                    }
+
+                    // Show loading state
+                    showLoading();
+
+                    // Simulate API call (replace with actual backend call)
+                    setTimeout(() => {
+                        // Simulate success (90% success rate for demo)
+                        if (Math.random() > 0.1) {
+                            showSuccess();
+                            sendWhatsAppMessage(date, time, people, name);
+                            resetForm();
+                        } else {
+                            showError('Unable to process reservation. Please try again or call us directly.');
+                        }
+                        hideLoading();
+                    }, 2000);
+                });
+            }
+
+            function validateEmail(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            }
+
+            function showLoading() {
+                submitBtn.disabled = true;
+                btnText.style.display = 'none';
+                btnLoader.style.display = 'inline-block';
+                hideMessages();
+            }
+
+            function hideLoading() {
+                submitBtn.disabled = false;
+                btnText.style.display = 'inline-block';
+                btnLoader.style.display = 'none';
+            }
+
+            function showSuccess() {
+                successMessage.style.display = 'block';
+                successMessage.style.animation = 'fadeInUp 0.6s ease-out forwards';
+                hideMessages();
+            }
+
+            function showError(message) {
+                errorText.textContent = message;
+                errorMessage.style.display = 'block';
+                errorMessage.style.animation = 'fadeInUp 0.6s ease-out forwards';
+                hideMessages();
+            }
+
+            function hideMessages() {
+                successMessage.style.display = 'none';
+                errorMessage.style.display = 'none';
+            }
+
+            function resetForm() {
+                if (reservationForm) {
+                    reservationForm.reset();
+                }
+            }
+
+            function sendWhatsAppMessage(date, time, people, name) {
+                const message = `Hi Crave, I just made a reservation for ${date} at ${time} for ${people} people. Name: ${name}`;
+                const whatsappUrl = `https://wa.me/233550020788?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+            }
+
+            // Back to top button
+            const backBtn = document.getElementById('myBtn');
+            if (backBtn) {
+                window.addEventListener('scroll', function() {
+                    if (window.pageYOffset > 300) {
+                        backBtn.style.display = 'flex';
+                    } else {
+                        backBtn.style.display = 'none';
+                    }
+                });
+                backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            }
+
+            // Copyright year
+            const yearSpan = document.getElementById('copyright-year');
+            if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+
+            // Mobile menu toggle
+            const btnShowSidebar = document.querySelector('.btn-show-sidebar');
+            const btnHideSidebar = document.querySelector('.btn-hide-sidebar');
+            const sidebar = document.querySelector('.sidebar');
+
+            if (btnShowSidebar && sidebar) {
+                btnShowSidebar.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    sidebar.classList.add('show-sidebar');
+                });
+            }
+
+            if (btnHideSidebar && sidebar) {
+                btnHideSidebar.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    sidebar.classList.remove('show-sidebar');
+                });
+            }
+
+            // Close sidebar when clicking on a link
+            if (sidebar) {
+                document.querySelectorAll('.sidebar a, .sidebar button').forEach(function(el) {
+                    el.addEventListener('click', function() {
+                        sidebar.classList.remove('show');
+                        document.body.style.overflow = 'auto';
+                    });
+                });
+            }
+
+            // Prevent iOS zoom on input focus
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(function(input) {
+                input.addEventListener('focus', function() {
+                    // iOS safari fix
+                    this.style.fontSize = '16px';
+                });
+            });
+
+            // Touch optimization for swiper
+            const swipers = document.querySelectorAll('.swiper');
+            swipers.forEach(function(swiperEl) {
+                if (swiperEl.swiper) {
+                    swiperEl.swiper.touchEventsTarget = 'container';
+                }
+            });
+
+            // Optimize image loading for mobile
+            const images = document.querySelectorAll('img[loading="lazy"]');
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            // Image already has src, so loading is handled by browser
+                            observer.unobserve(img);
+                        }
+                    });
+                }, {
+                    rootMargin: '50px'
+                });
+                
+                images.forEach(img => imageObserver.observe(img));
+            }
+
+            // Smooth scroll behavior
+            if (CSS.supports('scroll-behavior', 'smooth')) {
+                document.documentElement.style.scrollBehavior = 'smooth';
+            }
+
+            // Add touch feedback to buttons
+            document.querySelectorAll('button, a').forEach(el => {
+                el.addEventListener('touchstart', function() {
+                    this.style.opacity = '0.7';
+                });
+                el.addEventListener('touchend', function() {
+                    this.style.opacity = '1';
+                });
+            });
+        });
+
+        // Handle viewport changes for responsive adjustments
+        window.addEventListener('orientationchange', function() {
+            // Reload or adjust layout on orientation change
+            setTimeout(function() {
+                if (typeof Swiper !== 'undefined') {
+                    document.querySelectorAll('.swiper').forEach(swiperEl => {
+                        if (swiperEl.swiper) {
+                            swiperEl.swiper.update();
+                        }
+                    });
+                }
+            }, 100);
+        });
+
+        // Prevent bouncy scroll on iOS
+        document.body.addEventListener('touchmove', function(e) {
+            if (e.target.closest('input, select, textarea') === null) {
+                // Allow normal scroll outside of form elements
+            }
+        }, false);
+    </script>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/233550020788?text=Hi%20Crave%2C%20I%E2%80%99d%20like%20to%20place%20an%20order" class="whatsapp-float" target="_blank" aria-label="Order via WhatsApp" title="Order on WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
 </body>
 </html>

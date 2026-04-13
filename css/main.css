@@ -2513,6 +2513,82 @@ body.menu-page,
   }
 }
 
+/* Reservation Success and Error Messages */
+.reservation-success {
+  display: none;
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  border-radius: 16px;
+  padding: 25px;
+  margin: 20px 0;
+  text-align: center;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.reservation-success .success-icon {
+  font-size: 3rem;
+  color: #4ade80;
+  margin-bottom: 15px;
+}
+
+.reservation-success .success-content h4 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 10px 0;
+}
+
+.reservation-success .success-content p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+.reservation-error {
+  display: none;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 16px;
+  padding: 25px;
+  margin: 20px 0;
+  text-align: center;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.reservation-error .error-icon {
+  font-size: 3rem;
+  color: #ef4444;
+  margin-bottom: 15px;
+}
+
+.reservation-error .error-content h4 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 10px 0;
+}
+
+.reservation-error .error-content p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Psychological Tags */
 .menu-tag {
   position: absolute;
