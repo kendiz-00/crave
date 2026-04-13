@@ -2,200 +2,353 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover, shrink-to-fit=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#000000">
-    <meta name="description" content="Reserve a table at Crave Restaurant online.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Reserve your table at Crave Restaurant">
     <title>Reservation - Crave Restaurant</title>
-    <link rel="stylesheet" href="css/util.css">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main CSS -->
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/util.css">
+    
+    <style>
+        /* Additional Styles for Reservation Page */
+        .reservation-hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('images/restaurant-hero.jpg');
+            background-size: cover;
+            background-position: center;
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        
+        .reservation-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(212, 165, 116, 0.1) 0%, transparent 100%);
+        }
+        
+        .reservation-hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .reservation-hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .reservation-section {
+            padding: 80px 0;
+            background: #111;
+        }
+        
+        .reservation-card {
+            background: #1a1a1a;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+            border: 1px solid rgba(212, 165, 116, 0.2);
+        }
+        
+        .reservation-form {
+            padding: 40px;
+        }
+        
+        .reservation-image {
+            background: url('images/dining-experience.jpg');
+            background-size: cover;
+            background-position: center;
+            min-height: 600px;
+            position: relative;
+        }
+        
+        .reservation-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(212, 165, 116, 0.2) 0%, transparent 100%);
+        }
+        
+        .form-control, .form-select {
+            background: #111;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            background: #111;
+            border-color: #d4a574;
+            color: white;
+            box-shadow: 0 0 0 0.2rem rgba(212, 165, 116, 0.25);
+        }
+        
+        .form-label {
+            color: #d4a574;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+        
+        .btn-reserve {
+            background: linear-gradient(135deg, #d4a574 0%, #c19660 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 40px;
+            font-weight: 600;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(212, 165, 116, 0.3);
+        }
+        
+        .btn-reserve:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(212, 165, 116, 0.4);
+            color: white;
+        }
+        
+        .btn-reserve:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .success-message {
+            display: none;
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        .error-message {
+            display: none;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .microtext {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .reservation-hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .reservation-image {
+                min-height: 300px;
+            }
+            
+            .reservation-form {
+                padding: 30px 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-	<!-- Header/Navbar -->
-	<header id="siteHeader" class="navbar-header">
-		<nav class="navbar">
-			<div class="navbar-container">
-				<div class="navbar-logo">
-					<a href="index.html" class="logo-link">
-						<img src="images/logo.png" alt="Crave Restaurant" class="logo-img">
-					</a>
-				</div>
+    <!-- Navbar -->
+    <header id="siteHeader" class="navbar-header">
+        <nav class="navbar">
+            <div class="navbar-container">
+                <div class="navbar-logo">
+                    <a href="index.html" class="logo-link">
+                        <img src="images/logo.png" alt="Crave Restaurant" class="logo-img">
+                    </a>
+                </div>
 
-				<button
-					id="navbarToggle"
-					class="navbar-toggle"
-					aria-label="Toggle navigation"
-					aria-expanded="false"
-					aria-controls="navbarMenu"
-				>
-					<span class="navbar-toggle-bar"></span>
-					<span class="navbar-toggle-bar"></span>
-					<span class="navbar-toggle-bar"></span>
-				</button>
+                <button id="navbarToggle" class="navbar-toggle" aria-label="Toggle navigation">
+                    <span class="navbar-toggle-bar"></span>
+                    <span class="navbar-toggle-bar"></span>
+                    <span class="navbar-toggle-bar"></span>
+                </button>
 
-				<div class="navbar-menu" id="navbarMenu" aria-hidden="true" aria-label="Mobile navigation">
-					<ul class="navbar-menu-list">
-						<li class="navbar-menu-item"><a href="index.html" class="navbar-link" data-page="home">Home</a></li>
-						<li class="navbar-menu-item"><a href="menu.html" class="navbar-link" data-page="menu">Menu</a></li>
-						<li class="navbar-menu-item"><a href="about.html" class="navbar-link" data-page="about">About</a></li>
-					</ul>
-				</div>
-			</div>
-		</nav>
-	</header>
+                <div class="navbar-menu" id="navbarMenu">
+                    <ul class="navbar-menu-list">
+                        <li class="navbar-menu-item"><a href="index.html" class="navbar-link">Home</a></li>
+                        <li class="navbar-menu-item"><a href="menu.html" class="navbar-link">Menu</a></li>
+                        <li class="navbar-menu-item"><a href="about.html" class="navbar-link">About</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
 
-	<!-- Sidebar -->
-	<aside class="sidebar trans-0-4">
-		<button class="btn-hide-sidebar color0-hov trans-0-4" style="min-width: 44px; min-height: 44px; font-size: 24px; padding: 8px 12px; display: block; background: none; border: none; color: #fff;"><i class="fa-solid fa-xmark"></i></button>
+    <!-- Hero Section -->
+    <section class="reservation-hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Reserve Your Table</h1>
+                <p>Book your experience at Crave in seconds</p>
+            </div>
+        </div>
+    </section>
 
-		<ul class="menu-sidebar p-t-95 p-b-70" style="padding-top: 20px; padding-bottom: 20px;">
-			<li class="t-center m-b-13"><a href="index.html" class="txt19" style="display: block; padding: 12px;">Home</a></li>
-			<li class="t-center m-b-13"><a href="menu.html" class="txt19" style="display: block; padding: 12px;">Menu</a></li>
-			<li class="t-center m-b-13"><a href="gallery.html" class="txt19" style="display: block; padding: 12px;">Gallery</a></li>
-			<li class="t-center m-b-13"><a href="about.html" class="txt19" style="display: block; padding: 12px;">About</a></li>
-			<li class="t-center m-b-13"><a href="blog.html" class="txt19" style="display: block; padding: 12px;">Blog</a></li>
-			<li class="t-center m-b-33"><a href="contact.html" class="txt19" style="display: block; padding: 12px;">Contact</a></li>
-			<li class="t-center">
-				<a href="reservation.html" class="btn3 flex-c-m size13 txt11 trans-0-4 m-l-r-auto" style="min-height: 44px;">Reservation</a>
-			</li>
-		</ul>
-
-		<div class="social-sidebar t-center p-t-30 p-b-30">
-			<a href="#" class="fs-18 color1-hov m-r-15" style="display: inline-block; width: 44px; height: 44px; line-height: 44px;"><i class="fa-brands fa-yelp" aria-hidden="true"></i></a>
-			<a href="#" class="fs-18 color1-hov m-r-15" style="display: inline-block; width: 44px; height: 44px; line-height: 44px;"><i class="fa-brands fa-google" aria-hidden="true"></i></a>
-			<a href="#" class="fs-18 color1-hov m-r-15" style="display: inline-block; width: 44px; height: 44px; line-height: 44px;"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
-			<a href="#" class="fs-18 color1-hov m-r-15" style="display: inline-block; width: 44px; height: 44px; line-height: 44px;"><i class="fa-brands fa-facebook" aria-hidden="true"></i></a>
-			<a href="#" class="fs-18 color1-hov" style="display: inline-block; width: 44px; height: 44px; line-height: 44px;"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
-		</div>
-
-		<div class="gallery-sidebar t-center p-l-30 p-r-30 p-b-40" style="padding-left: 15px; padding-right: 15px;">
-			<h4 class="txt20 m-b-33">Gallery</h4>
-			<div class="wrap-gallery-sidebar flex-w">
-
-    <!-- Reservation Section -->
+    <!-- Reservation Form Section -->
     <section class="reservation-section">
-        <div class="container-fluid px-3">
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <div class="t-center">
-                        <span class="booking-subtitle">Reservation</span>
-                        <h3 class="booking-title">Reserve Your Table Now</h3>
-                        <p class="booking-trust">Secure your spot in seconds</p>
-                    </div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="reservation-card">
+                        <div class="row g-0">
+                            <!-- Form Column -->
+                            <div class="col-lg-6">
+                                <div class="reservation-form">
+                                    <h2 class="mb-4" style="color: #d4a574; font-weight: 700;">Make a Reservation</h2>
+                                    
+                                    <form id="reservationForm">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="date" class="form-label">Date</label>
+                                                <input type="date" class="form-control" id="date" name="date" required>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="time" class="form-label">Time</label>
+                                                <select class="form-select" id="time" name="time" required>
+                                                    <option value="">Select time</option>
+                                                    <option value="11:00">11:00 AM</option>
+                                                    <option value="11:30">11:30 AM</option>
+                                                    <option value="12:00">12:00 PM</option>
+                                                    <option value="12:30">12:30 PM</option>
+                                                    <option value="13:00">1:00 PM</option>
+                                                    <option value="13:30">1:30 PM</option>
+                                                    <option value="17:00">5:00 PM</option>
+                                                    <option value="17:30">5:30 PM</option>
+                                                    <option value="18:00">6:00 PM</option>
+                                                    <option value="18:30">6:30 PM</option>
+                                                    <option value="19:00">7:00 PM</option>
+                                                    <option value="19:30">7:30 PM</option>
+                                                    <option value="20:00">8:00 PM</option>
+                                                    <option value="20:30">8:30 PM</option>
+                                                    <option value="21:00">9:00 PM</option>
+                                                </select>
+                                            </div>
+                                        </div>
 
-                    <form id="reservationForm" class="wrap-form-booking" method="post">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <span class="txt9">Date</span>
-                                <div class="wrap-inputdate">
-                                    <input class="my-calendar" type="date" name="date" placeholder="Select date" required>
-                                    <i class="btn-calendar fa-solid fa-calendar" aria-hidden="true"></i>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="people" class="form-label">Number of People</label>
+                                                <select class="form-select" id="people" name="people" required>
+                                                    <option value="">Select number</option>
+                                                    <option value="1">1 Person</option>
+                                                    <option value="2">2 People</option>
+                                                    <option value="3">3 People</option>
+                                                    <option value="4">4 People</option>
+                                                    <option value="5">5 People</option>
+                                                    <option value="6">6 People</option>
+                                                    <option value="7">7 People</option>
+                                                    <option value="8">8 People</option>
+                                                    <option value="9">9+ People</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="name" class="form-label">Name</label>
+                                                <input type="text" class="form-control" id="name" name="name" placeholder="Your name" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="phone" class="form-label">Phone</label>
+                                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="Phone number" required>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="email" name="email" placeholder="Email address" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <label for="requests" class="form-label">Special Requests (Optional)</label>
+                                            <textarea class="form-control" id="requests" name="requests" rows="3" placeholder="Any special requests?"></textarea>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-reserve w-100" id="submitBtn">
+                                            <span id="btnText">Reserve Your Table</span>
+                                            <span id="btnLoader" style="display: none;">
+                                                <i class="fas fa-spinner fa-spin me-2"></i>Processing...
+                                            </span>
+                                        </button>
+                                        
+                                        <p class="microtext">" Takes less than 30 seconds</p>
+                                    </form>
+
+                                    <!-- Success Message -->
+                                    <div class="success-message" id="successMessage">
+                                        <div class="d-flex align-items-center justify-content-center mb-2">
+                                            <i class="fas fa-check-circle" style="color: #4ade80; font-size: 2rem;"></i>
+                                        </div>
+                                        <h4 style="color: #4ade80; margin-bottom: 10px;">" Reservation confirmed!</h4>
+                                        <p style="color: rgba(255,255,255,0.9); margin: 0;">We'll contact you shortly.</p>
+                                    </div>
+
+                                    <!-- Error Message -->
+                                    <div class="error-message" id="errorMessage">
+                                        <div class="d-flex align-items-center justify-content-center mb-2">
+                                            <i class="fas fa-exclamation-circle" style="color: #ef4444; font-size: 2rem;"></i>
+                                        </div>
+                                        <h4 style="color: #ef4444; margin-bottom: 10px;">Oops! Something went wrong</h4>
+                                        <p style="color: rgba(255,255,255,0.9); margin: 0;" id="errorText">Please check your details and try again.</p>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
-                                <span class="txt9">Time</span>
-                                <div class="wrap-inputtime">
-                                    <select class="selection-1" name="time" required>
-                                        <option>11:00 AM</option>
-                                        <option>11:30 AM</option>
-                                        <option>12:00 PM</option>
-                                        <option>12:30 PM</option>
-                                        <option>1:00 PM</option>
-                                        <option>1:30 PM</option>
-                                        <option>5:00 PM</option>
-                                        <option>5:30 PM</option>
-                                        <option>6:00 PM</option>
-                                        <option>6:30 PM</option>
-                                        <option>7:00 PM</option>
-                                        <option>7:30 PM</option>
-                                        <option>8:00 PM</option>
-                                        <option>8:30 PM</option>
-                                        <option>9:00 PM</option>
-                                        <option>9:30 PM</option>
-                                    </select>
-                                </div>
+                            <!-- Image Column -->
+                            <div class="col-lg-6">
+                                <div class="reservation-image"></div>
                             </div>
-
-                            <div class="col-md-6">
-                                <span class="txt9">People</span>
-                                <div class="wrap-inputpeople">
-                                    <select class="selection-1" name="people" required>
-                                        <option>1 person</option>
-                                        <option>2 people</option>
-                                        <option>3 people</option>
-                                        <option>4 people</option>
-                                        <option>5 people</option>
-                                        <option>6 people</option>
-                                        <option>7 people</option>
-                                        <option>8 people</option>
-                                        <option>9 people</option>
-                                        <option>10+ people</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <span class="txt9">Name</span>
-                                <div class="wrap-inputname">
-                                    <input type="text" name="name" placeholder="Your Name" required>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <span class="txt9">Phone</span>
-                                <div class="wrap-inputphone">
-                                    <input type="tel" name="phone" placeholder="Phone Number" required>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <span class="txt9">Email</span>
-                                <div class="wrap-inputemail">
-                                    <input type="email" name="email" placeholder="Email Address" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="wrap-btn-booking">
-                            <button type="submit" id="submitBtn" class="btn-premium">
-                                <span id="btnText">Reserve Your Table Now</span>
-                                <span id="btnLoader" class="btn-loader" style="display: none;">
-                                    <i class="fa-solid fa-spinner fa-spin"></i>
-                                </span>
-                            </button>
-                            <p class="trust-text">⚡ Takes less than 30 seconds</p>
-                        </div>
-                    </form>
-
-                    <!-- Success Message -->
-                    <div id="successMessage" class="reservation-success" style="display: none;">
-                        <div class="success-icon">
-                            <i class="fa-solid fa-check-circle"></i>
-                        </div>
-                        <div class="success-content">
-                            <h4>🎉 Reservation confirmed!</h4>
-                            <p>We'll contact you shortly.</p>
-                        </div>
-                    </div>
-
-                    <!-- Error Message -->
-                    <div id="errorMessage" class="reservation-error" style="display: none;">
-                        <div class="error-icon">
-                            <i class="fa-solid fa-exclamation-circle"></i>
-                        </div>
-                        <div class="error-content">
-                            <h4>Oops! Something went wrong</h4>
-                            <p id="errorText">Please check your details and try again.</p>
                         </div>
                     </div>
                 </div>
@@ -203,83 +356,83 @@
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- Footer (Same as Homepage) -->
     <footer class="bg1">
         <div class="container-fluid px-3 p-t-40 p-b-70">
             <div class="row">
                 <div class="col-sm-6 col-md-4 p-t-50 m-b-30">
-                    <h4 class="txt13 m-b-33" style="font-size: clamp(16px, 3vw, 18px);">Contact Us</h4>
+                    <h4 class="txt13 m-b-33">Contact Us</h4>
                     <ul class="m-b-70">
-                        <li class="txt14 m-b-14" style="font-size: clamp(13px, 2vw, 14px);">
-                            <i class="fa-solid fa-location-dot fs-16 dis-inline-block size19" aria-hidden="true"></i>
+                        <li class="txt14 m-b-14">
+                            <i class="fa-solid fa-location-dot fs-16 dis-inline-block size19"></i>
                             8th floor, 379 Hudson St, New York, NY 10018
                         </li>
-                        <li class="txt14 m-b-14" style="font-size: clamp(13px, 2vw, 14px);">
-                            <i class="fa-solid fa-phone fs-16 dis-inline-block size19" aria-hidden="true"></i>
+                        <li class="txt14 m-b-14">
+                            <i class="fa-solid fa-phone fs-16 dis-inline-block size19"></i>
                             <a href="tel:+19671668879">(+1) 96 716 6879</a>
                         </li>
-                        <li class="txt14 m-b-14" style="font-size: clamp(13px, 2vw, 14px);">
-                            <i class="fa-solid fa-envelope fs-13 dis-inline-block size19" aria-hidden="true"></i>
+                        <li class="txt14 m-b-14">
+                            <i class="fa-solid fa-envelope fs-13 dis-inline-block size19"></i>
                             <a href="mailto:contact@crave-restaurant.com">contact@crave-restaurant.com</a>
                         </li>
                     </ul>
 
-                    <h4 class="txt13 m-b-32" style="font-size: clamp(16px, 3vw, 18px);">Opening Times</h4>
+                    <h4 class="txt13 m-b-32">Opening Times</h4>
                     <ul>
-                        <li class="txt14" style="font-size: clamp(13px, 2vw, 14px);">11:00 AM – 10:00 PM</li>
-                        <li class="txt14" style="font-size: clamp(13px, 2vw, 14px);">Every Day</li>
+                        <li class="txt14">11:00 AM " 10:00 PM</li>
+                        <li class="txt14">Every Day</li>
                     </ul>
                 </div>
 
                 <div class="col-sm-6 col-md-4 p-t-50 m-b-30">
-                    <h4 class="txt13 m-b-33" style="font-size: clamp(16px, 3vw, 18px);">Latest Posts</h4>
+                    <h4 class="txt13 m-b-33">Latest Posts</h4>
                     <div class="m-b-25">
-                        <a href="blog.html" class="txt15" style="font-size: clamp(13px, 2vw, 15px);">Best Places for Wine</a>
-                        <p class="txt14 m-b-18" style="font-size: clamp(12px, 2vw, 13px);">Discover our curated wine selection and pairing recommendations for the perfect dining experience.</p>
-                        <span class="txt16" style="font-size: clamp(11px, 2vw, 12px);">21 Dec 2024</span>
+                        <a href="blog.html" class="txt15">Best Places for Wine</a>
+                        <p class="txt14 m-b-18">Discover our curated wine selection and pairing recommendations for the perfect dining experience.</p>
+                        <span class="txt16">21 Dec 2024</span>
                     </div>
                     <div>
-                        <a href="blog.html" class="txt15" style="font-size: clamp(13px, 2vw, 15px);">Seasonal Specials</a>
-                        <p class="txt14 m-b-18" style="font-size: clamp(12px, 2vw, 13px);">Explore our winter menu featuring fresh, seasonal ingredients from local farms.</p>
-                        <span class="txt16" style="font-size: clamp(11px, 2vw, 12px);">15 Dec 2024</span>
+                        <a href="blog.html" class="txt15">Seasonal Specials</a>
+                        <p class="txt14 m-b-18">Explore our winter menu featuring fresh, seasonal ingredients from local farms.</p>
+                        <span class="txt16">15 Dec 2024</span>
                     </div>
                 </div>
 
                 <div class="col-sm-6 col-md-4 p-t-50 m-b-30">
-                    <h4 class="txt13 m-b-38" style="font-size: clamp(16px, 3vw, 18px);">Gallery</h4>
+                    <h4 class="txt13 m-b-38">Gallery</h4>
                     <div class="wrap-gallery-footer flex-w">
-                        <a class="item-gallery-footer wrap-pic-w glightbox" href="images/photo-gallery-01.jpg" data-gallery="gallery-footer" style="min-width: 44px; min-height: 44px; display: inline-block;">
-                            <img src="images/photo-gallery-thumb-01.jpg" alt="GALLERY" loading="lazy" style="width: 100%; height: auto;">
+                        <a class="item-gallery-footer wrap-pic-w" href="images/photo-gallery-01.jpg">
+                            <img src="images/photo-gallery-thumb-01.jpg" alt="GALLERY">
                         </a>
-                        <a class="item-gallery-footer wrap-pic-w glightbox" href="images/photo-gallery-02.jpg" data-gallery="gallery-footer" style="min-width: 44px; min-height: 44px; display: inline-block;">
-                            <img src="images/photo-gallery-thumb-02.jpg" alt="GALLERY" loading="lazy" style="width: 100%; height: auto;">
+                        <a class="item-gallery-footer wrap-pic-w" href="images/photo-gallery-02.jpg">
+                            <img src="images/photo-gallery-thumb-02.jpg" alt="GALLERY">
                         </a>
-                        <a class="item-gallery-footer wrap-pic-w glightbox" href="images/photo-gallery-03.jpg" data-gallery="gallery-footer" style="min-width: 44px; min-height: 44px; display: inline-block;">
-                            <img src="images/photo-gallery-thumb-03.jpg" alt="GALLERY" loading="lazy" style="width: 100%; height: auto;">
+                        <a class="item-gallery-footer wrap-pic-w" href="images/photo-gallery-03.jpg">
+                            <img src="images/photo-gallery-thumb-03.jpg" alt="GALLERY">
                         </a>
-                        <a class="item-gallery-footer wrap-pic-w glightbox" href="images/photo-gallery-04.jpg" data-gallery="gallery-footer" style="min-width: 44px; min-height: 44px; display: inline-block;">
-                            <img src="images/photo-gallery-thumb-04.jpg" alt="GALLERY" loading="lazy" style="width: 100%; height: auto;">
+                        <a class="item-gallery-footer wrap-pic-w" href="images/photo-gallery-04.jpg">
+                            <img src="images/photo-gallery-thumb-04.jpg" alt="GALLERY">
                         </a>
-                        <a class="item-gallery-footer wrap-pic-w glightbox" href="images/photo-gallery-05.jpg" data-gallery="gallery-footer" style="min-width: 44px; min-height: 44px; display: inline-block;">
-                            <img src="images/photo-gallery-thumb-05.jpg" alt="GALLERY" loading="lazy" style="width: 100%; height: auto;">
+                        <a class="item-gallery-footer wrap-pic-w" href="images/photo-gallery-05.jpg">
+                            <img src="images/photo-gallery-thumb-05.jpg" alt="GALLERY">
                         </a>
-                        <a class="item-gallery-footer wrap-pic-w glightbox" href="images/photo-gallery-06.jpg" data-gallery="gallery-footer" style="min-width: 44px; min-height: 44px; display: inline-block;">
-                            <img src="images/photo-gallery-thumb-06.jpg" alt="GALLERY" loading="lazy" style="width: 100%; height: auto;">
+                        <a class="item-gallery-footer wrap-pic-w" href="images/photo-gallery-06.jpg">
+                            <img src="images/photo-gallery-thumb-06.jpg" alt="GALLERY">
                         </a>
-                        <a class="item-gallery-footer wrap-pic-w glightbox" href="images/photo-gallery-07.jpg" data-gallery="gallery-footer" style="min-width: 44px; min-height: 44px; display: inline-block;">
-                            <img src="images/photo-gallery-thumb-07.jpg" alt="GALLERY" loading="lazy" style="width: 100%; height: auto;">
+                        <a class="item-gallery-footer wrap-pic-w" href="images/photo-gallery-07.jpg">
+                            <img src="images/photo-gallery-thumb-07.jpg" alt="GALLERY">
                         </a>
-                        <a class="item-gallery-footer wrap-pic-w glightbox" href="images/photo-gallery-08.jpg" data-gallery="gallery-footer" style="min-width: 44px; min-height: 44px; display: inline-block;">
-                            <img src="images/photo-gallery-thumb-08.jpg" alt="GALLERY" loading="lazy" style="width: 100%; height: auto;">
+                        <a class="item-gallery-footer wrap-pic-w" href="images/photo-gallery-08.jpg">
+                            <img src="images/photo-gallery-thumb-08.jpg" alt="GALLERY">
                         </a>
-                        <a class="item-gallery-footer wrap-pic-w glightbox" href="images/photo-gallery-09.jpg" data-gallery="gallery-footer" style="min-width: 44px; min-height: 44px; display: inline-block;">
-                            <img src="images/photo-gallery-thumb-09.jpg" alt="GALLERY" loading="lazy" style="width: 100%; height: auto;">
+                        <a class="item-gallery-footer wrap-pic-w" href="images/photo-gallery-09.jpg">
+                            <img src="images/photo-gallery-thumb-09.jpg" alt="GALLERY">
                         </a>
-                        <a class="item-gallery-footer wrap-pic-w glightbox" href="images/photo-gallery-10.jpg" data-gallery="gallery-footer" style="min-width: 44px; min-height: 44px; display: inline-block;">
-                            <img src="images/photo-gallery-thumb-10.jpg" alt="GALLERY" loading="lazy" style="width: 100%; height: auto;">
+                        <a class="item-gallery-footer wrap-pic-w" href="images/photo-gallery-10.jpg">
+                            <img src="images/photo-gallery-thumb-10.jpg" alt="GALLERY">
                         </a>
-                        <a class="item-gallery-footer wrap-pic-w glightbox" href="images/photo-gallery-11.jpg" data-gallery="gallery-footer" style="min-width: 44px; min-height: 44px; display: inline-block;">
-                            <img src="images/photo-gallery-thumb-11.jpg" alt="GALLERY" loading="lazy" style="width: 100%; height: auto;">
+                        <a class="item-gallery-footer wrap-pic-w" href="images/photo-gallery-11.jpg">
+                            <img src="images/photo-gallery-thumb-11.jpg" alt="GALLERY">
                         </a>
                     </div>
                 </div>
@@ -288,15 +441,15 @@
 
         <div class="end-footer bg2">
             <div class="container-fluid px-3">
-                <div class="flex-sb-m flex-w p-t-22 p-b-22" style="flex-direction: column; gap: 15px;">
+                <div class="flex-sb-m flex-w p-t-22 p-b-22">
                     <div class="p-t-5 p-b-5">
-                        <a href="#" class="fs-15 c-white" style="min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center;"><i class="fa-brands fa-yelp" aria-hidden="true"></i></a>
-                        <a href="#" class="fs-15 c-white m-l-18" style="min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center;"><i class="fa-brands fa-google" aria-hidden="true"></i></a>
-                        <a href="#" class="fs-15 c-white m-l-18" style="min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center;"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
-                        <a href="#" class="fs-15 c-white m-l-18" style="min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center;"><i class="fa-brands fa-facebook" aria-hidden="true"></i></a>
-                        <a href="#" class="fs-15 c-white m-l-18" style="min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center;"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+                        <a href="#" class="fs-15 c-white"><i class="fa-brands fa-yelp"></i></a>
+                        <a href="#" class="fs-15 c-white m-l-18"><i class="fa-brands fa-google"></i></a>
+                        <a href="#" class="fs-15 c-white m-l-18"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="fs-15 c-white m-l-18"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#" class="fs-15 c-white m-l-18"><i class="fa-brands fa-x-twitter"></i></a>
                     </div>
-                    <div class="txt17 p-r-20 p-t-5 p-b-5" style="font-size: clamp(12px, 2vw, 14px); text-align: center;">
+                    <div class="txt17 p-r-20 p-t-5 p-b-5">
                         &copy; <span id="copyright-year">2025</span> Crave Restaurant. All rights reserved.
                     </div>
                 </div>
@@ -307,52 +460,30 @@
     <!-- Back to top -->
     <div class="btn-back-to-top bg0-hov" id="myBtn">
         <span class="symbol-btn-back-to-top">
-            <i class="fa-solid fa-angles-up" aria-hidden="true"></i>
+            <i class="fa-solid fa-angles-up"></i>
         </span>
     </div>
 
-    <!-- Modal Video -->
-    <div class="modal fade" id="modal-video-01" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document" data-bs-dismiss="modal">
-            <div class="close-mo-video-01 trans-0-4" data-bs-dismiss="modal" aria-label="Close">&times;</div>
-            <div class="wrap-video-mo-01">
-                <div class="w-full wrap-pic-w op-0-0"><img src="images/icons/video-16-9.jpg" alt="Video" loading="lazy"></div>
-                <div class="video-mo-01">
-                    <iframe src="https://www.youtube.com/embed/5k1hSu2gdKE?rel=0&amp;showinfo=0" allowfullscreen loading="lazy"></iframe>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/233550020788?text=Hi%20Crave%2C%20I%E2%80%99d%20like%20to%20make%20a%20reservation" class="whatsapp-float" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
-    <script src="js/swiper-custom.js"></script>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/main.js"></script>
+    
     <script>
-        // Mobile Optimizations
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize Flatpickr for date picker
-            if (document.querySelector('.my-calendar')) {
-                flatpickr('.my-calendar', { 
-                    dateFormat: 'Y-m-d', 
-                    minDate: 'today',
-                    mobile: true
-                });
+            // Set minimum date to today
+            const dateInput = document.getElementById('date');
+            if (dateInput) {
+                const today = new Date().toISOString().split('T')[0];
+                dateInput.min = today;
             }
 
-            // Initialize GLightbox for gallery
-            if (typeof GLightbox !== 'undefined') {
-                GLightbox({ 
-                    selector: '.glightbox',
-                    touchNavigation: true,
-                    loop: true
-                });
-            }
-
-            // RESERVATION FORM FUNCTIONALITY
-            const reservationForm = document.getElementById('reservationForm');
+            // Form submission
+            const form = document.getElementById('reservationForm');
             const submitBtn = document.getElementById('submitBtn');
             const btnText = document.getElementById('btnText');
             const btnLoader = document.getElementById('btnLoader');
@@ -360,17 +491,17 @@
             const errorMessage = document.getElementById('errorMessage');
             const errorText = document.getElementById('errorText');
 
-            if (reservationForm) {
-                reservationForm.addEventListener('submit', function(e) {
+            if (form) {
+                form.addEventListener('submit', function(e) {
                     e.preventDefault();
                     
                     // Get form values
-                    const date = document.querySelector('input[name="date"]').value;
-                    const time = document.querySelector('select[name="time"]').value;
-                    const people = document.querySelector('select[name="people"]').value;
-                    const name = document.querySelector('input[name="name"]').value;
-                    const phone = document.querySelector('input[name="phone"]').value;
-                    const email = document.querySelector('input[name="email"]').value;
+                    const date = document.getElementById('date').value;
+                    const time = document.getElementById('time').value;
+                    const people = document.getElementById('people').value;
+                    const name = document.getElementById('name').value;
+                    const phone = document.getElementById('phone').value;
+                    const email = document.getElementById('email').value;
 
                     // Validation
                     if (!date || !time || !people || !name || !phone || !email) {
@@ -378,7 +509,9 @@
                         return;
                     }
 
-                    if (!validateEmail(email)) {
+                    // Email validation
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email)) {
                         showError('Please enter a valid email address.');
                         return;
                     }
@@ -386,24 +519,19 @@
                     // Show loading state
                     showLoading();
 
-                    // Simulate API call (replace with actual backend call)
+                    // Simulate API call
                     setTimeout(() => {
-                        // Simulate success (90% success rate for demo)
+                        // Success (90% success rate for demo)
                         if (Math.random() > 0.1) {
                             showSuccess();
                             sendWhatsAppMessage(date, time, people, name);
-                            resetForm();
+                            form.reset();
                         } else {
                             showError('Unable to process reservation. Please try again or call us directly.');
                         }
                         hideLoading();
                     }, 2000);
                 });
-            }
-
-            function validateEmail(email) {
-                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                return re.test(email);
             }
 
             function showLoading() {
@@ -421,14 +549,12 @@
 
             function showSuccess() {
                 successMessage.style.display = 'block';
-                successMessage.style.animation = 'fadeInUp 0.6s ease-out forwards';
                 hideMessages();
             }
 
             function showError(message) {
                 errorText.textContent = message;
                 errorMessage.style.display = 'block';
-                errorMessage.style.animation = 'fadeInUp 0.6s ease-out forwards';
                 hideMessages();
             }
 
@@ -437,16 +563,16 @@
                 errorMessage.style.display = 'none';
             }
 
-            function resetForm() {
-                if (reservationForm) {
-                    reservationForm.reset();
-                }
-            }
-
             function sendWhatsAppMessage(date, time, people, name) {
                 const message = `Hi Crave, I just made a reservation for ${date} at ${time} for ${people} people. Name: ${name}`;
                 const whatsappUrl = `https://wa.me/233550020788?text=${encodeURIComponent(message)}`;
                 window.open(whatsappUrl, '_blank');
+            }
+
+            // Copyright year
+            const yearSpan = document.getElementById('copyright-year');
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
             }
 
             // Back to top button
@@ -461,116 +587,7 @@
                 });
                 backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
             }
-
-            // Copyright year
-            const yearSpan = document.getElementById('copyright-year');
-            if (yearSpan) yearSpan.textContent = new Date().getFullYear();
-
-            // Mobile menu toggle
-            const btnShowSidebar = document.querySelector('.btn-show-sidebar');
-            const btnHideSidebar = document.querySelector('.btn-hide-sidebar');
-            const sidebar = document.querySelector('.sidebar');
-
-            if (btnShowSidebar && sidebar) {
-                btnShowSidebar.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    sidebar.classList.add('show-sidebar');
-                });
-            }
-
-            if (btnHideSidebar && sidebar) {
-                btnHideSidebar.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    sidebar.classList.remove('show-sidebar');
-                });
-            }
-
-            // Close sidebar when clicking on a link
-            if (sidebar) {
-                document.querySelectorAll('.sidebar a, .sidebar button').forEach(function(el) {
-                    el.addEventListener('click', function() {
-                        sidebar.classList.remove('show');
-                        document.body.style.overflow = 'auto';
-                    });
-                });
-            }
-
-            // Prevent iOS zoom on input focus
-            const inputs = document.querySelectorAll('input, select, textarea');
-            inputs.forEach(function(input) {
-                input.addEventListener('focus', function() {
-                    // iOS safari fix
-                    this.style.fontSize = '16px';
-                });
-            });
-
-            // Touch optimization for swiper
-            const swipers = document.querySelectorAll('.swiper');
-            swipers.forEach(function(swiperEl) {
-                if (swiperEl.swiper) {
-                    swiperEl.swiper.touchEventsTarget = 'container';
-                }
-            });
-
-            // Optimize image loading for mobile
-            const images = document.querySelectorAll('img[loading="lazy"]');
-            if ('IntersectionObserver' in window) {
-                const imageObserver = new IntersectionObserver((entries, observer) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            const img = entry.target;
-                            // Image already has src, so loading is handled by browser
-                            observer.unobserve(img);
-                        }
-                    });
-                }, {
-                    rootMargin: '50px'
-                });
-                
-                images.forEach(img => imageObserver.observe(img));
-            }
-
-            // Smooth scroll behavior
-            if (CSS.supports('scroll-behavior', 'smooth')) {
-                document.documentElement.style.scrollBehavior = 'smooth';
-            }
-
-            // Add touch feedback to buttons
-            document.querySelectorAll('button, a').forEach(el => {
-                el.addEventListener('touchstart', function() {
-                    this.style.opacity = '0.7';
-                });
-                el.addEventListener('touchend', function() {
-                    this.style.opacity = '1';
-                });
-            });
         });
-
-        // Handle viewport changes for responsive adjustments
-        window.addEventListener('orientationchange', function() {
-            // Reload or adjust layout on orientation change
-            setTimeout(function() {
-                if (typeof Swiper !== 'undefined') {
-                    document.querySelectorAll('.swiper').forEach(swiperEl => {
-                        if (swiperEl.swiper) {
-                            swiperEl.swiper.update();
-                        }
-                    });
-                }
-            }, 100);
-        });
-
-        // Prevent bouncy scroll on iOS
-        document.body.addEventListener('touchmove', function(e) {
-            if (e.target.closest('input, select, textarea') === null) {
-                // Allow normal scroll outside of form elements
-            }
-        }, false);
     </script>
-
-    <!-- WhatsApp Floating Button -->
-    <a href="https://wa.me/233550020788?text=Hi%20Crave%2C%20I%E2%80%99d%20like%20to%20place%20an%20order" class="whatsapp-float" target="_blank" aria-label="Order via WhatsApp" title="Order on WhatsApp">
-        <i class="fa-brands fa-whatsapp"></i>
-    </a>
 </body>
 </html>
