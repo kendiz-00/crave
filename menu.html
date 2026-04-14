@@ -299,6 +299,22 @@
         let cartItems = [];
         let cartCount = 0;
 
+        // Load cart from localStorage on page load
+        function loadCartFromStorage() {
+            const storedCart = localStorage.getItem('craveCart');
+            if (storedCart) {
+                try {
+                    cartItems = JSON.parse(storedCart);
+                    cartCount = cartItems.length;
+                } catch (e) {
+                    cartItems = [];
+                    cartCount = 0;
+                    localStorage.removeItem('craveCart');
+                }
+            }
+            updateCartBadge();
+        }
+
         // Initialize menu
         function initializeMenu() {
             Object.keys(menuData).forEach(categoryId => {
@@ -390,6 +406,10 @@
             
             cartItems.push(item);
             cartCount++;
+            
+            // Save to localStorage for persistence
+            localStorage.setItem('craveCart', JSON.stringify(cartItems));
+            
             updateCartBadge();
             showCartFeedback(itemName);
         }
@@ -460,9 +480,9 @@
 
         // Initialize everything on page load
         document.addEventListener('DOMContentLoaded', function() {
+            loadCartFromStorage(); // Load cart first
             initializeMenu();
             initializeCategoryNav();
-            updateCartBadge();
             
             // Copyright year
             const yearSpan = document.getElementById('copyright-year');

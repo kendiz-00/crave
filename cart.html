@@ -332,9 +332,25 @@
     <script>
         // Cart page specific functionality - Won't interfere with main.js
         document.addEventListener('DOMContentLoaded', function() {
+            loadCartFromStorage();
             loadCartItems();
             updateCartDisplay();
         });
+
+        // Load cart from localStorage
+        function loadCartFromStorage() {
+            const storedCart = localStorage.getItem('craveCart');
+            if (storedCart) {
+                try {
+                    window.cartItems = JSON.parse(storedCart);
+                } catch (e) {
+                    window.cartItems = [];
+                    localStorage.removeItem('craveCart');
+                }
+            } else {
+                window.cartItems = [];
+            }
+        }
 
         function loadCartItems() {
             const cart = JSON.parse(localStorage.getItem('craveCart')) || [];
@@ -423,8 +439,10 @@
         document.getElementById('clearCartBtn')?.addEventListener('click', function() {
             if (confirm('Are you sure you want to clear your cart?')) {
                 localStorage.removeItem('craveCart');
+                window.cartItems = [];
                 loadCartItems();
                 updateCartDisplay();
+                updateCartBadge();
             }
         });
 
