@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete your order at Crave Restaurant">
+    <title>Checkout - Crave Restaurant</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/util.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <header id="siteHeader" class="navbar-header">
+        <nav class="navbar">
+            <div class="navbar-container">
+                <div class="navbar-logo">
+                    <a href="index.html" class="logo-link">
+                        <img src="images/logo.png" alt="Crave Restaurant" class="logo-img">
+                    </a>
+                </div>
+
+                <button id="navbarToggle" class="navbar-toggle" aria-label="Toggle navigation">
+                    <span class="navbar-toggle-bar"></span>
+                    <span class="navbar-toggle-bar"></span>
+                    <span class="navbar-toggle-bar"></span>
+                </button>
+
+                <div class="navbar-menu" id="navbarMenu">
+                    <ul class="navbar-menu-list">
+                        <li class="navbar-menu-item"><a href="index.html" class="navbar-link">Home</a></li>
+                        <li class="navbar-menu-item"><a href="menu.html" class="navbar-link">Menu</a></li>
+                        <li class="navbar-menu-item"><a href="about.html" class="navbar-link">About</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Checkout Container -->
+    <div class="checkout-container">
+        <div class="checkout-layout">
+            <!-- Customer Form Section -->
+            <div class="checkout-form-section">
+                <h1 class="checkout-title">Complete Your Order</h1>
+                <p class="checkout-subtitle">Fill in your details to place your order</p>
+
+                <!-- Error Message -->
+                <div class="checkout-error" id="checkoutError"></div>
+
+                <!-- Checkout Form -->
+                <form id="checkoutForm">
+                    <!-- Full Name -->
+                    <div class="checkout-form-group">
+                        <label for="fullName" class="checkout-label">
+                            Full Name <span class="required">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="fullName" 
+                            name="fullName" 
+                            class="checkout-input" 
+                            placeholder="Enter your full name"
+                            required
+                            autofocus
+                        >
+                    </div>
+
+                    <!-- Phone Number -->
+                    <div class="checkout-form-group">
+                        <label for="phoneNumber" class="checkout-label">
+                            Phone Number <span class="required">*</span>
+                        </label>
+                        <input 
+                            type="tel" 
+                            id="phoneNumber" 
+                            name="phoneNumber" 
+                            class="checkout-input" 
+                            placeholder="050 000 0000"
+                            required
+                        >
+                    </div>
+
+                    <!-- Delivery Address -->
+                    <div class="checkout-form-group">
+                        <label for="deliveryAddress" class="checkout-label">
+                            Delivery Address <span class="required">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="deliveryAddress" 
+                            name="deliveryAddress" 
+                            class="checkout-input" 
+                            placeholder="Enter your delivery address"
+                            required
+                        >
+                    </div>
+
+                    <!-- Order Type -->
+                    <div class="checkout-form-group">
+                        <label class="checkout-label">
+                            Order Type <span class="required">*</span>
+                        </label>
+                        <div class="order-type-group">
+                            <div class="order-type-option">
+                                <input type="radio" id="delivery" name="orderType" value="Delivery" class="order-type-radio" checked>
+                                <label for="delivery" class="order-type-label">
+                                    <i class="fas fa-truck"></i> Delivery
+                                </label>
+                            </div>
+                            <div class="order-type-option">
+                                <input type="radio" id="pickup" name="orderType" value="Pickup" class="order-type-radio">
+                                <label for="pickup" class="order-type-label">
+                                    <i class="fas fa-store"></i> Pickup
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Notes -->
+                    <div class="checkout-form-group">
+                        <label for="additionalNotes" class="checkout-label">
+                            Additional Notes (Optional)
+                        </label>
+                        <textarea 
+                            id="additionalNotes" 
+                            name="additionalNotes" 
+                            class="checkout-input checkout-textarea" 
+                            placeholder="Any special requests? (e.g., no onions, extra spicy)"
+                        ></textarea>
+                    </div>
+
+                    <!-- Place Order Button -->
+                    <button type="submit" class="checkout-place-order-btn" id="placeOrderBtn">
+                        <i class="fab fa-whatsapp btn-icon"></i>
+                        Place Order on WhatsApp
+                    </button>
+                </form>
+            </div>
+
+            <!-- Order Summary Section -->
+            <div class="checkout-summary-section">
+                <h2 class="checkout-summary-title">Order Summary</h2>
+                
+                <!-- Cart Items -->
+                <div class="checkout-cart-items" id="checkoutCartItems">
+                    <!-- Items will be populated by JavaScript -->
+                </div>
+
+                <!-- Empty Cart State -->
+                <div class="checkout-empty-cart" id="emptyCartState" style="display: none;">
+                    <div class="checkout-empty-cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="checkout-empty-cart-text">Your cart is empty</div>
+                    <a href="menu.html" class="checkout-empty-cart-link">
+                        <i class="fas fa-arrow-left"></i> Back to Menu
+                    </a>
+                </div>
+
+                <!-- Order Totals -->
+                <div class="checkout-summary-totals" id="orderTotals">
+                    <div class="checkout-summary-row">
+                        <span>Subtotal</span>
+                        <span id="subtotalAmount">GHS 0.00</span>
+                    </div>
+                    <div class="checkout-summary-row">
+                        <span>Delivery Fee</span>
+                        <span id="deliveryFee">GHS 15.00</span>
+                    </div>
+                    <div class="checkout-summary-row total">
+                        <span>TOTAL</span>
+                        <span id="totalAmount">GHS 0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Animation -->
+    <div class="checkout-success" id="checkoutSuccess">
+        <div class="checkout-success-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="checkout-success-text">Order Placed!</div>
+        <div class="checkout-success-subtext">Redirecting to WhatsApp...</div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg1">
+        <div class="container-fluid px-3 p-t-40 p-b-70">
+            <div class="row">
+                <div class="col-sm-6 col-md-4 p-t-50 m-b-30">
+                    <h4 class="txt13 m-b-33">Contact Us</h4>
+                    <ul class="m-b-70">
+                        <li class="txt14 m-b-14">
+                            <i class="fa-solid fa-location-dot fs-16 dis-inline-block size19"></i>
+                            8th floor, 379 Hudson St, New York, NY 10018
+                        </li>
+                        <li class="txt14 m-b-14">
+                            <i class="fa-solid fa-phone fs-16 dis-inline-block size19"></i>
+                            <a href="tel:+19671668879">(+1) 96 716 6879</a>
+                        </li>
+                        <li class="txt14 m-b-14">
+                            <i class="fa-solid fa-envelope fs-13 dis-inline-block size19"></i>
+                            <a href="mailto:contact@crave-restaurant.com">contact@crave-restaurant.com</a>
+                        </li>
+                    </ul>
+
+                    <h4 class="txt13 m-b-32">Opening Times</h4>
+                    <ul>
+                        <li class="txt14">11:00 AM " 10:00 PM</li>
+                        <li class="txt14">Every Day</li>
+                    </ul>
+                </div>
+
+                <div class="col-sm-6 col-md-4 p-t-50 m-b-30">
+                    <h4 class="txt13 m-b-33">Latest Posts</h4>
+                    <div class="m-b-25">
+                        <a href="blog.html" class="txt15">Best Places for Wine</a>
+                        <p class="txt14 m-b-18">Discover our curated wine selection and pairing recommendations for the perfect dining experience.</p>
+                        <span class="txt16">21 Dec 2024</span>
+                    </div>
+                    <div>
+                        <a href="blog.html" class="txt15">Seasonal Specials</a>
+                        <p class="txt14 m-b-18">Explore our winter menu featuring fresh, seasonal ingredients from local farms.</p>
+                        <span class="txt16">15 Dec 2024</span>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 p-t-50 m-b-30">
+                    <h4 class="txt13 m-b-38">Gallery</h4>
+                    <div class="wrap-gallery-footer flex-w">
+                        <a class="item-gallery-footer wrap-pic-w" href="images/photo-gallery-01.jpg">
+                            <img src="images/photo-gallery-thumb-01.jpg" alt="GALLERY">
+                        </a>
+                        <a class="item-gallery-footer wrap-pic-w" href="images/photo-gallery-02.jpg">
+                            <img src="images/photo-gallery-thumb-02.jpg" alt="GALLERY">
+                        </a>
+                        <a class="item-gallery-footer wrap-pic-w" href="images/photo-gallery-03.jpg">
+                            <img src="images/photo-gallery-thumb-03.jpg" alt="GALLERY">
+                        </a>
+                        <a class="item-gallery-footer wrap-pic-w" href="images/photo-gallery-04.jpg">
+                            <img src="images/photo-gallery-thumb-04.jpg" alt="GALLERY">
+                        </a>
+                        <a class="item-gallery-footer wrap-pic-w" href="images/photo-gallery-05.jpg">
+                            <img src="images/photo-gallery-thumb-05.jpg" alt="GALLERY">
+                        </a>
+                        <a class="item-gallery-footer wrap-pic-w" href="images/photo-gallery-06.jpg">
+                            <img src="images/photo-gallery-thumb-06.jpg" alt="GALLERY">
+                        </a>
+                        <a class="item-gallery-footer wrap-pic-w" href="images/photo-gallery-07.jpg">
+                            <img src="images/photo-gallery-thumb-07.jpg" alt="GALLERY">
+                        </a>
+                        <a class="item-gallery-footer wrap-pic-w" href="images/photo-gallery-08.jpg">
+                            <img src="images/photo-gallery-thumb-08.jpg" alt="GALLERY">
+                        </a>
+                        <a class="item-gallery-footer wrap-pic-w" href="images/photo-gallery-09.jpg">
+                            <img src="images/photo-gallery-thumb-09.jpg" alt="GALLERY">
+                        </a>
+                        <a class="item-gallery-footer wrap-pic-w" href="images/photo-gallery-10.jpg">
+                            <img src="images/photo-gallery-thumb-10.jpg" alt="GALLERY">
+                        </a>
+                        <a class="item-gallery-footer wrap-pic-w" href="images/photo-gallery-11.jpg">
+                            <img src="images/photo-gallery-thumb-11.jpg" alt="GALLERY">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="end-footer bg2">
+            <div class="container-fluid px-3">
+                <div class="flex-sb-m flex-w p-t-22 p-b-22">
+                    <div class="p-t-5 p-b-5">
+                        <a href="#" class="fs-15 c-white"><i class="fa-brands fa-yelp"></i></a>
+                        <a href="#" class="fs-15 c-white m-l-18"><i class="fa-brands fa-google"></i></a>
+                        <a href="#" class="fs-15 c-white m-l-18"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="fs-15 c-white m-l-18"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#" class="fs-15 c-white m-l-18"><i class="fa-brands fa-x-twitter"></i></a>
+                    </div>
+                    <div class="txt17 p-r-20 p-t-5 p-b-5">
+                        &copy; <span id="copyright-year">2025</span> Crave Restaurant. All rights reserved.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/233550020788?text=Hi%20Crave%2C%20I%E2%80%99d%20like%20to%20place%20an%20order" class="whatsapp-float" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+    
+    <!-- Checkout JavaScript -->
+    <script>
+        // Cart Management
+        let cartItems = [];
+        let deliveryFee = 15.00;
+
+        // Initialize checkout page
+        function initializeCheckout() {
+            loadCartFromStorage();
+            renderOrderSummary();
+            setupFormHandlers();
+            updateCopyrightYear();
+        }
+
+        // Load cart from localStorage
+        function loadCartFromStorage() {
+            const storedCart = localStorage.getItem('craveCart');
+            if (storedCart) {
+                try {
+                    cartItems = JSON.parse(storedCart);
+                } catch (e) {
+                    cartItems = [];
+                    localStorage.removeItem('craveCart');
+                }
+            }
+        }
+
+        // Save cart to localStorage
+        function saveCartToStorage() {
+            localStorage.setItem('craveCart', JSON.stringify(cartItems));
+        }
+
+        // Render order summary
+        function renderOrderSummary() {
+            const cartContainer = document.getElementById('checkoutCartItems');
+            const emptyState = document.getElementById('emptyCartState');
+            const orderTotals = document.getElementById('orderTotals');
+
+            if (cartItems.length === 0) {
+                cartContainer.style.display = 'none';
+                emptyState.style.display = 'block';
+                orderTotals.style.display = 'none';
+                return;
+            }
+
+            cartContainer.style.display = 'block';
+            emptyState.style.display = 'none';
+            orderTotals.style.display = 'block';
+
+            // Group items by name and sum quantities
+            const groupedItems = {};
+            cartItems.forEach(item => {
+                if (groupedItems[item.name]) {
+                    groupedItems[item.name].quantity += 1;
+                } else {
+                    groupedItems[item.name] = {
+                        name: item.name,
+                        price: item.price,
+                        quantity: 1
+                    };
+                }
+            });
+
+            // Render grouped items
+            cartContainer.innerHTML = '';
+            let subtotal = 0;
+
+            Object.values(groupedItems).forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+
+                const itemElement = document.createElement('div');
+                itemElement.className = 'checkout-cart-item';
+                itemElement.innerHTML = `
+                    <div class="checkout-item-info">
+                        <div class="checkout-item-name">${item.name}</div>
+                        <div class="checkout-item-quantity">Quantity: ${item.quantity}</div>
+                    </div>
+                    <div class="checkout-item-price">GHS ${itemTotal.toFixed(2)}</div>
+                `;
+                cartContainer.appendChild(itemElement);
+            });
+
+            // Update totals
+            const orderType = document.querySelector('input[name="orderType"]:checked').value;
+            const deliveryFeeAmount = orderType === 'Delivery' ? deliveryFee : 0;
+            const total = subtotal + deliveryFeeAmount;
+
+            document.getElementById('subtotalAmount').textContent = `GHS ${subtotal.toFixed(2)}`;
+            document.getElementById('deliveryFee').textContent = `GHS ${deliveryFeeAmount.toFixed(2)}`;
+            document.getElementById('totalAmount').textContent = `GHS ${total.toFixed(2)}`;
+        }
+
+        // Setup form handlers
+        function setupFormHandlers() {
+            const form = document.getElementById('checkoutForm');
+            const orderTypeRadios = document.querySelectorAll('input[name="orderType"]');
+
+            // Form submission
+            form.addEventListener('submit', handleFormSubmit);
+
+            // Order type change
+            orderTypeRadios.forEach(radio => {
+                radio.addEventListener('change', renderOrderSummary);
+            });
+        }
+
+        // Handle form submission
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            if (cartItems.length === 0) {
+                showError('Your cart is empty. Please add items before checkout.');
+                return;
+            }
+
+            const formData = new FormData(e.target);
+            const orderData = {
+                fullName: formData.get('fullName').trim(),
+                phoneNumber: formData.get('phoneNumber').trim(),
+                deliveryAddress: formData.get('deliveryAddress').trim(),
+                orderType: formData.get('orderType'),
+                additionalNotes: formData.get('additionalNotes').trim()
+            };
+
+            // Validate required fields
+            if (!validateForm(orderData)) {
+                return;
+            }
+
+            // Process order
+            processOrder(orderData);
+        }
+
+        // Validate form
+        function validateForm(data) {
+            const errors = [];
+
+            if (!data.fullName) {
+                errors.push('Full name is required');
+            }
+
+            if (!data.phoneNumber) {
+                errors.push('Phone number is required');
+            }
+
+            if (!data.deliveryAddress && data.orderType === 'Delivery') {
+                errors.push('Delivery address is required for delivery orders');
+            }
+
+            if (errors.length > 0) {
+                showError(errors.join('. '));
+                return false;
+            }
+
+            return true;
+        }
+
+        // Process order
+        function processOrder(orderData) {
+            const form = document.getElementById('checkoutForm');
+            const button = document.getElementById('placeOrderBtn');
+            const successModal = document.getElementById('checkoutSuccess');
+
+            // Show loading state
+            form.classList.add('checkout-loading');
+            button.disabled = true;
+
+            // Generate WhatsApp message
+            const message = generateWhatsAppMessage(orderData);
+
+            // Show success animation
+            successModal.classList.add('show');
+
+            // Open WhatsApp after delay
+            setTimeout(() => {
+                const whatsappUrl = `https://wa.me/233550020788?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+
+                // Reset form and clear cart
+                form.reset();
+                cartItems = [];
+                saveCartToStorage();
+                localStorage.removeItem('craveCart');
+
+                // Hide success modal and redirect
+                setTimeout(() => {
+                    successModal.classList.remove('show');
+                    window.location.href = 'menu.html';
+                }, 2000);
+            }, 1500);
+        }
+
+        // Generate WhatsApp message
+        function generateWhatsAppMessage(orderData) {
+            // Group cart items
+            const groupedItems = {};
+            cartItems.forEach(item => {
+                if (groupedItems[item.name]) {
+                    groupedItems[item.name].quantity += 1;
+                } else {
+                    groupedItems[item.name] = {
+                        name: item.name,
+                        price: item.price,
+                        quantity: 1
+                    };
+                }
+            });
+
+            // Calculate totals
+            let subtotal = 0;
+            const orderLines = [];
+
+            Object.values(groupedItems).forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                orderLines.push(`- ${item.name} x${item.quantity} = GHS ${itemTotal.toFixed(2)}`);
+            });
+
+            const deliveryFeeAmount = orderData.orderType === 'Delivery' ? deliveryFee : 0;
+            const total = subtotal + deliveryFeeAmount;
+
+            // Build message
+            let message = `Hello Crave, I'd like to place an order:\n\n`;
+            message += `Order:\n`;
+            message += orderLines.join('\n');
+            message += `\n\nSubtotal: GHS ${subtotal.toFixed(2)}`;
+            if (deliveryFeeAmount > 0) {
+                message += `\nDelivery Fee: GHS ${deliveryFeeAmount.toFixed(2)}`;
+            }
+            message += `\nTOTAL: GHS ${total.toFixed(2)}`;
+            message += `\n\nCustomer Details:\n`;
+            message += `Name: ${orderData.fullName}\n`;
+            message += `Phone: ${orderData.phoneNumber}\n`;
+            if (orderData.orderType === 'Delivery') {
+                message += `Address: ${orderData.deliveryAddress}\n`;
+            }
+            message += `Order Type: ${orderData.orderType}`;
+            
+            if (orderData.additionalNotes) {
+                message += `\n\nNotes: ${orderData.additionalNotes}`;
+            }
+
+            message += `\n\nPlease confirm my order. Thank you!`;
+
+            return message;
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorElement = document.getElementById('checkoutError');
+            errorElement.textContent = message;
+            errorElement.classList.add('show');
+
+            setTimeout(() => {
+                errorElement.classList.remove('show');
+            }, 5000);
+        }
+
+        // Update copyright year
+        function updateCopyrightYear() {
+            const yearSpan = document.getElementById('copyright-year');
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initializeCheckout);
+    </script>
+</body>
+</html>
