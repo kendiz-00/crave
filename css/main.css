@@ -2980,10 +2980,11 @@ body.menu-page,
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 15px;
-  padding: 15px 0;
+  gap: 20px;
+  padding: 20px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   transition: all 0.3s ease;
+  min-height: 80px;
 }
 
 .bolt-food-item:hover {
@@ -3001,14 +3002,14 @@ body.menu-page,
 
 .bolt-food-name {
   font-weight: 600;
-  font-size: 16px;
+  font-size: 18px;
   color: #fff;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   line-height: 1.3;
 }
 
 .bolt-food-description {
-  font-size: 14px;
+  font-size: 15px;
   color: rgba(255, 255, 255, 0.6);
   margin-bottom: 8px;
   line-height: 1.4;
@@ -3017,32 +3018,38 @@ body.menu-page,
 .bolt-food-price {
   color: #d4a574;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .bolt-food-right {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 15px;
 }
 
 .bolt-food-image {
-  width: 60px;
-  height: 60px;
+  width: 80px;
+  height: 80px;
   border-radius: 12px;
   object-fit: cover;
   background: #1a1a1a;
   border: 1px solid rgba(212, 165, 116, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.bolt-food-item:hover .bolt-food-image {
+  transform: scale(1.05);
 }
 
 .bolt-food-add-btn {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: linear-gradient(135deg, #d4a574 0%, #b88a5a 100%);
   border: none;
   color: #111;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -3050,11 +3057,12 @@ body.menu-page,
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 4px 15px rgba(212, 165, 116, 0.3);
 }
 
 .bolt-food-add-btn:hover {
   transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(212, 165, 116, 0.4);
+  box-shadow: 0 6px 20px rgba(212, 165, 116, 0.4);
 }
 
 .bolt-food-add-btn:active {
@@ -3615,20 +3623,25 @@ html {
 
 /* Cart Item Delete Button */
 .item-delete-btn {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #ef4444;
+  background: rgba(212, 165, 116, 0.1);
+  border: 1px solid rgba(212, 165, 116, 0.3);
+  color: #d4a574;
   border-radius: 8px;
   padding: 8px 12px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 14px;
   margin-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
 }
 
 .item-delete-btn:hover {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: rgba(239, 68, 68, 0.5);
+  background: rgba(212, 165, 116, 0.2);
+  border-color: rgba(212, 165, 116, 0.5);
   transform: scale(1.05);
 }
 
@@ -3655,6 +3668,7 @@ html {
 
 .item-info {
   flex: 1;
+  min-width: 0; /* Prevent flex item from overflowing */
 }
 
 .item-name {
@@ -3674,6 +3688,7 @@ html {
   color: rgba(255, 255, 255, 0.6);
   font-size: 14px;
   margin: 0 15px;
+  white-space: nowrap;
 }
 
 .item-total {
@@ -3681,6 +3696,7 @@ html {
   font-weight: 700;
   font-size: 16px;
   margin: 0 15px;
+  white-space: nowrap;
 }
 
 /* Psychological Tags */
