@@ -3109,11 +3109,11 @@ body.menu-page,
   position: fixed;
   top: 20px;
   right: 20px;
-  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+  background: linear-gradient(135deg, #d4a574 0%, #b88a5a 100%);
   color: white;
   padding: 15px 20px;
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(74, 222, 128, 0.4);
+  box-shadow: 0 10px 30px rgba(212, 165, 116, 0.4);
   z-index: 9999;
   transform: translateX(400px);
   transition: all 0.3s ease;

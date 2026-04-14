@@ -337,18 +337,15 @@
         });
 
         function loadCartItems() {
-            // Get cart from localStorage (same as menu.html uses)
-            const cart = JSON.parse(localStorage.getItem('craveCart')) || {};
+            const cart = JSON.parse(localStorage.getItem('craveCart')) || [];
             const cartItemsContainer = document.getElementById('cartItems');
             const emptyCart = document.getElementById('emptyCart');
             const checkoutSection = document.getElementById('checkoutSection');
             
-            const cartArray = Object.values(cart);
-            
-            if (cartArray.length === 0) {
-                emptyCart.style.display = 'block';
+            if (cart.length === 0) {
                 cartItemsContainer.style.display = 'none';
                 checkoutSection.style.display = 'none';
+                emptyCart.style.display = 'block';
                 return;
             }
             
@@ -356,26 +353,69 @@
             cartItemsContainer.style.display = 'block';
             checkoutSection.style.display = 'block';
             
-            cartItemsContainer.innerHTML = cartArray.map(item => `
-                <div class="cart-item">
+            // Group items by name and sum quantities
+            const groupedItems = {};
+            cart.forEach(item => {
+                if (groupedItems[item.name]) {
+                    groupedItems[item.name].quantity += 1;
+                } else {
+                    groupedItems[item.name] = {
+                        name: item.name,
+                        price: item.price,
+                        quantity: 1
+                    };
+                }
+            });
+            
+            // Display grouped items
+            cartItemsContainer.innerHTML = '';
+            let subtotal = 0;
+            
+            Object.values(groupedItems).forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                
+                const itemElement = document.createElement('div');
+                itemElement.className = 'cart-item';
+                itemElement.innerHTML = `
                     <div class="item-info">
-                        <h3 class="item-name">${item.title}</h3>
-                        <p class="item-price">${item.price}</p>
+                        <h3 class="item-name">${item.name}</h3>
+                        <p class="item-price">GHS ${item.price.toFixed(2)}</p>
                     </div>
                     <div class="item-quantity">Qty: ${item.quantity}</div>
-                </div>
-            `).join('');
+                    <div class="item-total">GHS ${itemTotal.toFixed(2)}</div>
+                `;
+                cartItemsContainer.appendChild(itemElement);
+            });
+            
+            // Update totals
+            document.getElementById('subtotal').textContent = `GHS ${subtotal.toFixed(2)}`;
+            document.getElementById('total').textContent = `GHS ${subtotal.toFixed(2)}`;
+            
+            // Update cart badge
+            updateCartBadge();
         }
 
         function updateCartDisplay() {
             // This function can be used to update totals if needed
-            const cart = JSON.parse(localStorage.getItem('craveCart')) || {};
-            const cartArray = Object.values(cart);
+            const cart = JSON.parse(localStorage.getItem('craveCart')) || [];
+            const cartArray = cart;
             const itemCount = cartArray.reduce((total, item) => total + item.quantity, 0);
             
             // Update page title with item count if needed
             if (itemCount > 0) {
                 document.title = `Cart (${itemCount}) - Crave Restaurant`;
+            }
+        }
+
+        // Update cart badge function
+        function updateCartBadge() {
+            const cart = JSON.parse(localStorage.getItem('craveCart')) || [];
+            const cartCount = cart.length;
+            const badge = document.getElementById('cartBadge');
+            if (badge) {
+                badge.textContent = cartCount;
+                badge.style.display = cartCount > 0 ? 'flex' : 'none';
             }
         }
 
@@ -390,36 +430,15 @@
 
         // Checkout functionality
         document.getElementById('checkoutBtn')?.addEventListener('click', function() {
-            const cart = JSON.parse(localStorage.getItem('craveCart')) || {};
-            const cartArray = Object.values(cart);
+            const cart = JSON.parse(localStorage.getItem('craveCart')) || [];
             
-            if (cartArray.length === 0) {
+            if (cart.length === 0) {
                 alert('Your cart is empty. Add some items before checkout.');
                 return;
             }
             
-            const specialInstructions = document.getElementById('specialInstructions').value;
-            let message = '🍔 *Crave Restaurant Order*\n\n';
-            
-            cartArray.forEach(item => {
-                message += `• ${item.quantity}x ${item.title} (${item.price})\n`;
-            });
-            
-            const totalAmount = cartArray.reduce((total, item) => {
-                const price = parseFloat(item.price.replace(/[^0-9.]/g, ''));
-                return total + (price * item.quantity);
-            }, 0);
-            
-            message += `\n💰 *Total: GHS ${totalAmount.toFixed(2)}*`;
-            
-            if (specialInstructions.trim()) {
-                message += `\n\n📝 *Special Instructions:* ${specialInstructions}`;
-            }
-            
-            const phoneNumber = '233550020788';
-            const encodedMessage = encodeURIComponent(message);
-            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-            window.open(whatsappUrl, '_blank');
+            // Redirect to checkout page
+            window.location.href = 'checkout.html';
         });
     </script>
 </body>
