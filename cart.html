@@ -310,8 +310,8 @@
                 ></textarea>
                 
                 <button id="checkoutBtn" class="checkout-btn">
-                    <i class="fab fa-whatsapp"></i>
-                    Checkout via WhatsApp
+                    <i class="fas fa-shopping-cart"></i>
+                    Checkout Now
                 </button>
                 
                 <button id="clearCartBtn" class="clear-btn">
@@ -321,7 +321,7 @@
                 
                 <div class="trust-badge">
                     <i class="fas fa-shield-alt"></i>
-                    Secure checkout via WhatsApp
+                    Secure checkout process
                 </div>
             </div>
         </div>
@@ -387,7 +387,7 @@
             cartItemsContainer.innerHTML = '';
             let subtotal = 0;
             
-            Object.values(groupedItems).forEach(item => {
+            Object.values(groupedItems).forEach((item, index) => {
                 const itemTotal = item.price * item.quantity;
                 subtotal += itemTotal;
                 
@@ -400,6 +400,9 @@
                     </div>
                     <div class="item-quantity">Qty: ${item.quantity}</div>
                     <div class="item-total">GHS ${itemTotal.toFixed(2)}</div>
+                    <button class="item-delete-btn" onclick="removeFromCart('${item.name}')" title="Remove item">
+                        <i class="fas fa-trash"></i>
+                    </button>
                 `;
                 cartItemsContainer.appendChild(itemElement);
             });
@@ -433,6 +436,25 @@
                 badge.textContent = cartCount;
                 badge.style.display = cartCount > 0 ? 'flex' : 'none';
             }
+        }
+
+        // Remove item from cart
+        function removeFromCart(itemName) {
+            let cart = JSON.parse(localStorage.getItem('craveCart')) || [];
+            
+            // Remove all instances of this item
+            cart = cart.filter(item => item.name !== itemName);
+            
+            // Save back to localStorage
+            localStorage.setItem('craveCart', JSON.stringify(cart));
+            
+            // Update window cart items
+            window.cartItems = cart;
+            
+            // Refresh display
+            loadCartItems();
+            updateCartDisplay();
+            updateCartBadge();
         }
 
         // Clear cart functionality
