@@ -394,15 +394,16 @@
                 const itemElement = document.createElement('div');
                 itemElement.className = 'cart-item';
                 itemElement.innerHTML = `
-                    <div class="item-info">
-                        <h3 class="item-name">${item.name}</h3>
-                        <p class="item-price">GHS ${item.price.toFixed(2)}</p>
+                    <div class="cart-left">
+                        <h4 class="cart-title">${item.name}</h4>
+                        <p class="cart-qty">Qty: ${item.quantity}</p>
                     </div>
-                    <div class="item-quantity">Qty: ${item.quantity}</div>
-                    <div class="item-total">GHS ${itemTotal.toFixed(2)}</div>
-                    <button class="item-delete-btn" onclick="removeFromCart('${item.name}')" title="Remove item">
-                        <i class="fas fa-trash"></i>
-                    </button>
+                    <div class="cart-right">
+                        <span class="cart-price">GHS ${itemTotal.toFixed(2)}</span>
+                        <button class="cart-delete" onclick="removeFromCart('${item.name}')" title="Remove item">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
                 `;
                 cartItemsContainer.appendChild(itemElement);
             });

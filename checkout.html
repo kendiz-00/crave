@@ -10,6 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
     <!-- Main CSS -->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/util.css">
@@ -88,17 +90,32 @@
 
                     <!-- Delivery Address -->
                     <div class="checkout-form-group">
-                        <label for="deliveryAddress" class="checkout-label">
-                            Delivery Address <span class="required">*</span>
+                        <label class="checkout-label">
+                            Delivery Location <span class="required">*</span>
                         </label>
-                        <input 
-                            type="text" 
-                            id="deliveryAddress" 
-                            name="deliveryAddress" 
-                            class="checkout-input" 
-                            placeholder="Enter your delivery address"
-                            required
-                        >
+                        
+                        <!-- Map Container -->
+                        <div class="map-container">
+                            <div id="deliveryMap" class="delivery-map"></div>
+                            
+                            <!-- Location Controls -->
+                            <div class="map-controls">
+                                <button type="button" id="useMyLocationBtn" class="location-btn">
+                                    <i class="fas fa-location-crosshairs"></i>
+                                    Use My Location
+                                </button>
+                            </div>
+                            
+                            <!-- Selected Location Display -->
+                            <div id="selectedLocation" class="selected-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span id="locationText">Click on the map to select delivery location</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Hidden coordinates input -->
+                        <input type="hidden" id="deliveryCoordinates" name="deliveryCoordinates" required>
+                        <input type="hidden" id="deliveryAddress" name="deliveryAddress" required>
                     </div>
 
                     <!-- Order Type -->
@@ -300,18 +317,29 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/main.js"></script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     
-    <!-- Checkout JavaScript -->
+    <!-- Interactive Map JavaScript -->
     <script>
-        // Cart Management
+        // Map variables
+        let map;
+        let marker;
+        let selectedCoordinates = { lat: 5.6037, lng: -0.1870 }; // Accra, Ghana
         let cartItems = [];
         let deliveryFee = 15.00;
+        
+        // Initialize map on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCheckout();
+            initializeMap();
+            setupMapEventListeners();
+        });
 
         // Initialize checkout page
         function initializeCheckout() {
             loadCartFromStorage();
             renderOrderSummary();
-            setupFormHandlers();
             updateCopyrightYear();
         }
 
@@ -394,18 +422,113 @@
             document.getElementById('totalAmount').textContent = `GHS ${total.toFixed(2)}`;
         }
 
-        // Setup form handlers
-        function setupFormHandlers() {
-            const form = document.getElementById('checkoutForm');
-            const orderTypeRadios = document.querySelectorAll('input[name="orderType"]');
+        // Update copyright year
+        function updateCopyrightYear() {
+            const yearSpan = document.getElementById('copyright-year');
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
+            }
+        }
 
-            // Form submission
-            form.addEventListener('submit', handleFormSubmit);
+        // Initialize map
+        function initializeMap() {
+            // Create map centered on Accra, Ghana
+            map = L.map('deliveryMap').setView([selectedCoordinates.lat, selectedCoordinates.lng], 13);
+            
+            // Add dark theme tile layer
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                maxZoom: 19
+            }).addTo(map);
+            
+            // Add draggable marker
+            marker = L.marker([selectedCoordinates.lat, selectedCoordinates.lng], {
+                draggable: true
+            }).addTo(map);
+            
+            // Marker drag event
+            marker.on('dragend', function(event) {
+                const position = marker.getLatLng();
+                updateLocation(position.lat, position.lng);
+            });
+            
+            // Map click event
+            map.on('click', function(event) {
+                const position = event.latlng;
+                marker.setLatLng(position);
+                updateLocation(position.lat, position.lng);
+            });
+        }
+
+        // Update location when marker moves
+        function updateLocation(lat, lng) {
+            selectedCoordinates = { lat, lng };
+            
+            // Update hidden inputs
+            document.getElementById('deliveryCoordinates').value = `${lat},${lng}`;
+            document.getElementById('deliveryAddress').value = `${lat},${lng}`;
+            
+            // Get address from coordinates (reverse geocoding)
+            getAddressFromCoordinates(lat, lng);
+        }
+
+        // Get address from coordinates using Nominatim API
+        function getAddressFromCoordinates(lat, lng) {
+            const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.display_name) {
+                        const locationText = document.getElementById('locationText');
+                        locationText.textContent = `Selected Location: ${data.display_name}`;
+                        
+                        // Update hidden address field
+                        document.getElementById('deliveryAddress').value = data.display_name;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error getting address:', error);
+                    const locationText = document.getElementById('locationText');
+                    locationText.textContent = `Selected Location: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+                });
+        }
+
+        // Setup map event listeners
+        function setupMapEventListeners() {
+            // Use My Location button
+            document.getElementById('useMyLocationBtn').addEventListener('click', function() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        function(position) {
+                            const lat = position.coords.latitude;
+                            const lng = position.coords.longitude;
+                            
+                            // Move marker to user location
+                            marker.setLatLng([lat, lng]);
+                            map.setView([lat, lng], 15);
+                            
+                            updateLocation(lat, lng);
+                        },
+                        function(error) {
+                            console.error('Geolocation error:', error);
+                            alert('Unable to get your location. Please select your location on map.');
+                        }
+                    );
+                } else {
+                    alert('Geolocation is not supported by your browser. Please select your location on map.');
+                }
+            });
 
             // Order type change
+            const orderTypeRadios = document.querySelectorAll('input[name="orderType"]');
             orderTypeRadios.forEach(radio => {
                 radio.addEventListener('change', renderOrderSummary);
             });
+
+            // Form submission
+            const form = document.getElementById('checkoutForm');
+            form.addEventListener('submit', handleFormSubmit);
         }
 
         // Handle form submission
@@ -421,6 +544,7 @@
             const orderData = {
                 fullName: formData.get('fullName').trim(),
                 phoneNumber: formData.get('phoneNumber').trim(),
+                deliveryCoordinates: formData.get('deliveryCoordinates').trim(),
                 deliveryAddress: formData.get('deliveryAddress').trim(),
                 orderType: formData.get('orderType'),
                 additionalNotes: formData.get('additionalNotes').trim()
@@ -435,7 +559,18 @@
             processOrder(orderData);
         }
 
-        // Validate form
+        // Show error message
+        function showError(message) {
+            const errorElement = document.getElementById('checkoutError');
+            errorElement.textContent = message;
+            errorElement.classList.add('show');
+
+            setTimeout(() => {
+                errorElement.classList.remove('show');
+            }, 5000);
+        }
+
+        // Update form validation to include map
         function validateForm(data) {
             const errors = [];
 
@@ -447,8 +582,8 @@
                 errors.push('Phone number is required');
             }
 
-            if (!data.deliveryAddress && data.orderType === 'Delivery') {
-                errors.push('Delivery address is required for delivery orders');
+            if (!data.deliveryCoordinates && data.orderType === 'Delivery') {
+                errors.push('Please select your delivery location on the map');
             }
 
             if (errors.length > 0) {
@@ -459,7 +594,7 @@
             return true;
         }
 
-        // Process order
+        // Update processOrder to include map coordinates
         function processOrder(orderData) {
             const form = document.getElementById('checkoutForm');
             const button = document.getElementById('placeOrderBtn');
@@ -469,7 +604,7 @@
             form.classList.add('checkout-loading');
             button.disabled = true;
 
-            // Generate WhatsApp message
+            // Generate WhatsApp message with map link
             const message = generateWhatsAppMessage(orderData);
 
             // Show success animation
@@ -494,7 +629,7 @@
             }, 1500);
         }
 
-        // Generate WhatsApp message
+        // Update WhatsApp message generation to include map link
         function generateWhatsAppMessage(orderData) {
             // Group cart items
             const groupedItems = {};
@@ -535,9 +670,15 @@
             message += `\n\nCustomer Details:\n`;
             message += `Name: ${orderData.fullName}\n`;
             message += `Phone: ${orderData.phoneNumber}\n`;
+            
             if (orderData.orderType === 'Delivery') {
-                message += `Address: ${orderData.deliveryAddress}\n`;
+                message += `📍 Location: https://www.google.com/maps?q=${selectedCoordinates.lat},${selectedCoordinates.lng}\n`;
+                const addressText = document.getElementById('locationText').textContent;
+                if (addressText && addressText !== 'Click on map to select delivery location') {
+                    message += `Address: ${addressText.replace('Selected Location: ', '')}\n`;
+                }
             }
+            
             message += `Order Type: ${orderData.orderType}`;
             
             if (orderData.additionalNotes) {
@@ -548,28 +689,6 @@
 
             return message;
         }
-
-        // Show error message
-        function showError(message) {
-            const errorElement = document.getElementById('checkoutError');
-            errorElement.textContent = message;
-            errorElement.classList.add('show');
-
-            setTimeout(() => {
-                errorElement.classList.remove('show');
-            }, 5000);
-        }
-
-        // Update copyright year
-        function updateCopyrightYear() {
-            const yearSpan = document.getElementById('copyright-year');
-            if (yearSpan) {
-                yearSpan.textContent = new Date().getFullYear();
-            }
-        }
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', initializeCheckout);
     </script>
 </body>
 </html>
