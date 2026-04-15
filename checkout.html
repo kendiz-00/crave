@@ -109,7 +109,13 @@
                             <!-- Selected Location Display -->
                             <div id="selectedLocation" class="selected-location">
                                 <i class="fas fa-map-marker-alt"></i>
-                                <span id="locationText">Click on the map to select delivery location</span>
+                                <span id="locationText">Location selected</span>
+                            </div>
+                            
+                            <!-- Helper Text -->
+                            <div class="map-helper-text">
+                                <i class="fas fa-info-circle"></i>
+                                Drag the pin to your exact delivery location
                             </div>
                         </div>
                         
@@ -341,6 +347,7 @@
             loadCartFromStorage();
             renderOrderSummary();
             updateCopyrightYear();
+            validateFormReady(); // Initialize button state
         }
 
         // Load cart from localStorage
@@ -464,35 +471,17 @@
         function updateLocation(lat, lng) {
             selectedCoordinates = { lat, lng };
             
-            // Update hidden inputs
+            // Update hidden coordinates input only
             document.getElementById('deliveryCoordinates').value = `${lat},${lng}`;
-            document.getElementById('deliveryAddress').value = `${lat},${lng}`;
             
-            // Get address from coordinates (reverse geocoding)
-            getAddressFromCoordinates(lat, lng);
+            // Update location text to simple "Location selected"
+            document.getElementById('locationText').textContent = 'Location selected';
+            
+            // Enable form validation
+            validateFormReady();
         }
 
-        // Get address from coordinates using Nominatim API
-        function getAddressFromCoordinates(lat, lng) {
-            const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
-            
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data.display_name) {
-                        const locationText = document.getElementById('locationText');
-                        locationText.textContent = `Selected Location: ${data.display_name}`;
-                        
-                        // Update hidden address field
-                        document.getElementById('deliveryAddress').value = data.display_name;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error getting address:', error);
-                    const locationText = document.getElementById('locationText');
-                    locationText.textContent = `Selected Location: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
-                });
-        }
+        // Remove reverse geocoding function - we don't need it anymore
 
         // Setup map event listeners
         function setupMapEventListeners() {
@@ -523,8 +512,18 @@
             // Order type change
             const orderTypeRadios = document.querySelectorAll('input[name="orderType"]');
             orderTypeRadios.forEach(radio => {
-                radio.addEventListener('change', renderOrderSummary);
+                radio.addEventListener('change', function() {
+                    renderOrderSummary();
+                    validateFormReady();
+                });
             });
+
+            // Form field change listeners for real-time validation
+            const fullNameInput = document.getElementById('fullName');
+            const phoneInput = document.getElementById('phoneNumber');
+            
+            fullNameInput.addEventListener('input', validateFormReady);
+            phoneInput.addEventListener('input', validateFormReady);
 
             // Form submission
             const form = document.getElementById('checkoutForm');
@@ -545,7 +544,6 @@
                 fullName: formData.get('fullName').trim(),
                 phoneNumber: formData.get('phoneNumber').trim(),
                 deliveryCoordinates: formData.get('deliveryCoordinates').trim(),
-                deliveryAddress: formData.get('deliveryAddress').trim(),
                 orderType: formData.get('orderType'),
                 additionalNotes: formData.get('additionalNotes').trim()
             };
@@ -568,6 +566,27 @@
             setTimeout(() => {
                 errorElement.classList.remove('show');
             }, 5000);
+        }
+
+        // Validate form readiness and update button state
+        function validateFormReady() {
+            const form = document.getElementById('checkoutForm');
+            const button = document.getElementById('placeOrderBtn');
+            const formData = new FormData(form);
+            
+            const isReady = 
+                cartItems.length > 0 &&
+                formData.get('fullName')?.trim() &&
+                formData.get('phoneNumber')?.trim() &&
+                formData.get('deliveryCoordinates')?.trim();
+            
+            button.disabled = !isReady;
+            
+            if (isReady) {
+                button.classList.remove('disabled');
+            } else {
+                button.classList.add('disabled');
+            }
         }
 
         // Update form validation to include map
@@ -594,42 +613,44 @@
             return true;
         }
 
-        // Update processOrder to include map coordinates
+        // Update processOrder with UX polish
         function processOrder(orderData) {
             const form = document.getElementById('checkoutForm');
             const button = document.getElementById('placeOrderBtn');
             const successModal = document.getElementById('checkoutSuccess');
 
             // Show loading state
-            form.classList.add('checkout-loading');
             button.disabled = true;
-
-            // Generate WhatsApp message with map link
-            const message = generateWhatsAppMessage(orderData);
-
-            // Show success animation
-            successModal.classList.add('show');
-
-            // Open WhatsApp after delay
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            
+            // Show success feedback
             setTimeout(() => {
-                const whatsappUrl = `https://wa.me/233550020788?text=${encodeURIComponent(message)}`;
-                window.open(whatsappUrl, '_blank');
+                button.innerHTML = '<i class="fas fa-check"></i> Opening WhatsApp...';
+                
+                // Generate WhatsApp message
+                const message = generateWhatsAppMessage(orderData);
 
-                // Reset form and clear cart
-                form.reset();
-                cartItems = [];
-                saveCartToStorage();
-                localStorage.removeItem('craveCart');
-
-                // Hide success modal and redirect
+                // Open WhatsApp after delay
                 setTimeout(() => {
-                    successModal.classList.remove('show');
-                    window.location.href = 'menu.html';
-                }, 2000);
-            }, 1500);
+                    const whatsappUrl = `https://wa.me/233550020788?text=${encodeURIComponent(message)}`;
+                    window.open(whatsappUrl, '_blank');
+
+                    // Reset form and clear cart
+                    form.reset();
+                    cartItems = [];
+                    saveCartToStorage();
+                    localStorage.removeItem('craveCart');
+
+                    // Hide success modal and redirect
+                    setTimeout(() => {
+                        successModal.classList.remove('show');
+                        window.location.href = 'menu.html';
+                    }, 2000);
+                }, 1000);
+            }, 1000);
         }
 
-        // Update WhatsApp message generation to include map link
+        // Generate ultra-clean WhatsApp message
         function generateWhatsAppMessage(orderData) {
             // Group cart items
             const groupedItems = {};
@@ -645,47 +666,30 @@
                 }
             });
 
-            // Calculate totals
-            let subtotal = 0;
+            // Calculate total
+            let total = 0;
             const orderLines = [];
 
             Object.values(groupedItems).forEach(item => {
                 const itemTotal = item.price * item.quantity;
-                subtotal += itemTotal;
-                orderLines.push(`- ${item.name} x${item.quantity} = GHS ${itemTotal.toFixed(2)}`);
+                total += itemTotal;
+                orderLines.push(`- ${item.name} x${item.quantity} - GHS ${itemTotal.toFixed(2)}`);
             });
 
-            const deliveryFeeAmount = orderData.orderType === 'Delivery' ? deliveryFee : 0;
-            const total = subtotal + deliveryFeeAmount;
-
-            // Build message
-            let message = `Hello Crave, I'd like to place an order:\n\n`;
-            message += `Order:\n`;
+            // Build ultra-clean message
+            let message = `Hello Crave \ud83d\udc4b\ud83c\udffe\n\n`;
+            message += `\ud83e\udd3e Order:\n`;
             message += orderLines.join('\n');
-            message += `\n\nSubtotal: GHS ${subtotal.toFixed(2)}`;
-            if (deliveryFeeAmount > 0) {
-                message += `\nDelivery Fee: GHS ${deliveryFeeAmount.toFixed(2)}`;
-            }
-            message += `\nTOTAL: GHS ${total.toFixed(2)}`;
-            message += `\n\nCustomer Details:\n`;
-            message += `Name: ${orderData.fullName}\n`;
-            message += `Phone: ${orderData.phoneNumber}\n`;
+            message += `\n\n\ud83d\udcb0 Total: GHS ${total.toFixed(2)}\n`;
             
             if (orderData.orderType === 'Delivery') {
-                message += `📍 Location: https://www.google.com/maps?q=${selectedCoordinates.lat},${selectedCoordinates.lng}\n`;
-                const addressText = document.getElementById('locationText').textContent;
-                if (addressText && addressText !== 'Click on map to select delivery location') {
-                    message += `Address: ${addressText.replace('Selected Location: ', '')}\n`;
-                }
+                message += `\ud83d\udccd https://www.google.com/maps?q=${selectedCoordinates.lat},${selectedCoordinates.lng}\n`;
             }
             
-            message += `Order Type: ${orderData.orderType}`;
-            
-            if (orderData.additionalNotes) {
-                message += `\n\nNotes: ${orderData.additionalNotes}`;
-            }
-
-            message += `\n\nPlease confirm my order. Thank you!`;
+            message += `\n\ud83d\udc64 ${orderData.fullName}\n`;
+            message += `\ud83d\udcde ${orderData.phoneNumber}\n`;
+            message += `\ud83d\ude9a ${orderData.orderType}\n\n`;
+            message += `Please confirm. \ud83d\ude4f\ud83c\udffe`;
 
             return message;
         }
