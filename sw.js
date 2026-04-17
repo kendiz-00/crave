@@ -7,9 +7,11 @@ const urlsToCache = [
   '/cart.html',
   '/checkout.html',
   '/reservation.html',
+  '/tracking.html',
   '/css/main.css',
   '/css/util.css',
   '/favicon.png',
+  '/favicon.ico',
   '/icon-192.png',
   '/icon-512.png',
   '/manifest.json'
@@ -35,7 +37,9 @@ self.addEventListener('fetch', event => {
       })
       .catch(() => {
         // Return offline page if both cache and network fail
-        return caches.match('/index.html');
+        if (event.request.destination === 'document') {
+          return caches.match('/index.html');
+        }
       })
   );
 });
