@@ -647,6 +647,11 @@
                     const whatsappUrl = `https://wa.me/233550020788?text=${encodeURIComponent(message)}`;
                     window.open(whatsappUrl, '_blank');
 
+                    // Redirect to tracking page after opening WhatsApp
+                    setTimeout(() => {
+                        window.location.href = 'tracking.html';
+                    }, 2000);
+
                     // Reset form and clear cart
                     form.reset();
                     cartItems = [];
@@ -656,8 +661,7 @@
                     // Hide success modal and redirect
                     setTimeout(() => {
                         successModal.classList.remove('show');
-                        window.location.href = 'menu.html';
-                    }, 2000);
+                    }, 1500);
                 }, 1000);
             }, 1000);
         }
