@@ -37,6 +37,99 @@
     <!-- Main CSS -->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/util.css">
+    
+    <!-- Paystack Payment Integration -->
+    <style>
+        .checkout-pay-now-btn {
+            width: 100%;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, #00c896 0%, #00a878 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 200, 150, 0.3);
+        }
+        
+        .checkout-pay-now-btn:hover {
+            background: linear-gradient(135deg, #00a878 0%, #008f66 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 200, 150, 0.4);
+        }
+        
+        .checkout-pay-now-btn:active {
+            transform: translateY(0);
+        }
+        
+        .checkout-pay-now-btn i {
+            font-size: 18px;
+        }
+        
+        .payment-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .payment-modal-content {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .payment-modal h3 {
+            color: #333;
+            margin-bottom: 16px;
+            font-size: 24px;
+        }
+        
+        .payment-modal p {
+            color: #666;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        
+        .payment-modal-amount {
+            font-size: 28px;
+            font-weight: bold;
+            color: #00c896;
+            margin: 20px 0;
+        }
+        
+        .payment-modal-close {
+            background: #f5f5f5;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            transition: background 0.3s ease;
+        }
+        
+        .payment-modal-close:hover {
+            background: #e0e0e0;
+        }
+    </style>
 </head>
 <body>
     <!-- Navbar -->
@@ -184,6 +277,12 @@
                     <button type="submit" class="checkout-place-order-btn" id="placeOrderBtn">
                         <i class="fas fa-shopping-cart"></i>
                         Place Order
+                    </button>
+
+                    <!-- Pay Now Button - Paystack Integration -->
+                    <button type="button" class="checkout-pay-now-btn" id="payNowBtn">
+                        <i class="fas fa-mobile-alt"></i>
+                        Pay Now with Mobile Money
                     </button>
                 </form>
             </div>
@@ -718,6 +817,278 @@
             message += `Please confirm. \ud83d\ude4f\ud83c\udffe`;
 
             return message;
+        }
+    </script>
+    
+    <!-- Payment Modal -->
+    <div class="payment-modal" id="paymentModal">
+        <div class="payment-modal-content">
+            <h3><i class="fas fa-mobile-alt"></i> Mobile Money Payment</h3>
+            <p>You will be redirected to Paystack to complete your payment securely.</p>
+            <div class="payment-modal-amount" id="paymentAmount">GH¢ 0.00</div>
+            <p>After successful payment, you'll receive a confirmation and your order will be processed immediately.</p>
+            <button class="payment-modal-close" onclick="closePaymentModal()">Close</button>
+        </div>
+    </div>
+    
+    <!-- Paystack Payment Integration -->
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <script>
+        // Paystack Payment Handler
+        let paystackHandler = null;
+        
+        // Initialize Paystack when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listener for Pay Now button
+            const payNowBtn = document.getElementById('payNowBtn');
+            if (payNowBtn) {
+                payNowBtn.addEventListener('click', initiatePaystackPayment);
+            }
+        });
+        
+        // Initiate Paystack Payment
+        function initiatePaystackPayment() {
+            const form = document.getElementById('checkoutForm');
+            
+            // Validate form first
+            if (!validateCheckoutForm()) {
+                return;
+            }
+            
+            // Get order data
+            const orderData = {
+                fullName: form.fullName.value,
+                email: form.email.value,
+                phoneNumber: form.phoneNumber.value,
+                orderType: form.querySelector('input[name="orderType"]:checked').value,
+                specialRequests: form.specialRequests.value,
+                deliveryAddress: form.deliveryAddress ? form.deliveryAddress.value : '',
+                deliveryCoordinates: form.deliveryCoordinates ? form.deliveryCoordinates.value : ''
+            };
+            
+            // Calculate total amount
+            const total = calculateOrderTotal();
+            
+            // Show payment modal with amount
+            showPaymentModal(total);
+            
+            // Initialize Paystack transaction
+            initializePaystackTransaction(orderData, total);
+        }
+        
+        // Show payment modal
+        function showPaymentModal(amount) {
+            const modal = document.getElementById('paymentModal');
+            const amountElement = document.getElementById('paymentAmount');
+            
+            amountElement.textContent = `GH¢ ${amount.toFixed(2)}`;
+            modal.style.display = 'flex';
+        }
+        
+        // Close payment modal
+        function closePaymentModal() {
+            const modal = document.getElementById('paymentModal');
+            modal.style.display = 'none';
+        }
+        
+        // Initialize Paystack transaction
+        function initializePaystackTransaction(orderData, amount) {
+            // Convert to kobo (Paystack uses smallest currency unit)
+            const amountInKobo = Math.round(amount * 100);
+            
+            // Generate unique transaction reference
+            const transactionRef = 'CRV_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            
+            // Initialize Paystack handler
+            paystackHandler = PaystackPop.setup({
+                key: 'pk_test_1234567890abcdef', // Replace with your actual Paystack public key
+                email: orderData.email,
+                amount: amountInKobo,
+                currency: 'GHS',
+                ref: transactionRef,
+                metadata: {
+                    custom_fields: [
+                        {
+                            display_name: "Customer Name",
+                            variable_name: "customer_name",
+                            value: orderData.fullName
+                        },
+                        {
+                            display_name: "Phone Number", 
+                            variable_name: "phone_number",
+                            value: orderData.phoneNumber
+                        },
+                        {
+                            display_name: "Order Type",
+                            variable_name: "order_type", 
+                            value: orderData.orderType
+                        }
+                    ]
+                },
+                callback: function(response) {
+                    // Payment successful
+                    handlePaymentSuccess(response, orderData, amount);
+                },
+                onClose: function() {
+                    // Payment window closed
+                    closePaymentModal();
+                    showPaymentMessage('Payment cancelled. You can try again or use WhatsApp to place your order.', 'warning');
+                }
+            });
+            
+            // Open payment window
+            paystackHandler.openIframe();
+        }
+        
+        // Handle successful payment
+        function handlePaymentSuccess(response, orderData, amount) {
+            closePaymentModal();
+            
+            // Show success message
+            showPaymentMessage('Payment successful! Processing your order...', 'success');
+            
+            // Send order confirmation to WhatsApp (for order tracking)
+            sendOrderConfirmation(orderData, amount, response.reference);
+            
+            // Clear cart and form
+            clearCartAndForm();
+            
+            // Redirect to tracking page after delay
+            setTimeout(() => {
+                window.location.href = 'tracking.html?payment_ref=' + response.reference;
+            }, 3000);
+        }
+        
+        // Send order confirmation to WhatsApp
+        function sendOrderConfirmation(orderData, amount, paymentRef) {
+            // Group cart items
+            const groupedItems = {};
+            cartItems.forEach(item => {
+                if (groupedItems[item.name]) {
+                    groupedItems[item.name].quantity += 1;
+                } else {
+                    groupedItems[item.name] = {
+                        name: item.name,
+                        price: item.price,
+                        quantity: 1
+                    };
+                }
+            });
+            
+            // Build confirmation message
+            let message = `PAYMENT CONFIRMED! \ud83d\udcb0\ud83c\udffe\n\n`;
+            message += `\ud83e\udd3e Order Details:\n`;
+            
+            Object.values(groupedItems).forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                message += `- ${item.name} x${item.quantity} - GH¢ ${itemTotal.toFixed(2)}\n`;
+            });
+            
+            message += `\n\n\ud83d\udcb0 Total: GH¢ ${amount.toFixed(2)}`;
+            message += `\n\ud83d\udd3c Payment ID: ${paymentRef}`;
+            message += `\n\ud83d\udc64 ${orderData.fullName}`;
+            message += `\n\ud83d\udcde ${orderData.phoneNumber}`;
+            message += `\n\ud83d\ude9a ${orderData.orderType}`;
+            
+            if (orderData.orderType === 'Delivery' && orderData.deliveryAddress) {
+                message += `\n\ud83d\udccd ${orderData.deliveryAddress}`;
+            }
+            
+            message += `\n\nStatus: PAID - Processing order...\ud83d\ude80`;
+            
+            // Send WhatsApp message
+            const whatsappUrl = `https://wa.me/233550020788?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+        
+        // Calculate order total
+        function calculateOrderTotal() {
+            let subtotal = 0;
+            cartItems.forEach(item => {
+                subtotal += item.price;
+            });
+            
+            const orderType = document.querySelector('input[name="orderType"]:checked').value;
+            const deliveryFee = orderType === 'Delivery' ? 15 : 0;
+            const total = subtotal + deliveryFee;
+            
+            return total;
+        }
+        
+        // Clear cart and form
+        function clearCartAndForm() {
+            const form = document.getElementById('checkoutForm');
+            form.reset();
+            
+            // Clear cart
+            cartItems = [];
+            saveCartToStorage();
+            localStorage.removeItem('craveCart');
+            
+            // Update display
+            updateCheckoutDisplay();
+        }
+        
+        // Show payment message
+        function showPaymentMessage(message, type) {
+            const errorElement = document.getElementById('checkoutError');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            
+            if (type === 'success') {
+                errorElement.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+                errorElement.style.color = 'white';
+            } else if (type === 'warning') {
+                errorElement.style.background = 'linear-gradient(135deg, #ffc107, #fd7e14)';
+                errorElement.style.color = 'white';
+            }
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                errorElement.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Validate checkout form
+        function validateCheckoutForm() {
+            const form = document.getElementById('checkoutForm');
+            const fullName = form.fullName.value.trim();
+            const email = form.email.value.trim();
+            const phoneNumber = form.phoneNumber.value.trim();
+            
+            if (!fullName || !email || !phoneNumber) {
+                showPaymentMessage('Please fill in all required fields.', 'error');
+                return false;
+            }
+            
+            if (!validateEmail(email)) {
+                showPaymentMessage('Please enter a valid email address.', 'error');
+                return false;
+            }
+            
+            if (!validatePhone(phoneNumber)) {
+                showPaymentMessage('Please enter a valid Ghana phone number.', 'error');
+                return false;
+            }
+            
+            if (cartItems.length === 0) {
+                showPaymentMessage('Your cart is empty. Please add items to your cart.', 'error');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // Email validation
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+        
+        // Phone validation (Ghana numbers)
+        function validatePhone(phone) {
+            const re = /^(?:\+233|0)?[2-9]\d{8}$/;
+            return re.test(phone.replace(/\s/g, ''));
         }
     </script>
     
