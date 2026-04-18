@@ -202,15 +202,15 @@
                 <div class="checkout-summary-totals" id="orderTotals">
                     <div class="checkout-summary-row">
                         <span>Subtotal</span>
-                        <span id="subtotalAmount">GHS 0.00</span>
+                        <span id="subtotalAmount">GH¢ 0.00</span>
                     </div>
                     <div class="checkout-summary-row">
                         <span>Delivery Fee</span>
-                        <span id="deliveryFee">GHS 15.00</span>
+                        <span id="deliveryFee">GH¢ 15.00</span>
                     </div>
                     <div class="checkout-summary-row total">
                         <span>TOTAL</span>
-                        <span id="totalAmount">GHS 0.00</span>
+                        <span id="totalAmount">GH¢ 0.00</span>
                     </div>
                 </div>
             </div>
@@ -426,7 +426,7 @@
                         <div class="checkout-item-name">${item.name}</div>
                         <div class="checkout-item-quantity">Quantity: ${item.quantity}</div>
                     </div>
-                    <div class="checkout-item-price">GHS ${itemTotal.toFixed(2)}</div>
+                    <div class="checkout-item-price">GH¢ ${itemTotal.toFixed(2)}</div>
                 `;
                 cartContainer.appendChild(itemElement);
             });
@@ -436,9 +436,9 @@
             const deliveryFeeAmount = orderType === 'Delivery' ? deliveryFee : 0;
             const total = subtotal + deliveryFeeAmount;
 
-            document.getElementById('subtotalAmount').textContent = `GHS ${subtotal.toFixed(2)}`;
-            document.getElementById('deliveryFee').textContent = `GHS ${deliveryFeeAmount.toFixed(2)}`;
-            document.getElementById('totalAmount').textContent = `GHS ${total.toFixed(2)}`;
+            document.getElementById('subtotalAmount').textContent = `GH¢ ${subtotal.toFixed(2)}`;
+            document.getElementById('deliveryFee').textContent = `GH¢ ${deliveryFeeAmount.toFixed(2)}`;
+            document.getElementById('totalAmount').textContent = `GH¢ ${total.toFixed(2)}`;
         }
 
         // Update copyright year
@@ -689,14 +689,14 @@
             Object.values(groupedItems).forEach(item => {
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;
-                orderLines.push(`- ${item.name} x${item.quantity} - GHS ${itemTotal.toFixed(2)}`);
+                orderLines.push(`- ${item.name} x${item.quantity} - GH¢ ${itemTotal.toFixed(2)}`);
             });
 
             // Build ultra-clean message
             let message = `Hello Crave \ud83d\udc4b\ud83c\udffe\n\n`;
             message += `\ud83e\udd3e Order:\n`;
             message += orderLines.join('\n');
-            message += `\n\n\ud83d\udcb0 Total: GHS ${total.toFixed(2)}\n`;
+            message += `\n\n\ud83d\udcb0 Total: GH¢ ${total.toFixed(2)}\n`;
             
             if (orderData.orderType === 'Delivery') {
                 message += `\ud83d\udccd https://www.google.com/maps?q=${selectedCoordinates.lat},${selectedCoordinates.lng}\n`;

@@ -413,7 +413,7 @@
                         <p class="cart-qty">Qty: ${item.quantity}</p>
                     </div>
                     <div class="cart-right">
-                        <span class="cart-price">GHS ${itemTotal.toFixed(2)}</span>
+                        <span class="cart-price">GH¢ ${itemTotal.toFixed(2)}</span>
                         <button class="cart-delete" onclick="removeFromCart('${item.name}')" title="Remove item">
                             <i class="fa-solid fa-trash"></i>
                         </button>
@@ -423,8 +423,8 @@
             });
             
             // Update totals
-            document.getElementById('subtotal').textContent = `GHS ${subtotal.toFixed(2)}`;
-            document.getElementById('total').textContent = `GHS ${subtotal.toFixed(2)}`;
+            document.getElementById('subtotal').textContent = `GH¢ ${subtotal.toFixed(2)}`;
+            document.getElementById('total').textContent = `GH¢ ${subtotal.toFixed(2)}`;
             
             // Update cart badge
             updateCartBadge();
