@@ -202,18 +202,6 @@ function initAdaptiveMenuSizing() {
   applySizing();
 }
 
-function preloadHeroBackground() {
-  const heroUrl = 'images/cover_page.jpeg';
-  if (!heroUrl) return;
-  const heroImg = new Image();
-  heroImg.src = heroUrl;
-  heroImg.onload = () => {
-    /* loaded */
-  };
-  heroImg.onerror = () => {
-    /* fallback or ignore */
-  };
-}
 
 
 /**
@@ -313,86 +301,7 @@ function initAnimations() {
   elements.forEach(el => observer.observe(el));
 }
 
-function initMenuScrollAnimations() {
-  const items = document.querySelectorAll('.menu-item, .testimonial-card, .hero-content, .menu-section, .testimonials-section, footer');
-  if (!items.length) return;
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const target = entry.target;
-
-        let delay = 0;
-        if (target.dataset && typeof target.dataset.index !== 'undefined') {
-          delay = Number(target.dataset.index) * 0.12;
-        }
-
-        target.style.transitionDelay = `${delay}s`;
-        target.classList.add('fadeInUp');
-        target.classList.remove('visible-false');
-        observer.unobserve(target);
-      }
-    });
-  }, {
-    threshold: 0.15
-  });
-
-  items.forEach((item, index) => {
-    if (!item.classList.contains('visible-false')) {
-      item.classList.add('visible-false');
-    }
-    item.dataset.index = index;
-    observer.observe(item);
-  });
-
-  // Fallback for stale observers - trigger animation after 3 seconds if not already animated
-  setTimeout(() => {
-    items.forEach(item => {
-      if (item.classList.contains('visible-false')) {
-        item.classList.add('fadeInUp');
-        item.classList.remove('visible-false');
-        item.classList.add('cards-loading-fallback');
-      }
-    });
-  }, 3000);
-}
-
-/**
- * Swiper initialization (if Swiper library is loaded)
- */
-function initSwiper() {
-  if (typeof Swiper === 'undefined') return;
-  
-  // Hero Slider
-  if (document.querySelector('.swiper-hero')) {
-    new Swiper('.swiper-hero', {
-      loop: true,
-      autoplay: {
-        delay: 5000,
-      },
-      navigation: {
-        nextEl: '.next-slick1',
-        prevEl: '.prev-slick1',
-      },
-      pagination: {
-        el: '.wrap-slick1-dots',
-        clickable: true,
-      },
-    });
-  }
-  
-  // Event Slider
-  if (document.querySelector('.swiper-event')) {
-    new Swiper('.swiper-event', {
-      loop: true,
-      autoplay: {
-        delay: 8000,
-      },
-    });
-  }
-}
-
-// Swiper is initialized by swiper-custom.js when loaded (cravee.html)
 
 /**
  * Initialize Menu Category Section Scroll Detection - Enhanced
@@ -739,7 +648,6 @@ function initMenuCart() {
     // Add to Cart functionality
     if (target.matches('.btn-add-cart')) {
       event.preventDefault();
-      console.log('Add to Cart clicked!'); // Debug log
       
       const itemTitle = target.getAttribute('data-item');
       const itemPrice = target.getAttribute('data-price') || '$0';
@@ -747,19 +655,13 @@ function initMenuCart() {
       const qtyInput = document.querySelector(`.qty-input[data-item="${itemTitle}"]`);
       const quantity = Math.max(1, Number(qtyInput ? qtyInput.value : 1));
 
-      console.log('Adding item:', itemTitle, quantity); // Debug log
-
       if (!cart[itemKey]) {
         cart[itemKey] = { title: itemTitle, price: itemPrice, quantity };
       } else {
         cart[itemKey].quantity += quantity;
       }
 
-      // Save cart to localStorage
       localStorage.setItem('craveCart', JSON.stringify(cart));
-      
-      console.log('Cart saved:', cart); // Debug log
-      
       updateCartSummary();
       if (qtyInput) qtyInput.value = 1;
       return;
