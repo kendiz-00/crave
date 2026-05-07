@@ -36,6 +36,383 @@
     <!-- Main CSS -->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/util.css">
+    
+    <!-- Premium Food Modal CSS -->
+    <style>
+        /* Premium Food Customization Modal */
+        .food-customization-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            display: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .food-customization-modal.active {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            max-height: 90vh;
+            background: linear-gradient(to bottom, #0a0a0a, #1a1a1a);
+            border-radius: 25px 25px 0 0;
+            box-shadow: 0 -10px 40px rgba(212, 165, 116, 0.2);
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+        }
+        
+        .food-customization-modal.active .modal-content {
+            transform: translateY(0);
+        }
+        
+        /* Modal Header */
+        .modal-header {
+            position: relative;
+            padding: 20px 20px 0;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        
+        .modal-food-image {
+            width: 100%;
+            height: 200px;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .modal-food-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .modal-food-info {
+            padding: 0 10px 20px;
+        }
+        
+        .modal-food-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 0 10px 0;
+        }
+        
+        .modal-food-price-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .modal-food-price {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: #d4a373;
+        }
+        
+        .modal-food-description {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Modal Body */
+        .modal-body {
+            padding: 0 20px 100px;
+        }
+        
+        .customization-options {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .customization-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(212, 165, 116, 0.1);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .required-badge {
+            background: linear-gradient(135deg, #ff6b6b, #d4a373);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option-item:last-child {
+            border-bottom: none;
+        }
+        
+        .option-item:hover {
+            background: rgba(212, 165, 116, 0.05);
+            margin: 0 -10px;
+            padding: 15px 10px;
+            border-radius: 10px;
+        }
+        
+        .option-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+        
+        .custom-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(212, 165, 116, 0.3);
+            border-radius: 50%;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .custom-radio.selected {
+            border-color: #d4a373;
+            background: #d4a373;
+            box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.2);
+        }
+        
+        .custom-radio.selected::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+        }
+        
+        .custom-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(212, 165, 116, 0.3);
+            border-radius: 6px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .custom-checkbox.selected {
+            border-color: #d4a373;
+            background: #d4a373;
+            box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.2);
+        }
+        
+        .custom-checkbox.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .option-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            color: #fff;
+            font-weight: 500;
+        }
+        
+        .option-price {
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            color: #d4a373;
+            font-weight: 600;
+        }
+        
+        /* Modal Footer */
+        .modal-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to top, #0a0a0a, rgba(10, 10, 10, 0.95));
+            padding: 20px;
+            border-top: 1px solid rgba(212, 165, 116, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 5px;
+            gap: 5px;
+        }
+        
+        .quantity-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: transparent;
+            color: #fff;
+            font-size: 18px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .quantity-btn:hover {
+            background: rgba(212, 165, 116, 0.2);
+        }
+        
+        .quantity {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .add-to-cart-btn {
+            flex: 1;
+            background: linear-gradient(135deg, #d4a373, #b8935f);
+            border: none;
+            border-radius: 25px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(212, 165, 116, 0.3);
+        }
+        
+        .add-to-cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(212, 165, 116, 0.4);
+        }
+        
+        .add-to-cart-btn:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .btn-price {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .modal-content {
+                max-height: 95vh;
+            }
+            
+            .modal-food-image {
+                height: 180px;
+            }
+            
+            .modal-food-title {
+                font-size: 20px;
+            }
+            
+            .modal-footer {
+                padding: 15px;
+            }
+            
+            .quantity-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navbar -->
@@ -418,23 +795,31 @@
             return imageMap[name] || 'placeholder.jpg';
         }
 
-        // Add to cart
+        // Add to cart - Now opens customization modal
         function addToCart(itemName, price) {
-            const item = {
-                name: itemName,
-                price: price,
-                quantity: 1,
-                timestamp: new Date().toISOString()
-            };
-            
-            cartItems.push(item);
-            cartCount++;
-            
-            // Save to localStorage for persistence
-            localStorage.setItem('craveCart', JSON.stringify(cartItems));
-            
-            updateCartBadge();
-            showCartFeedback(itemName);
+            // Check if item has customizations
+            if (foodCustomizations[itemName]) {
+                // Open customization modal
+                openFoodModal(itemName, price);
+            } else {
+                // Direct add to cart for items without customizations
+                const item = {
+                    name: itemName,
+                    price: price,
+                    quantity: 1,
+                    customizations: {},
+                    timestamp: new Date().toISOString()
+                };
+                
+                cartItems.push(item);
+                cartCount++;
+                
+                // Save to localStorage for persistence
+                localStorage.setItem('craveCart', JSON.stringify(cartItems));
+                
+                updateCartBadge();
+                showCartFeedback(itemName);
+            }
         }
 
         // Update cart badge
@@ -529,5 +914,384 @@
             });
         }
     </script>
+    
+    <!-- Premium Food Customization JavaScript -->
+    <script>
+        // Food Customization Data Structure
+        const foodCustomizations = {
+            'Loaded Fries': {
+                description: 'Our signature loaded fries with your choice of protein and toppings',
+                options: [
+                    {
+                        title: 'Choose Protein',
+                        required: true,
+                        type: 'radio',
+                        choices: [
+                            { name: 'Beef', price: 0 },
+                            { name: 'Chicken', price: 0 },
+                            { name: 'Bacon', price: 8 }
+                        ]
+                    },
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Cheese', price: 10 },
+                            { name: 'Jalapeños', price: 5 },
+                            { name: 'Crispy Bacon', price: 12 }
+                        ]
+                    }
+                ]
+            },
+            'Cheese Beef Loaded Fries': {
+                description: 'Loaded fries with seasoned beef and melted cheese',
+                options: [
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Cheese', price: 10 },
+                            { name: 'Bacon', price: 8 }
+                        ]
+                    }
+                ]
+            }
+        };
+        
+        // Modal State Management
+        let currentFoodItem = null;
+        let currentQuantity = 1;
+        let selectedOptions = {};
+        let basePrice = 0;
+        
+        // Open Food Customization Modal
+        function openFoodModal(foodName, foodPrice) {
+            currentFoodItem = foodName;
+            basePrice = foodPrice;
+            currentQuantity = 1;
+            selectedOptions = {};
+            
+            // Update modal content
+            document.getElementById('modalFoodTitle').textContent = foodName;
+            document.getElementById('modalFoodPrice').textContent = `GHS ${foodPrice.toFixed(2)}`;
+            document.getElementById('modalFoodImage').src = `images/${getFoodImage(foodName)}`;
+            document.getElementById('modalFoodDescription').textContent = foodCustomizations[foodName]?.description || '';
+            document.getElementById('quantity').textContent = currentQuantity;
+            
+            // Generate customization options
+            generateCustomizationOptions(foodName);
+            
+            // Update total price
+            updateTotalPrice();
+            
+            // Show modal
+            const modal = document.getElementById('foodCustomizationModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Close Food Modal
+        function closeFoodModal() {
+            const modal = document.getElementById('foodCustomizationModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            // Reset state
+            currentFoodItem = null;
+            currentQuantity = 1;
+            selectedOptions = {};
+        }
+        
+        // Generate Customization Options
+        function generateCustomizationOptions(foodName) {
+            const container = document.getElementById('customizationOptions');
+            container.innerHTML = '';
+            
+            const customization = foodCustomizations[foodName];
+            if (!customization) {
+                container.innerHTML = '<p style="color: rgba(255,255,255,0.7); text-align: center; padding: 20px;">No customizations available</p>';
+                return;
+            }
+            
+            customization.options.forEach((section, sectionIndex) => {
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'customization-section';
+                
+                const sectionHeader = document.createElement('div');
+                sectionHeader.className = 'section-header';
+                sectionHeader.innerHTML = `
+                    <h3 class="section-title">${section.title}</h3>
+                    ${section.required ? '<span class="required-badge">Required</span>' : ''}
+                `;
+                sectionDiv.appendChild(sectionHeader);
+                
+                section.choices.forEach((choice, choiceIndex) => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'option-item';
+                    optionDiv.onclick = () => selectOption(sectionIndex, choiceIndex, section.type);
+                    
+                    const optionLeft = document.createElement('div');
+                    optionLeft.className = 'option-left';
+                    
+                    const indicator = document.createElement('div');
+                    indicator.className = section.type === 'radio' ? 'custom-radio' : 'custom-checkbox';
+                    indicator.id = `option-${sectionIndex}-${choiceIndex}`;
+                    
+                    const optionName = document.createElement('span');
+                    optionName.className = 'option-name';
+                    optionName.textContent = choice.name;
+                    
+                    optionLeft.appendChild(indicator);
+                    optionLeft.appendChild(optionName);
+                    
+                    const optionPrice = document.createElement('span');
+                    optionPrice.className = 'option-price';
+                    optionPrice.textContent = choice.price > 0 ? `+GHS ${choice.price}` : '';
+                    
+                    optionDiv.appendChild(optionLeft);
+                    optionDiv.appendChild(optionPrice);
+                    sectionDiv.appendChild(optionDiv);
+                });
+                
+                container.appendChild(sectionDiv);
+            });
+        }
+        
+        // Select Option
+        function selectOption(sectionIndex, choiceIndex, type) {
+            const section = foodCustomizations[currentFoodItem].options[sectionIndex];
+            const choice = section.choices[choiceIndex];
+            const key = `${sectionIndex}`;
+            
+            if (type === 'radio') {
+                // Clear previous selection in this section
+                selectedOptions[key] = choice;
+                
+                // Update UI
+                section.choices.forEach((_, index) => {
+                    const indicator = document.getElementById(`option-${sectionIndex}-${index}`);
+                    indicator.classList.remove('selected');
+                });
+                
+                document.getElementById(`option-${sectionIndex}-${choiceIndex}`).classList.add('selected');
+            } else {
+                // Checkbox toggle
+                if (!selectedOptions[key]) {
+                    selectedOptions[key] = [];
+                }
+                
+                const existingIndex = selectedOptions[key].findIndex(item => item.name === choice.name);
+                
+                if (existingIndex >= 0) {
+                    // Remove selection
+                    selectedOptions[key].splice(existingIndex, 1);
+                    document.getElementById(`option-${sectionIndex}-${choiceIndex}`).classList.remove('selected');
+                } else {
+                    // Add selection
+                    selectedOptions[key].push(choice);
+                    document.getElementById(`option-${sectionIndex}-${choiceIndex}`).classList.add('selected');
+                }
+            }
+            
+            updateTotalPrice();
+        }
+        
+        // Quantity Controls
+        function increaseQuantity() {
+            currentQuantity++;
+            document.getElementById('quantity').textContent = currentQuantity;
+            updateTotalPrice();
+        }
+        
+        function decreaseQuantity() {
+            if (currentQuantity > 1) {
+                currentQuantity--;
+                document.getElementById('quantity').textContent = currentQuantity;
+                updateTotalPrice();
+            }
+        }
+        
+        // Update Total Price
+        function updateTotalPrice() {
+            let totalPrice = basePrice;
+            
+            // Add selected options prices
+            Object.values(selectedOptions).forEach(selections => {
+                if (Array.isArray(selections)) {
+                    selections.forEach(choice => {
+                        totalPrice += choice.price;
+                    });
+                } else {
+                    totalPrice += selections.price;
+                }
+            });
+            
+            totalPrice *= currentQuantity;
+            
+            document.getElementById('totalPrice').textContent = totalPrice.toFixed(2);
+            
+            // Enable/disable add to cart button based on required options
+            const addToCartBtn = document.getElementById('addToCartBtn');
+            const customization = foodCustomizations[currentFoodItem];
+            
+            if (customization) {
+                const requiredSections = customization.options.filter(section => section.required);
+                const allRequiredSelected = requiredSections.every(section => {
+                    const sectionIndex = customization.options.indexOf(section);
+                    return selectedOptions[sectionIndex];
+                });
+                
+                addToCartBtn.disabled = !allRequiredSelected;
+            }
+        }
+        
+        // Add to Cart with Customizations
+        function addToCartWithCustomizations() {
+            const customization = foodCustomizations[currentFoodItem];
+            
+            // Check required options
+            if (customization) {
+                const requiredSections = customization.options.filter(section => section.required);
+                const allRequiredSelected = requiredSections.every(section => {
+                    const sectionIndex = customization.options.indexOf(section);
+                    return selectedOptions[sectionIndex];
+                });
+                
+                if (!allRequiredSelected) {
+                    alert('Please select all required options');
+                    return;
+                }
+            }
+            
+            // Prepare cart item with customizations
+            const cartItem = {
+                name: currentFoodItem,
+                price: basePrice,
+                quantity: currentQuantity,
+                customizations: selectedOptions,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Add to cart
+            let cart = JSON.parse(localStorage.getItem('craveCart')) || [];
+            cart.push(cartItem);
+            localStorage.setItem('craveCart', JSON.stringify(cart));
+            
+            // Update cart badge
+            updateCartBadge();
+            
+            // Show feedback
+            showCartFeedback(currentFoodItem);
+            
+            // Close modal
+            closeFoodModal();
+        }
+        
+        // Show Cart Feedback
+        function showCartFeedback(itemName) {
+            // Create feedback element
+            const feedback = document.createElement('div');
+            feedback.className = 'cart-feedback';
+            feedback.innerHTML = `
+                <div class="feedback-content">
+                    <i class="fas fa-check-circle"></i>
+                    <span>${itemName} added to cart!</span>
+                </div>
+            `;
+            
+            // Add styles
+            feedback.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #d4a373, #b8935f);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 25px;
+                box-shadow: 0 4px 20px rgba(212, 165, 116, 0.4);
+                z-index: 10000;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+            `;
+            
+            document.body.appendChild(feedback);
+            
+            // Animate in
+            setTimeout(() => {
+                feedback.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                feedback.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(feedback);
+                }, 300);
+            }, 3000);
+        }
+        
+        // Update Cart Badge
+        function updateCartBadge() {
+            const cart = JSON.parse(localStorage.getItem('craveCart')) || [];
+            const cartCount = cart.length;
+            const badge = document.getElementById('cartBadge');
+            if (badge) {
+                badge.textContent = cartCount;
+                badge.style.display = cartCount > 0 ? 'flex' : 'none';
+            }
+        }
+        
+        // Close modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeFoodModal();
+            }
+        });
+    </script>
+    
+    <!-- Premium Food Customization Modal -->
+    <div id="foodCustomizationModal" class="food-customization-modal">
+        <div class="modal-overlay" onclick="closeFoodModal()"></div>
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button class="modal-close" onclick="closeFoodModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="modal-food-image">
+                    <img id="modalFoodImage" src="" alt="">
+                </div>
+                <div class="modal-food-info">
+                    <h2 id="modalFoodTitle" class="modal-food-title"></h2>
+                    <div class="modal-food-price-row">
+                        <span id="modalFoodPrice" class="modal-food-price"></span>
+                        <span id="modalFoodDescription" class="modal-food-description"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <div id="customizationOptions" class="customization-options">
+                    <!-- Options will be dynamically generated -->
+                </div>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <div class="quantity-selector">
+                    <button class="quantity-btn" onclick="decreaseQuantity()">-</button>
+                    <span id="quantity" class="quantity">1</span>
+                    <button class="quantity-btn" onclick="increaseQuantity()">+</button>
+                </div>
+                <button id="addToCartBtn" class="add-to-cart-btn" onclick="addToCartWithCustomizations()">
+                    <span class="btn-text">Add to Cart</span>
+                    <span class="btn-price">GHS <span id="totalPrice">0</span></span>
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
