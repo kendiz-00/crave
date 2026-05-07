@@ -343,6 +343,36 @@
             border-color: rgba(255, 107, 107, 0.3);
             transform: scale(1.1);
         }
+        
+        /* Cart Customizations Styling */
+        .cart-item-customizations {
+            margin-top: 8px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .cart-customization {
+            padding: 2px 0;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.4;
+        }
+        
+        .cart-customization:first-child {
+            padding-top: 0;
+        }
+        
+        .cart-special-requests {
+            margin-top: 6px;
+            padding: 8px 12px;
+            background: rgba(212, 165, 116, 0.1);
+            border-radius: 8px;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.8);
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -522,41 +552,52 @@
             cartItemsContainer.style.display = 'block';
             checkoutSection.style.display = 'block';
             
-            // Group items by name and sum quantities
-            const groupedItems = {};
-            cart.forEach(item => {
-                if (groupedItems[item.name]) {
-                    groupedItems[item.name].quantity += 1;
-                } else {
-                    groupedItems[item.name] = {
-                        name: item.name,
-                        price: item.price,
-                        quantity: 1
-                    };
-                }
-            });
-            
-            // Display grouped items
+            // Display individual cart items with customizations (don't group)
             cartItemsContainer.innerHTML = '';
             let subtotal = 0;
             
-            Object.values(groupedItems).forEach((item, index) => {
+            cart.forEach((item, index) => {
                 const itemTotal = item.price * item.quantity;
                 subtotal += itemTotal;
                 
                 const itemElement = document.createElement('div');
                 itemElement.className = 'cart-item';
+                
+                // Build customizations HTML
+                let customizationsHtml = '';
+                if (item.customizations && Object.keys(item.customizations).length > 0) {
+                    customizationsHtml = '<div class="cart-item-customizations">';
+                    Object.values(item.customizations).forEach(selections => {
+                        if (Array.isArray(selections)) {
+                            selections.forEach(choice => {
+                                customizationsHtml += `<div class="cart-customization">• ${choice.name}</div>`;
+                            });
+                        } else if (selections && selections.name) {
+                            customizationsHtml += `<div class="cart-customization">• ${selections.name}</div>`;
+                        }
+                    });
+                    customizationsHtml += '</div>';
+                }
+                
+                // Add special requests if present
+                let specialRequestsHtml = '';
+                if (item.specialRequests) {
+                    specialRequestsHtml = `<div class="cart-special-requests">📝 ${item.specialRequests}</div>`;
+                }
+                
                 itemElement.innerHTML = `
                     <div class="cart-left">
                         <img src="images/${getFoodImage(item.name)}" alt="${item.name}" class="cart-item-image" onerror="this.src='images/placeholder.jpg'">
                         <div class="cart-item-details">
                             <h4 class="cart-title">${item.name}</h4>
                             <p class="cart-qty">Qty: ${item.quantity}</p>
+                            ${customizationsHtml}
+                            ${specialRequestsHtml}
                         </div>
                     </div>
                     <div class="cart-right">
                         <span class="cart-price">GH¢ ${itemTotal.toFixed(2)}</span>
-                        <button class="cart-delete" onclick="removeFromCart('${item.name}')" title="Remove item">
+                        <button class="cart-delete" onclick="removeFromCart(${index})" title="Remove item">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>
@@ -596,11 +637,11 @@
         }
 
         // Remove item from cart
-        function removeFromCart(itemName) {
+        function removeFromCart(index) {
             let cart = JSON.parse(localStorage.getItem('craveCart')) || [];
             
-            // Remove all instances of this item
-            cart = cart.filter(item => item.name !== itemName);
+            // Remove specific item by index
+            cart.splice(index, 1);
             
             // Save back to localStorage
             localStorage.setItem('craveCart', JSON.stringify(cart));
