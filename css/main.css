@@ -3031,8 +3031,8 @@ body.menu-page,
 }
 
 .bolt-food-image {
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 120px;
   border-radius: 12px;
   object-fit: cover;
   background: #1a1a1a;
@@ -3173,8 +3173,8 @@ body.menu-page,
   }
   
   .bolt-food-image {
-    width: 50px;
-    height: 50px;
+    width: 90px;
+    height: 90px;
   }
   
   .bolt-food-add-btn {
