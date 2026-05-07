@@ -39,7 +39,7 @@
     
     <!-- Premium Food Modal CSS -->
     <style>
-        /* Premium Food Customization Modal */
+        /* Premium Food Customization Modal - Mobile First */
         .food-customization-modal {
             position: fixed;
             top: 0;
@@ -50,11 +50,11 @@
             display: none;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .food-customization-modal.active {
-            display: block;
+            display: flex;
             opacity: 1;
             visibility: visible;
         }
@@ -65,8 +65,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
         
         .modal-content {
@@ -74,13 +75,15 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            max-height: 90vh;
-            background: linear-gradient(to bottom, #0a0a0a, #1a1a1a);
-            border-radius: 25px 25px 0 0;
-            box-shadow: 0 -10px 40px rgba(212, 165, 116, 0.2);
+            max-height: 92vh;
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+            border-radius: 30px 30px 0 0;
+            box-shadow: 0 -10px 40px rgba(212, 165, 116, 0.25);
             transform: translateY(100%);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            will-change: transform;
         }
         
         .food-customization-modal.active .modal-content {
@@ -91,41 +94,56 @@
         .modal-header {
             position: relative;
             padding: 20px 20px 0;
+            background: linear-gradient(180deg, rgba(212, 165, 116, 0.1) 0%, transparent 100%);
         }
         
         .modal-close {
             position: absolute;
             top: 15px;
             right: 15px;
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border: none;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
             color: #fff;
             font-size: 18px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .modal-close:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(212, 165, 116, 0.3);
             transform: scale(1.1);
+        }
+        
+        .modal-close:active {
+            transform: scale(0.95);
         }
         
         .modal-food-image {
             width: 100%;
-            height: 200px;
+            height: 220px;
             border-radius: 20px;
             overflow: hidden;
             margin-bottom: 20px;
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
         }
         
         .modal-food-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-food-image:hover img {
+            transform: scale(1.05);
         }
         
         .modal-food-info {
@@ -133,35 +151,46 @@
         }
         
         .modal-food-title {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             font-size: 24px;
             font-weight: 700;
             color: #fff;
-            margin: 0 0 10px 0;
+            margin: 0 0 12px 0;
+            line-height: 1.2;
+            word-wrap: break-word;
+            hyphens: auto;
         }
         
         .modal-food-price-row {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             gap: 15px;
+            margin-bottom: 8px;
         }
         
         .modal-food-price {
-            font-family: 'Poppins', sans-serif;
-            font-size: 20px;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 22px;
             font-weight: 700;
             color: #d4a373;
+            text-shadow: 0 2px 4px rgba(212, 165, 116, 0.3);
         }
         
         .modal-food-description {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             font-size: 14px;
             color: rgba(255, 255, 255, 0.7);
+            line-height: 1.4;
+            flex: 1;
+            text-align: right;
         }
         
         /* Modal Body */
         .modal-body {
-            padding: 0 20px 100px;
+            padding: 0 20px 140px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
         
         .customization-options {
@@ -174,41 +203,60 @@
             background: rgba(255, 255, 255, 0.05);
             border-radius: 20px;
             padding: 20px;
-            border: 1px solid rgba(212, 165, 116, 0.1);
+            border: 1px solid rgba(212, 165, 116, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .customization-section:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(212, 165, 116, 0.25);
+            transform: translateY(-2px);
         }
         
         .section-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
         }
         
         .section-title {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             font-size: 16px;
             font-weight: 600;
             color: #fff;
+            margin: 0;
         }
         
         .required-badge {
             background: linear-gradient(135deg, #ff6b6b, #d4a373);
             color: #fff;
-            font-family: 'Poppins', sans-serif;
-            font-size: 12px;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 11px;
             font-weight: 600;
             padding: 4px 12px;
             border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
         }
         
         .option-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
         
         .option-item:last-child {
@@ -216,32 +264,45 @@
         }
         
         .option-item:hover {
-            background: rgba(212, 165, 116, 0.05);
+            background: rgba(212, 165, 116, 0.08);
             margin: 0 -10px;
-            padding: 15px 10px;
-            border-radius: 10px;
+            padding: 16px 10px;
+            border-radius: 12px;
+        }
+        
+        .option-item:active {
+            transform: scale(0.98);
         }
         
         .option-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
             flex: 1;
+            min-width: 0;
         }
         
         .custom-radio {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(212, 165, 116, 0.3);
+            width: 22px;
+            height: 22px;
+            border: 2px solid rgba(212, 165, 116, 0.4);
             border-radius: 50%;
             position: relative;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
         }
         
         .custom-radio.selected {
             border-color: #d4a373;
             background: #d4a373;
-            box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.2);
+            box-shadow: 0 0 0 6px rgba(212, 165, 116, 0.2);
+            animation: radioSelect 0.3s ease;
+        }
+        
+        @keyframes radioSelect {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
         }
         
         .custom-radio.selected::after {
@@ -257,18 +318,26 @@
         }
         
         .custom-checkbox {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(212, 165, 116, 0.3);
-            border-radius: 6px;
+            width: 22px;
+            height: 22px;
+            border: 2px solid rgba(212, 165, 116, 0.4);
+            border-radius: 8px;
             position: relative;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
         }
         
         .custom-checkbox.selected {
             border-color: #d4a373;
             background: #d4a373;
-            box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.2);
+            box-shadow: 0 0 0 6px rgba(212, 165, 116, 0.2);
+            animation: checkboxSelect 0.3s ease;
+        }
+        
+        @keyframes checkboxSelect {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+            100% { transform: scale(1) rotate(0deg); }
         }
         
         .custom-checkbox.selected::after {
@@ -278,20 +347,133 @@
             left: 50%;
             transform: translate(-50%, -50%);
             color: #fff;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: bold;
         }
         
         .option-name {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             font-size: 15px;
             color: #fff;
             font-weight: 500;
+            line-height: 1.3;
+            word-wrap: break-word;
+            hyphens: auto;
+            flex: 1;
+            min-width: 0;
         }
         
         .option-price {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             font-size: 15px;
+            color: #d4a373;
+            font-weight: 600;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        
+        /* Special Requests Section */
+        .special-requests-section {
+            margin-top: 20px;
+            background: rgba(212, 165, 116, 0.05);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(212, 165, 116, 0.1);
+        }
+        
+        .special-requests-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(212, 165, 116, 0.2);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 14px;
+            color: #fff;
+            resize: vertical;
+            min-height: 80px;
+            transition: all 0.3s ease;
+        }
+        
+        .special-requests-input:focus {
+            outline: none;
+            border-color: #d4a373;
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.1);
+        }
+        
+        .special-requests-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Recommended Addons Section */
+        .recommended-addons-section {
+            margin-top: 20px;
+        }
+        
+        .addons-title {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .addons-title::before {
+            content: '⭐';
+            font-size: 16px;
+        }
+        
+        .addons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+        
+        .addon-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 165, 116, 0.15);
+            border-radius: 16px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+        }
+        
+        .addon-item:hover {
+            background: rgba(212, 165, 116, 0.15);
+            border-color: #d4a373;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(212, 165, 116, 0.2);
+        }
+        
+        .addon-item.selected {
+            background: rgba(212, 165, 116, 0.2);
+            border-color: #d4a373;
+        }
+        
+        .addon-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            object-fit: cover;
+            margin-bottom: 8px;
+        }
+        
+        .addon-name {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 13px;
+            color: #fff;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .addon-price {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 14px;
             color: #d4a373;
             font-weight: 600;
         }
@@ -302,13 +484,15 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            background: linear-gradient(to top, #0a0a0a, rgba(10, 10, 10, 0.95));
-            padding: 20px;
-            border-top: 1px solid rgba(212, 165, 116, 0.1);
+            background: linear-gradient(180deg, #0a0a0a 0%, rgba(10, 10, 10, 0.95) 100%);
+            padding: 16px 20px;
+            border-top: 1px solid rgba(212, 165, 116, 0.15);
             display: flex;
             align-items: center;
-            gap: 15px;
-            backdrop-filter: blur(10px);
+            gap: 16px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 100;
         }
         
         .quantity-selector {
@@ -316,35 +500,42 @@
             align-items: center;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 25px;
-            padding: 5px;
-            gap: 5px;
+            padding: 6px;
+            gap: 8px;
+            min-width: 120px;
+            justify-content: space-between;
         }
         
         .quantity-btn {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border: none;
             background: transparent;
             color: #fff;
-            font-size: 18px;
+            font-size: 16px;
             border-radius: 50%;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             justify-content: center;
         }
         
         .quantity-btn:hover {
-            background: rgba(212, 165, 116, 0.2);
+            background: rgba(212, 165, 116, 0.25);
+            transform: scale(1.1);
+        }
+        
+        .quantity-btn:active {
+            transform: scale(0.95);
         }
         
         .quantity {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             font-size: 16px;
             font-weight: 600;
             color: #fff;
-            min-width: 30px;
+            min-width: 32px;
             text-align: center;
         }
         
@@ -353,18 +544,39 @@
             background: linear-gradient(135deg, #d4a373, #b8935f);
             border: none;
             border-radius: 25px;
-            padding: 15px 20px;
+            padding: 16px 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(212, 165, 116, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 6px 24px rgba(212, 165, 116, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .add-to-cart-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .add-to-cart-btn:hover::before {
+            left: 100%;
         }
         
         .add-to-cart-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(212, 165, 116, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(212, 165, 116, 0.4);
+        }
+        
+        .add-to-cart-btn:active {
+            transform: translateY(-1px);
         }
         
         .add-to-cart-btn:disabled {
@@ -374,22 +586,26 @@
             box-shadow: none;
         }
         
+        .add-to-cart-btn:disabled::before {
+            display: none;
+        }
+        
         .btn-text {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             font-size: 16px;
             font-weight: 600;
             color: #fff;
         }
         
         .btn-price {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             font-size: 16px;
             font-weight: 700;
             color: #fff;
         }
         
         /* Mobile Responsiveness */
-        @media (max-width: 768px) {
+        @media (max-width: 480px) {
             .modal-content {
                 max-height: 95vh;
             }
@@ -402,14 +618,175 @@
                 font-size: 20px;
             }
             
+            .modal-food-price {
+                font-size: 18px;
+            }
+            
+            .modal-food-description {
+                font-size: 13px;
+            }
+            
+            .modal-body {
+                padding: 0 16px 130px;
+            }
+            
+            .customization-section {
+                padding: 16px;
+            }
+            
+            .section-title {
+                font-size: 15px;
+            }
+            
+            .option-item {
+                padding: 14px 0;
+            }
+            
+            .option-name {
+                font-size: 14px;
+            }
+            
+            .option-price {
+                font-size: 14px;
+            }
+            
             .modal-footer {
-                padding: 15px;
+                padding: 14px 16px;
+                gap: 12px;
+            }
+            
+            .quantity-selector {
+                min-width: 110px;
+                padding: 5px;
             }
             
             .quantity-btn {
-                width: 32px;
-                height: 32px;
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+            
+            .quantity {
+                font-size: 15px;
+                min-width: 28px;
+            }
+            
+            .add-to-cart-btn {
+                padding: 14px 20px;
+            }
+            
+            .btn-text,
+            .btn-price {
+                font-size: 15px;
+            }
+            
+            .addons-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 10px;
+            }
+            
+            .addon-image {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .addon-name {
+                font-size: 12px;
+            }
+            
+            .addon-price {
+                font-size: 13px;
+            }
+        }
+        
+        /* Large Mobile */
+        @media (max-width: 414px) {
+            .modal-food-title {
+                font-size: 18px;
+            }
+            
+            .modal-body {
+                padding: 0 14px 125px;
+            }
+        }
+        
+        /* Small Mobile */
+        @media (max-width: 375px) {
+            .modal-food-title {
+                font-size: 17px;
+            }
+            
+            .modal-food-price {
                 font-size: 16px;
+            }
+            
+            .modal-body {
+                padding: 0 12px 120px;
+            }
+            
+            .customization-section {
+                padding: 14px;
+            }
+            
+            .modal-footer {
+                padding: 12px 14px;
+            }
+        }
+        
+        /* Very Small Mobile */
+        @media (max-width: 320px) {
+            .modal-food-title {
+                font-size: 16px;
+            }
+            
+            .section-title {
+                font-size: 14px;
+            }
+            
+            .option-name {
+                font-size: 13px;
+            }
+            
+            .addons-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Tablet and Desktop */
+        @media (min-width: 768px) {
+            .modal-content {
+                max-width: 500px;
+                left: 50%;
+                transform: translateX(-50%) translateY(100%);
+                border-radius: 30px;
+                margin: 20px;
+            }
+            
+            .food-customization-modal.active .modal-content {
+                transform: translateX(-50%) translateY(0);
+            }
+            
+            .modal-food-image {
+                height: 250px;
+            }
+            
+            .modal-body {
+                padding: 0 24px 140px;
+            }
+            
+            .addons-grid {
+                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            }
+        }
+        
+        /* Large Desktop */
+        @media (min-width: 1024px) {
+            .modal-content {
+                max-width: 600px;
+            }
+            
+            .modal-food-image {
+                height: 280px;
             }
         }
     </style>
@@ -917,19 +1294,18 @@
     
     <!-- Premium Food Customization JavaScript -->
     <script>
-        // Food Customization Data Structure
+        // Food Customization Data Structure - Complete Implementation
         const foodCustomizations = {
             'Loaded Fries': {
                 description: 'Our signature loaded fries with your choice of protein and toppings',
                 options: [
                     {
-                        title: 'Choose Protein',
+                        title: 'Choose Style',
                         required: true,
                         type: 'radio',
                         choices: [
-                            { name: 'Beef', price: 0 },
-                            { name: 'Chicken', price: 0 },
-                            { name: 'Bacon', price: 8 }
+                            { name: 'Regular Loaded Fries', price: 0 },
+                            { name: 'Spicy Loaded Fries', price: 0 }
                         ]
                     },
                     {
@@ -937,23 +1313,579 @@
                         required: false,
                         type: 'checkbox',
                         choices: [
-                            { name: 'Extra Cheese', price: 10 },
-                            { name: 'Jalapeños', price: 5 },
-                            { name: 'Crispy Bacon', price: 12 }
+                            { name: 'Extra Cheese', price: 8 },
+                            { name: 'Add Crispy Chicken', price: 15 }
                         ]
                     }
+                ],
+                recommendedAddons: [
+                    { name: 'Strawberry Colada', price: 25, image: 'strawberry-smoothie.jpg' },
+                    { name: 'Lemonade Ice', price: 20, image: 'lemonade-smoothie.jpg' },
+                    { name: 'Biscoff Jar Cake', price: 30, image: 'biscoff-cake.jpg' }
                 ]
             },
             'Cheese Beef Loaded Fries': {
                 description: 'Loaded fries with seasoned beef and melted cheese',
                 options: [
                     {
+                        title: 'Choose Spice Level',
+                        required: true,
+                        type: 'radio',
+                        choices: [
+                            { name: 'Mild', price: 0 },
+                            { name: 'Spicy', price: 0 }
+                        ]
+                    },
+                    {
                         title: 'Add Extras',
                         required: false,
                         type: 'checkbox',
                         choices: [
-                            { name: 'Extra Cheese', price: 10 },
-                            { name: 'Bacon', price: 8 }
+                            { name: 'Extra Beef', price: 10 },
+                            { name: 'Double Cheese', price: 8 }
+                        ]
+                    }
+                ],
+                recommendedAddons: [
+                    { name: 'Watermelon Mint Ice', price: 22, image: 'watermelon-smoothie.jpg' },
+                    { name: 'Chocolate Rich Buttercream Jar Cake', price: 35, image: 'choco_jar.jpeg' }
+                ]
+            },
+            'Jerk Chicken Shawarma': {
+                description: 'Traditional jerk chicken wrapped in warm pita',
+                options: [
+                    {
+                        title: 'Choose Spice Level',
+                        required: true,
+                        type: 'radio',
+                        choices: [
+                            { name: 'Mild', price: 0 },
+                            { name: 'Medium', price: 0 },
+                            { name: 'Hot', price: 0 }
+                        ]
+                    },
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Chicken', price: 12 },
+                            { name: 'Add Cheese', price: 5 }
+                        ]
+                    }
+                ],
+                recommendedAddons: [
+                    { name: 'Tropical Fruit Blend', price: 25, image: 'tropical-smoothie.jpg' },
+                    { name: 'Green Glow Smoothie', price: 28, image: 'green-smoothie.jpg' }
+                ]
+            },
+            'Warning! 2 Piece Extra Insanity Hot Fried Chicken and Fries': {
+                description: 'Extra spicy fried chicken with fries for the brave',
+                options: [
+                    {
+                        title: 'Spice Level (Required)',
+                        required: true,
+                        type: 'radio',
+                        choices: [
+                            { name: 'Medium', price: 0 },
+                            { name: 'Hot', price: 0 },
+                            { name: 'Extreme', price: 0 },
+                            { name: 'INSANITY 🔥', price: 0 }
+                        ]
+                    },
+                    {
+                        title: 'Optional Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Fries', price: 10 },
+                            { name: 'Cheese Dip', price: 6 },
+                            { name: 'Add Drink', price: 8 }
+                        ]
+                    }
+                ],
+                recommendedAddons: [
+                    { name: 'Strawberry Colada', price: 25, image: 'strawberry-smoothie.jpg' },
+                    { name: 'Pineapple Strawberry', price: 24, image: 'pineapple-strawberry.jpg' }
+                ]
+            },
+            'Loaded BBQ Chicken Cheddar Fries': {
+                description: 'Loaded fries with BBQ chicken and cheddar cheese',
+                options: [
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra BBQ Sauce', price: 0 },
+                            { name: 'Extra Chicken', price: 12 },
+                            { name: 'Double Cheese', price: 8 }
+                        ]
+                    }
+                ],
+                recommendedAddons: [
+                    { name: 'Lemon Buttercream Jar Cake', price: 30, image: 'lemon-cake.jpg' },
+                    { name: 'Coffee Latte Jar Cake', price: 32, image: 'coffee-cake.jpg' }
+                ]
+            },
+            'Honey BBQ Wings (6) and Fries': {
+                description: 'Sweet and tangy BBQ wings with crispy fries',
+                options: [
+                    {
+                        title: 'BBQ Level',
+                        required: false,
+                        type: 'radio',
+                        choices: [
+                            { name: 'Mild BBQ', price: 0 },
+                            { name: 'Medium BBQ', price: 0 },
+                            { name: 'Hot BBQ', price: 0 }
+                        ]
+                    },
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Wings (3pcs)', price: 15 },
+                            { name: 'Extra Fries', price: 8 }
+                        ]
+                    }
+                ]
+            },
+            'Siracha Mayo Hot Wings': {
+                description: 'Spicy wings with creamy sriracha mayo',
+                options: [
+                    {
+                        title: 'Spice Level',
+                        required: false,
+                        type: 'radio',
+                        choices: [
+                            { name: 'Mild', price: 0 },
+                            { name: 'Hot', price: 0 },
+                            { name: 'Extreme', price: 0 }
+                        ]
+                    },
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Siracha Mayo', price: 0 }
+                        ]
+                    }
+                ]
+            },
+            '2 Piece Glazed Crispy Chicken and Fries': {
+                description: 'Crispy chicken with your choice of glaze',
+                options: [
+                    {
+                        title: 'Choose Glaze',
+                        required: true,
+                        type: 'radio',
+                        choices: [
+                            { name: 'Honey Glaze', price: 0 },
+                            { name: 'BBQ Glaze', price: 0 },
+                            { name: 'Spicy Glaze', price: 0 }
+                        ]
+                    }
+                ]
+            },
+            'Ultimate Bacon Cheddar Burger': {
+                description: 'Double bacon with melted cheddar on a premium bun',
+                options: [
+                    {
+                        title: 'Beef Patty Level',
+                        required: false,
+                        type: 'radio',
+                        choices: [
+                            { name: 'Single Patty', price: 0 },
+                            { name: 'Double Patty', price: 20 }
+                        ]
+                    },
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Bacon', price: 10 },
+                            { name: 'Extra Cheese', price: 6 }
+                        ]
+                    }
+                ],
+                recommendedAddons: [
+                    { name: 'Smoothies', price: 25, image: 'tropical-smoothie.jpg' },
+                    { name: 'Jar Cakes', price: 30, image: 'biscoff-cake.jpg' },
+                    { name: 'Fries', price: 15, image: 'loaded_fries_01.jpg' }
+                ]
+            },
+            'Chicken Burrito': {
+                description: 'Grilled chicken wrapped in a warm tortilla',
+                options: [
+                    {
+                        title: 'Choose Spice Level',
+                        required: false,
+                        type: 'radio',
+                        choices: [
+                            { name: 'Mild', price: 0 },
+                            { name: 'Medium', price: 0 },
+                            { name: 'Hot', price: 0 }
+                        ]
+                    },
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Chicken', price: 0 },
+                            { name: 'Extra Cheese', price: 0 },
+                            { name: 'Guacamole', price: 0 }
+                        ]
+                    }
+                ]
+            },
+            '2 Chicken Crispy Tacos': {
+                description: 'Crispy tacos with seasoned chicken',
+                options: [
+                    {
+                        title: 'Choose Shell',
+                        required: false,
+                        type: 'radio',
+                        choices: [
+                            { name: 'Soft Shell', price: 0 },
+                            { name: 'Crispy Shell', price: 0 }
+                        ]
+                    },
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Sauce', price: 0 }
+                        ]
+                    }
+                ]
+            },
+            '2 Beef Crispy Tacos': {
+                description: 'Crispy tacos with seasoned beef',
+                options: [
+                    {
+                        title: 'Choose Spice Level',
+                        required: false,
+                        type: 'radio',
+                        choices: [
+                            { name: 'Mild', price: 0 },
+                            { name: 'Hot', price: 0 }
+                        ]
+                    },
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Add Cheese', price: 0 }
+                        ]
+                    }
+                ]
+            },
+            'Chocolate Rich Buttercream Jar Cake': {
+                description: 'Decadent chocolate cake with buttercream',
+                options: [
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Chocolate', price: 0 },
+                            { name: 'Extra Cream', price: 0 },
+                            { name: 'Oreo Topping', price: 0 }
+                        ]
+                    }
+                ]
+            },
+            'Lemon Buttercream Jar Cake': {
+                description: 'Fresh lemon cake with buttercream',
+                options: [
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Lemon Cream', price: 0 },
+                            { name: 'Vanilla Drizzle', price: 0 }
+                        ]
+                    }
+                ]
+            },
+            'Biscoff Jar Cake': {
+                description: 'Decadent biscoff cake in a jar',
+                options: [
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Biscoff Spread', price: 0 },
+                            { name: 'Cookie Crunch', price: 0 }
+                        ]
+                    }
+                ]
+            },
+            'Pistachio Dream Jar Cake': {
+                description: 'Luxurious pistachio cake with dreamy texture',
+                options: [
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Pistachio Cream', price: 0 },
+                            { name: 'Chocolate Drizzle', price: 0 }
+                        ]
+                    }
+                ]
+            },
+            'Chicken and Waffles': {
+                description: 'Crispy chicken with fluffy waffles',
+                options: [
+                    {
+                        title: 'Choose Syrup',
+                        required: false,
+                        type: 'radio',
+                        choices: [
+                            { name: 'Maple Syrup', price: 0 },
+                            { name: 'Spicy Syrup', price: 0 }
+                        ]
+                    },
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Chicken', price: 0 }
+                        ]
+                    }
+                ]
+            },
+            'Loaded Omelette': {
+                description: 'Fluffy omelette with your choice of fillings',
+                options: [
+                    {
+                        title: 'Add Fillings',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Cheese', price: 0 },
+                            { name: 'Bacon', price: 0 },
+                            { name: 'Sausage', price: 0 },
+                            { name: 'Mushrooms', price: 0 }
+                        ]
+                    }
+                ]
+            },
+            // Smoothies - All with size options and protein boost
+            'Strawberry Colada': {
+                description: 'Sweet strawberry and coconut blend',
+                options: [
+                    {
+                        title: 'Choose Size',
+                        required: true,
+                        type: 'radio',
+                        choices: [
+                            { name: 'Regular Size', price: 0 },
+                            { name: 'Large Size', price: 5 }
+                        ]
+                    },
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Ice', price: 0 },
+                            { name: 'Protein Boost', price: 8 }
+                        ]
+                    }
+                ]
+            },
+            'Pina Colada': {
+                description: 'Tropical pineapple and coconut smoothie',
+                options: [
+                    {
+                        title: 'Choose Size',
+                        required: true,
+                        type: 'radio',
+                        choices: [
+                            { name: 'Regular Size', price: 0 },
+                            { name: 'Large Size', price: 5 }
+                        ]
+                    },
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Ice', price: 0 },
+                            { name: 'Protein Boost', price: 8 }
+                        ]
+                    }
+                ]
+            },
+            'Watermelon Mint Ice': {
+                description: 'Refreshing watermelon with cool mint',
+                options: [
+                    {
+                        title: 'Choose Size',
+                        required: true,
+                        type: 'radio',
+                        choices: [
+                            { name: 'Regular Size', price: 0 },
+                            { name: 'Large Size', price: 5 }
+                        ]
+                    },
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Ice', price: 0 },
+                            { name: 'Protein Boost', price: 8 }
+                        ]
+                    }
+                ]
+            },
+            'Green Glow': {
+                description: 'Healthy green smoothie with energy boost',
+                options: [
+                    {
+                        title: 'Choose Size',
+                        required: true,
+                        type: 'radio',
+                        choices: [
+                            { name: 'Regular Size', price: 0 },
+                            { name: 'Large Size', price: 5 }
+                        ]
+                    },
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Ice', price: 0 },
+                            { name: 'Protein Boost', price: 8 }
+                        ]
+                    }
+                ]
+            },
+            'Tropical Fruit Blend': {
+                description: 'Exotic tropical fruit mix',
+                options: [
+                    {
+                        title: 'Choose Size',
+                        required: true,
+                        type: 'radio',
+                        choices: [
+                            { name: 'Regular Size', price: 0 },
+                            { name: 'Large Size', price: 5 }
+                        ]
+                    },
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Ice', price: 0 },
+                            { name: 'Protein Boost', price: 8 }
+                        ]
+                    }
+                ]
+            },
+            'Pineapple Strawberry': {
+                description: 'Sweet pineapple and strawberry combination',
+                options: [
+                    {
+                        title: 'Choose Size',
+                        required: true,
+                        type: 'radio',
+                        choices: [
+                            { name: 'Regular Size', price: 0 },
+                            { name: 'Large Size', price: 5 }
+                        ]
+                    },
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Ice', price: 0 },
+                            { name: 'Protein Boost', price: 8 }
+                        ]
+                    }
+                ]
+            },
+            'Strawberries and Cream': {
+                description: 'Classic strawberry and cream smoothie',
+                options: [
+                    {
+                        title: 'Choose Size',
+                        required: true,
+                        type: 'radio',
+                        choices: [
+                            { name: 'Regular Size', price: 0 },
+                            { name: 'Large Size', price: 5 }
+                        ]
+                    },
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Ice', price: 0 },
+                            { name: 'Protein Boost', price: 8 }
+                        ]
+                    }
+                ]
+            },
+            'Lemonade Ice': {
+                description: 'Refreshing lemonade ice smoothie',
+                options: [
+                    {
+                        title: 'Choose Size',
+                        required: true,
+                        type: 'radio',
+                        choices: [
+                            { name: 'Regular Size', price: 0 },
+                            { name: 'Large Size', price: 5 }
+                        ]
+                    },
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Ice', price: 0 },
+                            { name: 'Protein Boost', price: 8 }
+                        ]
+                    }
+                ]
+            },
+            'Banana Peanut Butter Chocolate': {
+                description: 'Rich banana with peanut butter and chocolate',
+                options: [
+                    {
+                        title: 'Choose Size',
+                        required: true,
+                        type: 'radio',
+                        choices: [
+                            { name: 'Regular Size', price: 0 },
+                            { name: 'Large Size', price: 5 }
+                        ]
+                    },
+                    {
+                        title: 'Add Extras',
+                        required: false,
+                        type: 'checkbox',
+                        choices: [
+                            { name: 'Extra Ice', price: 0 },
+                            { name: 'Protein Boost', price: 8 }
                         ]
                     }
                 ]
@@ -1007,7 +1939,9 @@
         // Generate Customization Options
         function generateCustomizationOptions(foodName) {
             const container = document.getElementById('customizationOptions');
+            const addonsContainer = document.getElementById('recommendedAddons');
             container.innerHTML = '';
+            addonsContainer.innerHTML = '';
             
             const customization = foodCustomizations[foodName];
             if (!customization) {
@@ -1015,6 +1949,7 @@
                 return;
             }
             
+            // Generate main customization sections
             customization.options.forEach((section, sectionIndex) => {
                 const sectionDiv = document.createElement('div');
                 sectionDiv.className = 'customization-section';
@@ -1056,6 +1991,79 @@
                 });
                 
                 container.appendChild(sectionDiv);
+            });
+            
+            // Generate recommended addons section
+            if (customization.recommendedAddons && customization.recommendedAddons.length > 0) {
+                const addonsTitle = document.createElement('h3');
+                addonsTitle.className = 'addons-title';
+                addonsTitle.textContent = 'Recommended Addons';
+                
+                const addonsGrid = document.createElement('div');
+                addonsGrid.className = 'addons-grid';
+                
+                customization.recommendedAddons.forEach((addon, index) => {
+                    const addonDiv = document.createElement('div');
+                    addonDiv.className = 'addon-item';
+                    addonDiv.onclick = () => toggleRecommendedAddon(addon, index);
+                    
+                    const addonImage = document.createElement('img');
+                    addonImage.className = 'addon-image';
+                    addonImage.src = `images/${addon.image}`;
+                    addonImage.alt = addon.name;
+                    addonImage.onerror = () => { addonImage.src = 'images/placeholder.jpg'; };
+                    
+                    const addonName = document.createElement('div');
+                    addonName.className = 'addon-name';
+                    addonName.textContent = addon.name;
+                    
+                    const addonPrice = document.createElement('div');
+                    addonPrice.className = 'addon-price';
+                    addonPrice.textContent = `GHS ${addon.price}`;
+                    
+                    addonDiv.appendChild(addonImage);
+                    addonDiv.appendChild(addonName);
+                    addonDiv.appendChild(addonPrice);
+                    addonsGrid.appendChild(addonDiv);
+                });
+                
+                addonsContainer.appendChild(addonsTitle);
+                addonsContainer.appendChild(addonsGrid);
+            }
+        }
+        
+        // Recommended Addons State
+        let selectedAddons = [];
+        
+        // Toggle Recommended Addon
+        function toggleRecommendedAddon(addon, index) {
+            const addonIndex = selectedAddons.findIndex(a => a.name === addon.name);
+            
+            if (addonIndex >= 0) {
+                // Remove addon
+                selectedAddons.splice(addonIndex, 1);
+            } else {
+                // Add addon
+                selectedAddons.push(addon);
+            }
+            
+            // Update UI
+            updateAddonsUI();
+            updateTotalPrice();
+        }
+        
+        // Update Addons UI
+        function updateAddonsUI() {
+            const addonItems = document.querySelectorAll('.addon-item');
+            addonItems.forEach((item, index) => {
+                const addonName = item.querySelector('.addon-name').textContent;
+                const isSelected = selectedAddons.some(a => a.name === addonName);
+                
+                if (isSelected) {
+                    item.classList.add('selected');
+                } else {
+                    item.classList.remove('selected');
+                }
             });
         }
         
@@ -1123,9 +2131,14 @@
                     selections.forEach(choice => {
                         totalPrice += choice.price;
                     });
-                } else {
+                } else if (selections && selections.price) {
                     totalPrice += selections.price;
                 }
+            });
+            
+            // Add selected addons prices
+            selectedAddons.forEach(addon => {
+                totalPrice += addon.price;
             });
             
             totalPrice *= currentQuantity;
@@ -1277,14 +2290,36 @@
                 <div id="customizationOptions" class="customization-options">
                     <!-- Options will be dynamically generated -->
                 </div>
+                
+                <!-- Special Requests -->
+                <div class="special-requests-section">
+                    <div class="section-header">
+                        <h3 class="section-title">Special Requests</h3>
+                    </div>
+                    <textarea 
+                        id="specialRequests" 
+                        class="special-requests-input" 
+                        placeholder="Any special requests? (e.g., no onions, extra spicy)"
+                        rows="3"
+                    ></textarea>
+                </div>
+                
+                <!-- Recommended Addons -->
+                <div id="recommendedAddons" class="recommended-addons-section">
+                    <!-- Addons will be dynamically generated -->
+                </div>
             </div>
             
             <!-- Modal Footer -->
             <div class="modal-footer">
                 <div class="quantity-selector">
-                    <button class="quantity-btn" onclick="decreaseQuantity()">-</button>
+                    <button class="quantity-btn" onclick="decreaseQuantity()">
+                        <i class="fas fa-minus"></i>
+                    </button>
                     <span id="quantity" class="quantity">1</span>
-                    <button class="quantity-btn" onclick="increaseQuantity()">+</button>
+                    <button class="quantity-btn" onclick="increaseQuantity()">
+                        <i class="fas fa-plus"></i>
+                    </button>
                 </div>
                 <button id="addToCartBtn" class="add-to-cart-btn" onclick="addToCartWithCustomizations()">
                     <span class="btn-text">Add to Cart</span>

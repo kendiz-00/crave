@@ -554,6 +554,7 @@
             return imageMap[name] || 'placeholder.jpg';
         }
         
+        
         // Render customizations for checkout display
         function renderCustomizations(customizations) {
             let html = '<div class="checkout-item-customizations">';
@@ -638,6 +639,7 @@
                             <div class="checkout-item-name">${item.name}</div>
                             <div class="checkout-item-quantity">Quantity: ${item.quantity}</div>
                             ${item.customizations ? renderCustomizations(item.customizations) : ''}
+                            ${item.specialRequests ? `<div class="checkout-special-requests">📝 ${item.specialRequests}</div>` : ''}
                         </div>
                     </div>
                     <div class="checkout-item-price">GH¢ ${itemTotal.toFixed(2)}</div>
@@ -925,22 +927,91 @@
                 orderLines.push(itemLine);
             });
 
-            // Build ultra-clean message
-            let message = `Hello Crave \ud83d\udc4b\ud83c\udffe\n\n`;
-            message += `\ud83e\udd3e Order:\n`;
-            message += orderLines.join('\n');
-            message += `\n\n\ud83d\udcb0 Total: GH¢ ${total.toFixed(2)}\n`;
+            // Build ultra-clean WhatsApp message
+            let message = `Hello Crave 👋\n\nI'd like to place an order:\n\n`;
+            
+            Object.values(groupedItems).forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                
+                // Add item header with emoji
+                const itemEmoji = getItemEmoji(item.name);
+                message += `${itemEmoji} ${item.name}\n`;
+                
+                // Add customizations
+                const originalItem = cartItems.find(cartItem => cartItem.name === item.name);
+                if (originalItem && originalItem.customizations) {
+                    Object.values(originalItem.customizations).forEach(selections => {
+                        if (Array.isArray(selections)) {
+                            selections.forEach(choice => {
+                                message += `  • ${choice.name}\n`;
+                            });
+                        } else if (selections && selections.name) {
+                            message += `  • ${selections.name}\n`;
+                        }
+                    });
+                }
+                
+                // Add special requests
+                if (originalItem && originalItem.specialRequests) {
+                    message += `  📝 ${originalItem.specialRequests}\n`;
+                }
+                
+                // Add quantity and price
+                message += `  Qty: ${item.quantity}\n`;
+                message += `  GHS ${itemTotal.toFixed(2)}\n\n`;
+            });
+            
+            // Add total with separator
+            message += `━━━━━━━━━━━━━━━━━━\n`;
+            message += `TOTAL: GHS ${total.toFixed(2)}\n\n\n`;
+            
+            // Add customer details
+            message += `👤 ${orderData.fullName}\n`;
+            message += `📞 ${orderData.phoneNumber}\n`;
             
             if (orderData.orderType === 'Delivery') {
-                message += `\ud83d\udccd https://www.google.com/maps?q=${selectedCoordinates.lat},${selectedCoordinates.lng}\n`;
+                message += `📍 Live Location:\nhttps://maps.google.com/?q=${selectedCoordinates.lat},${selectedCoordinates.lng}\n`;
             }
             
-            message += `\n\ud83d\udc64 ${orderData.fullName}\n`;
-            message += `\ud83d\udcde ${orderData.phoneNumber}\n`;
-            message += `\ud83d\ude9a ${orderData.orderType}\n\n`;
-            message += `Please confirm. \ud83d\ude4f\ud83c\udffe`;
+            message += `🛒 ${orderData.orderType}\n\n`;
+            message += `Please confirm my order. Thank you!`;
 
             return message;
+        }
+        
+        // Get item emoji for WhatsApp
+        function getItemEmoji(itemName) {
+            const emojiMap = {
+                'Loaded Fries': '🍟',
+                'Cheese Beef Loaded Fries': '🍟',
+                'Jerk Chicken Shawarma': '🍗',
+                'Warning! 2 Piece Extra Insanity Hot Fried Chicken and Fries': '🔥',
+                'Loaded BBQ Chicken Cheddar Fries': '🍟',
+                'Honey BBQ Wings (6) and Fries': '🍗',
+                'Siracha Mayo Hot Wings': '🔥',
+                '2 Piece Glazed Crispy Chicken and Fries': '🍗',
+                'Ultimate Bacon Cheddar Burger': '🍔',
+                'Chicken Burrito': '🌮',
+                '2 Chicken Crispy Tacos': '🌮',
+                '2 Beef Crispy Tacos': '🌮',
+                'Chocolate Rich Buttercream Jar Cake': '🧁',
+                'Lemon Buttercream Jar Cake': '🍋',
+                'Biscoff Jar Cake': '🍪',
+                'Pistachio Dream Jar Cake': '🍪',
+                'Chicken and Waffles': '🧇',
+                'Loaded Omelette': '🍳',
+                'Strawberry Colada': '🥤',
+                'Pina Colada': '🥥',
+                'Watermelon Mint Ice': '🍉',
+                'Green Glow': '💚',
+                'Tropical Fruit Blend': '🥤',
+                'Pineapple Strawberry': '🍓',
+                'Strawberries and Cream': '🍓',
+                'Lemonade Ice': '🍋',
+                'Banana Peanut Butter Chocolate': '🍌'
+            };
+            
+            return emojiMap[itemName] || '🍽';
         }
     </script>
     
