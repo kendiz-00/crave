@@ -512,23 +512,23 @@
         // Get food image based on name
         function getFoodImage(name) {
             const imageMap = {
-                'Loaded Fries': 'loaded_fries_01.JFIF',
-                'Cheese Beef Loaded Fries': 'beef_loaded.JFIF',
+                'Loaded Fries': 'loaded_fries_01.jpg',
+                'Cheese Beef Loaded Fries': 'beef_loaded.jpg',
                 'Jerk Chicken Shawarma': 'jerk_shawarma.jpeg',
                 'Chocolate Rich Buttercream Frosting Jar Cake': 'choco_jar.jpeg',
                 'Warning! 2 Piece Extra Insanity Hot Fried Chicken and Fries': 'hot_chicken.jpeg',
                 'Loaded BBQ Chicken Cheddar Cheese Fries': 'bbq-fries.jpg',
                 'Biscoff Jar Cake': 'biscoff-cake.jpg',
                 'Lemon Buttercream Jar Cake': 'lemon-cake.jpg',
-                'Honey BBQ Wings (6) and Fries': 'bbq_wings.JFIF',
-                'Siracha Mayo Hot Wings (6) and Fries': 'hot_wings.JFIF',
+                'Honey BBQ Wings (6) and Fries': 'bbq_wings.jpg',
+                'Siracha Mayo Hot Wings (6) and Fries': 'hot_wings.jpg',
                 '2 Piece Glazed Crispy Chicken and Fries': 'glazed-chicken.jpg',
-                'Grilled Cheese Sandwich': 'grilled_sandwich.JFIF',
-                'Tuna Fish Sandwich': 'tuna_sandwich.JFIF',
-                'American BLT (Bacon Lettuce Tomato)': 'blt_sandwich.JFIF',
-                'Bacon Cheddar Fries': 'bacon_fries.JFIF',
-                'Ultimate Bacon Cheddar Burger': 'bacon_burger.JFIF',
-                'Melted Cheddar Burger': 'melted_cheddar.JFIF',
+                'Grilled Cheese Sandwich': 'grilled_sandwich.jpg',
+                'Tuna Fish Sandwich': 'tuna_sandwich.jpg',
+                'American BLT (Bacon Lettuce Tomato)': 'blt_sandwich.jpg',
+                'Bacon Cheddar Fries': 'bacon_fries.jpg',
+                'Ultimate Bacon Cheddar Burger': 'bacon_burger.jpg',
+                'Melted Cheddar Burger': 'melted_cheddar.jpg',
                 'Chicken Burrito': 'burrito.jpg',
                 '2 Chicken Crispy Tacos': 'chicken-tacos.jpg',
                 '2 Beef Crispy Tacos': 'beef-tacos.jpg',
@@ -552,6 +552,24 @@
             };
             
             return imageMap[name] || 'placeholder.jpg';
+        }
+        
+        // Render customizations for checkout display
+        function renderCustomizations(customizations) {
+            let html = '<div class="checkout-item-customizations">';
+            
+            Object.values(customizations).forEach(selections => {
+                if (Array.isArray(selections)) {
+                    selections.forEach(choice => {
+                        html += `<div class="checkout-customization">• ${choice.name}</div>`;
+                    });
+                } else if (selections && selections.name) {
+                    html += `<div class="checkout-customization">• ${selections.name}</div>`;
+                }
+            });
+            
+            html += '</div>';
+            return html;
         }
 
         // Load cart from localStorage
@@ -619,6 +637,7 @@
                         <div class="checkout-item-details">
                             <div class="checkout-item-name">${item.name}</div>
                             <div class="checkout-item-quantity">Quantity: ${item.quantity}</div>
+                            ${item.customizations ? renderCustomizations(item.customizations) : ''}
                         </div>
                     </div>
                     <div class="checkout-item-price">GH¢ ${itemTotal.toFixed(2)}</div>
@@ -884,7 +903,26 @@
             Object.values(groupedItems).forEach(item => {
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;
-                orderLines.push(`- ${item.name} x${item.quantity} - GH¢ ${itemTotal.toFixed(2)}`);
+                
+                // Build item line with customizations
+                let itemLine = `- ${item.name} x${item.quantity}`;
+                
+                // Add customizations to the message
+                const originalItem = cartItems.find(cartItem => cartItem.name === item.name);
+                if (originalItem && originalItem.customizations) {
+                    Object.values(originalItem.customizations).forEach(selections => {
+                        if (Array.isArray(selections)) {
+                            selections.forEach(choice => {
+                                itemLine += `\n  • ${choice.name}`;
+                            });
+                        } else if (selections && selections.name) {
+                            itemLine += `\n  • ${selections.name}`;
+                        }
+                    });
+                }
+                
+                itemLine += ` - GH¢ ${itemTotal.toFixed(2)}`;
+                orderLines.push(itemLine);
             });
 
             // Build ultra-clean message
