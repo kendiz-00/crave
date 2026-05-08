@@ -133,37 +133,104 @@
 
         .cart-item {
             display: flex;
+            align-items: flex-start;
             justify-content: space-between;
-            align-items: center;
             padding: 20px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(212, 165, 116, 0.1);
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
             margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            min-height: 120px;
         }
-
-        .item-info {
+        
+        .cart-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .cart-left {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
             flex: 1;
+            min-width: 0;
         }
-
-        .item-name {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.1rem;
-            color: #fff;
-            margin: 0 0 5px 0;
+        
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid rgba(212, 165, 116, 0.3);
+            flex-shrink: 0;
         }
-
-        .item-price {
-            font-family: 'Poppins', sans-serif;
-            color: #d4a574;
+        
+        .cart-item-details {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .cart-title {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 16px;
             font-weight: 600;
+            color: #fff;
             margin: 0;
+            line-height: 1.3;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
-
-        .item-quantity {
-            font-family: 'Poppins', sans-serif;
+        
+        .cart-qty {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 14px;
             color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
+            margin: 0;
+            font-weight: 500;
+        }
+        
+        .cart-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 12px;
+            flex-shrink: 0;
+            min-width: 100px;
+        }
+        
+        .cart-price {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: #d4a373;
+            text-align: right;
+            white-space: nowrap;
+        }
+        
+        .cart-delete {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.2);
+            color: rgba(255, 107, 107, 0.8);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .cart-delete:hover {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: rgba(255, 107, 107, 0.3);
+            transform: scale(1.1);
         }
 
         .cart-actions {
@@ -259,89 +326,33 @@
                 padding: 20px;
             }
             
-            .cart-item-image {
-                width: 50px;
-                height: 50px;
+            .cart-item {
+                padding: 15px;
+                min-height: 100px;
             }
-        }
-        
-        /* Cart Item Images Styling */
-        .cart-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .cart-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex: 1;
-        }
-        
-        .cart-item-image {
-            width: 70px;
-            height: 70px;
-            border-radius: 10px;
-            object-fit: cover;
-            border: 1px solid rgba(212, 165, 116, 0.2);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .cart-item-details {
-            flex: 1;
-        }
-        
-        .cart-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #fff;
-            margin: 0 0 5px 0;
-            text-transform: none; /* Remove uppercase */
-        }
-        
-        .cart-qty {
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin: 0;
-        }
-        
-        .cart-right {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 10px;
-        }
-        
-        .cart-price {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #d4a373;
-        }
-        
-        .cart-delete {
-            background: rgba(255, 107, 107, 0.1);
-            border: 1px solid rgba(255, 107, 107, 0.2);
-            color: #ff6b6b;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .cart-delete:hover {
-            background: rgba(255, 107, 107, 0.2);
-            border-color: rgba(255, 107, 107, 0.3);
-            transform: scale(1.1);
+            
+            .cart-item-image {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .cart-title {
+                font-size: 14px;
+            }
+            
+            .cart-qty {
+                font-size: 12px;
+            }
+            
+            .cart-price {
+                font-size: 14px;
+            }
+            
+            .cart-delete {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+            }
         }
         
         /* Cart Customizations Styling */
