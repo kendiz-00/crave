@@ -687,32 +687,50 @@
 
         // Initialize map
         function initializeMap() {
-            // Create map centered on Accra, Ghana
-            map = L.map('deliveryMap').setView([selectedCoordinates.lat, selectedCoordinates.lng], 13);
-            
-            // Add dark theme tile layer
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-                maxZoom: 19
-            }).addTo(map);
-            
-            // Add draggable marker
-            marker = L.marker([selectedCoordinates.lat, selectedCoordinates.lng], {
-                draggable: true
-            }).addTo(map);
-            
-            // Marker drag event
-            marker.on('dragend', function(event) {
-                const position = marker.getLatLng();
-                updateLocation(position.lat, position.lng);
-            });
-            
-            // Map click event
-            map.on('click', function(event) {
-                const position = event.latlng;
-                marker.setLatLng(position);
-                updateLocation(position.lat, position.lng);
-            });
+            try {
+                // Check if map container exists
+                const mapContainer = document.getElementById('deliveryMap');
+                if (!mapContainer) {
+                    console.error('Map container not found');
+                    return;
+                }
+                
+                // Create map centered on Accra, Ghana
+                map = L.map('deliveryMap').setView([selectedCoordinates.lat, selectedCoordinates.lng], 13);
+                
+                // Add dark theme tile layer
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                    maxZoom: 19
+                }).addTo(map);
+                
+                // Add draggable marker
+                marker = L.marker([selectedCoordinates.lat, selectedCoordinates.lng], {
+                    draggable: true
+                }).addTo(map);
+                
+                // Marker drag event
+                marker.on('dragend', function(event) {
+                    const position = marker.getLatLng();
+                    updateLocation(position.lat, position.lng);
+                });
+                
+                // Map click event
+                map.on('click', function(event) {
+                    const position = event.latlng;
+                    marker.setLatLng(position);
+                    updateLocation(position.lat, position.lng);
+                });
+                
+                console.log('Map initialized successfully');
+            } catch (error) {
+                console.error('Error initializing map:', error);
+                // Fallback: show simple location input
+                const mapContainer = document.getElementById('deliveryMap');
+                if (mapContainer) {
+                    mapContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: #666;"><i class="fas fa-map-marker-alt"></i><br>Map temporarily unavailable<br>Please use GPS location</div>';
+                }
+            }
         }
 
         // Update location when marker moves
