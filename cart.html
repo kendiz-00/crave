@@ -198,9 +198,10 @@
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            gap: 12px;
+            gap: 8px;
             flex-shrink: 0;
             min-width: 100px;
+            justify-content: space-between;
         }
         
         .cart-price {
@@ -210,6 +211,7 @@
             color: #d4a373;
             text-align: right;
             white-space: nowrap;
+            order: 1;
         }
         
         .cart-delete {
@@ -225,6 +227,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-size: 14px;
+            order: 2;
         }
         
         .cart-delete:hover {
@@ -383,6 +386,25 @@
             font-size: 11px;
             color: rgba(255, 255, 255, 0.8);
             font-style: italic;
+        }
+        
+        .cart-item-addons {
+            margin-top: 8px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .cart-addon {
+            padding: 2px 0;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 12px;
+            color: rgba(212, 165, 116, 0.9);
+            line-height: 1.4;
+            font-weight: 500;
+        }
+        
+        .cart-addon:first-child {
+            padding-top: 0;
         }
     </style>
 </head>
@@ -590,6 +612,16 @@
                     customizationsHtml += '</div>';
                 }
                 
+                // Build addons HTML
+                let addonsHtml = '';
+                if (item.addons && item.addons.length > 0) {
+                    addonsHtml = '<div class="cart-item-addons">';
+                    item.addons.forEach(addon => {
+                        addonsHtml += `<div class="cart-addon">+ ${addon.name} (GH¢ ${addon.price})</div>`;
+                    });
+                    addonsHtml += '</div>';
+                }
+                
                 // Add special requests if present
                 let specialRequestsHtml = '';
                 if (item.specialRequests) {
@@ -603,6 +635,7 @@
                             <h4 class="cart-title">${item.name}</h4>
                             <p class="cart-qty">Qty: ${item.quantity}</p>
                             ${customizationsHtml}
+                            ${addonsHtml}
                             ${specialRequestsHtml}
                         </div>
                     </div>

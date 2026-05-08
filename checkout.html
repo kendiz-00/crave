@@ -496,9 +496,16 @@
         
         // Initialize map on page load
         document.addEventListener('DOMContentLoaded', function() {
-            initializeCheckout();
-            initializeMap();
-            setupMapEventListeners();
+            // Wait a bit for the DOM to be fully ready
+            setTimeout(function() {
+                initializeCheckout();
+                if (typeof L !== 'undefined') {
+                    initializeMap();
+                    setupMapEventListeners();
+                } else {
+                    console.error('Leaflet library not loaded');
+                }
+            }, 100);
         });
 
         // Initialize checkout page

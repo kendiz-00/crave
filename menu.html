@@ -2178,12 +2178,37 @@
                 }
             }
             
-            // Prepare cart item with customizations
+            // Calculate total price with customizations and addons
+            let totalPrice = basePrice;
+            
+            // Add selected options prices
+            Object.values(selectedOptions).forEach(selections => {
+                if (Array.isArray(selections)) {
+                    selections.forEach(choice => {
+                        totalPrice += choice.price;
+                    });
+                } else if (selections && selections.price) {
+                    totalPrice += selections.price;
+                }
+            });
+            
+            // Add selected addons prices
+            selectedAddons.forEach(addon => {
+                totalPrice += addon.price;
+            });
+            
+            // Get special requests
+            const specialRequests = document.getElementById('specialRequests').value;
+            
+            // Prepare cart item with customizations and calculated price
             const cartItem = {
                 name: currentFoodItem,
-                price: basePrice,
+                price: totalPrice, // Use calculated total price
+                basePrice: basePrice, // Store base price for reference
                 quantity: currentQuantity,
                 customizations: selectedOptions,
+                addons: selectedAddons,
+                specialRequests: specialRequests,
                 timestamp: new Date().toISOString()
             };
             
