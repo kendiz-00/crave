@@ -504,8 +504,13 @@
                     setupMapEventListeners();
                 } else {
                     console.error('Leaflet library not loaded');
+                    // Fallback: show simple location input
+                    const mapContainer = document.getElementById('deliveryMap');
+                    if (mapContainer) {
+                        mapContainer.innerHTML = '<div style="padding: 40px; text-align: center; background: #f8f9fa; border: 2px dashed #dee2e6; border-radius: 8px; color: #6c757d;"><i class="fas fa-map-marker-alt" style="font-size: 48px; margin-bottom: 16px; display: block;"></i><div style="font-weight: 600; margin-bottom: 8px;">Location Selection</div><div style="font-size: 14px;">Please use the "Use My Location" button below</div></div>';
+                    }
                 }
-            }, 100);
+            }, 200);
         });
 
         // Initialize checkout page
@@ -633,7 +638,7 @@
             cartContainer.innerHTML = '';
             let subtotal = 0;
 
-            cart.forEach((item, index) => {
+            cartItems.forEach((item, index) => {
                 const itemTotal = item.price * item.quantity;
                 subtotal += itemTotal;
 
@@ -695,12 +700,19 @@
                     return;
                 }
                 
-                // Create map centered on Accra, Ghana
-                map = L.map('deliveryMap').setView([selectedCoordinates.lat, selectedCoordinates.lng], 13);
+                // Clear any existing content
+                mapContainer.innerHTML = '';
                 
-                // Add dark theme tile layer
-                L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                // Create map centered on Accra, Ghana
+                map = L.map('deliveryMap', {
+                    center: [selectedCoordinates.lat, selectedCoordinates.lng],
+                    zoom: 13,
+                    zoomControl: true
+                });
+                
+                // Add OpenStreetMap tiles (more reliable)
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
                     maxZoom: 19
                 }).addTo(map);
                 
@@ -728,7 +740,7 @@
                 // Fallback: show simple location input
                 const mapContainer = document.getElementById('deliveryMap');
                 if (mapContainer) {
-                    mapContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: #666;"><i class="fas fa-map-marker-alt"></i><br>Map temporarily unavailable<br>Please use GPS location</div>';
+                    mapContainer.innerHTML = '<div style="padding: 40px; text-align: center; background: #f8f9fa; border: 2px dashed #dee2e6; border-radius: 8px; color: #6c757d;"><i class="fas fa-map-marker-alt" style="font-size: 48px; margin-bottom: 16px; display: block;"></i><div style="font-weight: 600; margin-bottom: 8px;">Location Selection</div><div style="font-size: 14px;">Please use the "Use My Location" button below</div></div>';
                 }
             }
         }
