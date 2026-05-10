@@ -7429,3 +7429,673 @@ section {
   50% { transform: scale(1.05); }
   100% { transform: scale(1); }
 }
+
+/* ===== PREMIUM HERO SECTION ===== */
+.premium-hero {
+    position: relative;
+    height: 100vh;
+    min-height: 700px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Cinematic Background */
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.hero-image-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transform: scale(1.1);
+    animation: heroZoom 20s ease-in-out infinite alternate;
+}
+
+@keyframes heroZoom {
+    0% { transform: scale(1.1); }
+    100% { transform: scale(1.2); }
+}
+
+.hero-gradient-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.7) 0%,
+        rgba(0, 0, 0, 0.5) 30%,
+        rgba(0, 0, 0, 0.6) 70%,
+        rgba(0, 0, 0, 0.8) 100%
+    );
+    z-index: 2;
+}
+
+.hero-ambient-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        circle at 30% 40%,
+        rgba(212, 163, 116, 0.15) 0%,
+        transparent 50%
+    ),
+    radial-gradient(
+        circle at 70% 60%,
+        rgba(212, 163, 116, 0.1) 0%,
+        transparent 40%
+    );
+    z-index: 3;
+    animation: ambientGlow 8s ease-in-out infinite alternate;
+}
+
+@keyframes ambientGlow {
+    0% { opacity: 0.3; }
+    50% { opacity: 0.6; }
+    100% { opacity: 0.4; }
+}
+
+/* Floating Particles */
+.hero-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    background: radial-gradient(circle, rgba(212, 163, 116, 0.8) 0%, rgba(212, 163, 116, 0.4) 50%, transparent 70%);
+    border-radius: 50%;
+    animation: float 15s infinite ease-in-out;
+}
+
+.particle-1 {
+    width: 4px;
+    height: 4px;
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+    animation-duration: 12s;
+}
+
+.particle-2 {
+    width: 6px;
+    height: 6px;
+    top: 60%;
+    left: 80%;
+    animation-delay: 2s;
+    animation-duration: 15s;
+}
+
+.particle-3 {
+    width: 3px;
+    height: 3px;
+    top: 40%;
+    left: 20%;
+    animation-delay: 4s;
+    animation-duration: 10s;
+}
+
+.particle-4 {
+    width: 5px;
+    height: 5px;
+    top: 70%;
+    left: 60%;
+    animation-delay: 6s;
+    animation-duration: 18s;
+}
+
+.particle-5 {
+    width: 4px;
+    height: 4px;
+    top: 30%;
+    left: 90%;
+    animation-delay: 8s;
+    animation-duration: 14s;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px) translateX(0px) scale(1);
+        opacity: 0.3;
+    }
+    25% {
+        transform: translateY(-20px) translateX(10px) scale(1.2);
+        opacity: 0.6;
+    }
+    50% {
+        transform: translateY(-10px) translateX(-5px) scale(0.8);
+        opacity: 0.4;
+    }
+    75% {
+        transform: translateY(-30px) translateX(15px) scale(1.1);
+        opacity: 0.7;
+    }
+}
+
+/* Hero Container */
+.hero-container {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 20px;
+}
+
+.hero-content-wrapper {
+    text-align: center;
+    position: relative;
+}
+
+/* Trust Badges */
+.hero-trust-badges {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out 0.3s forwards;
+}
+
+.trust-badge {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(212, 163, 116, 0.3);
+    border-radius: 50px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(212, 163, 116, 0.1);
+}
+
+.trust-badge:hover {
+    background: rgba(212, 163, 116, 0.15);
+    border-color: rgba(212, 163, 116, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 163, 116, 0.2);
+}
+
+.badge-icon {
+    font-size: 16px;
+    line-height: 1;
+}
+
+.badge-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    white-space: nowrap;
+}
+
+/* Main Hero Content */
+.hero-main-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-pretitle {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(14px, 2vw, 18px);
+    font-weight: 500;
+    color: #d4a373;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out 0.5s forwards;
+    text-shadow: 0 2px 10px rgba(212, 163, 116, 0.3);
+}
+
+.hero-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 64px);
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out 0.7s forwards;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.hero-subheading {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(16px, 2.5vw, 20px);
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out 0.9s forwards;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Premium CTA Buttons */
+.hero-cta-section {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out 1.1s forwards;
+}
+
+.cta-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 32px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.cta-primary {
+    background: linear-gradient(135deg, #d4a373 0%, #b8935f 50%, #d4a373 100%);
+    background-size: 200% 200%;
+    color: #ffffff;
+    box-shadow: 0 8px 25px rgba(212, 163, 116, 0.3);
+    animation: goldShimmer 3s ease-in-out infinite;
+}
+
+.cta-primary:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 35px rgba(212, 163, 116, 0.4);
+    background-position: 100% 0;
+}
+
+.cta-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(212, 163, 116, 0.5);
+    color: #ffffff;
+    box-shadow: 0 8px 25px rgba(212, 163, 116, 0.1);
+}
+
+.cta-secondary:hover {
+    transform: translateY(-3px) scale(1.05);
+    background: rgba(212, 163, 116, 0.2);
+    border-color: rgba(212, 163, 116, 0.8);
+    box-shadow: 0 12px 35px rgba(212, 163, 116, 0.2);
+}
+
+@keyframes goldShimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.button-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.button-icon {
+    font-size: 18px;
+}
+
+.button-text {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.button-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.cta-button:hover .button-glow {
+    opacity: 1;
+}
+
+/* Floating Food Preview Card */
+.floating-food-card {
+    position: absolute;
+    top: 50%;
+    right: -20px;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(212, 163, 116, 0.3);
+    border-radius: 20px;
+    padding: 20px;
+    min-width: 200px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    animation: slideInRight 0.8s ease-out 1.3s forwards;
+    transition: all 0.3s ease;
+}
+
+.floating-food-card:hover {
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateY(-50%) translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(-50%) translateX(0);
+    }
+}
+
+.food-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.food-emoji {
+    font-size: 24px;
+    line-height: 1;
+}
+
+.food-name {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.food-badge {
+    background: linear-gradient(135deg, #d4a373, #b8935f);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 12px;
+}
+
+.food-price {
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.food-add-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #d4a373, #b8935f);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.food-add-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(212, 163, 116, 0.3);
+}
+
+.food-add-btn span:first-child {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* Scroll Indicator */
+.scroll-indicator {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out 1.5s forwards, bounce 2s ease-in-out infinite 2.5s;
+    z-index: 6;
+    cursor: pointer;
+}
+
+.scroll-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.scroll-arrow {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-5px); }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .premium-hero {
+        min-height: 600px;
+    }
+    
+    .hero-trust-badges {
+        gap: 10px;
+        margin-bottom: 30px;
+    }
+    
+    .trust-badge {
+        padding: 6px 12px;
+    }
+    
+    .badge-text {
+        font-size: 11px;
+    }
+    
+    .hero-pretitle {
+        font-size: 14px;
+        letter-spacing: 2px;
+        margin-bottom: 15px;
+    }
+    
+    .hero-headline {
+        font-size: clamp(28px, 8vw, 40px);
+        margin-bottom: 20px;
+    }
+    
+    .hero-subheading {
+        font-size: clamp(14px, 4vw, 18px);
+        margin-bottom: 30px;
+    }
+    
+    .hero-cta-section {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .cta-button {
+        width: 100%;
+        max-width: 280px;
+        padding: 16px 24px;
+    }
+    
+    .floating-food-card {
+        position: static;
+        transform: none;
+        margin-top: 40px;
+        opacity: 1;
+        animation: fadeInUp 0.8s ease-out 1.3s forwards;
+    }
+    
+    .floating-food-card:hover {
+        transform: scale(1.02);
+    }
+    
+    .scroll-indicator {
+        bottom: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .premium-hero {
+        min-height: 500px;
+    }
+    
+    .hero-container {
+        padding: 0 15px;
+    }
+    
+    .hero-trust-badges {
+        gap: 8px;
+        margin-bottom: 25px;
+    }
+    
+    .trust-badge {
+        padding: 5px 10px;
+    }
+    
+    .badge-icon {
+        font-size: 14px;
+    }
+    
+    .badge-text {
+        font-size: 10px;
+    }
+    
+    .hero-pretitle {
+        font-size: 12px;
+        letter-spacing: 1.5px;
+        margin-bottom: 12px;
+    }
+    
+    .hero-headline {
+        font-size: clamp(24px, 10vw, 32px);
+        margin-bottom: 15px;
+    }
+    
+    .hero-subheading {
+        font-size: clamp(13px, 4.5vw, 16px);
+        margin-bottom: 25px;
+    }
+    
+    .cta-button {
+        padding: 14px 20px;
+        font-size: 15px;
+    }
+    
+    .button-text {
+        font-size: 15px;
+    }
+    
+    .floating-food-card {
+        margin-top: 30px;
+        padding: 15px;
+        min-width: 180px;
+    }
+    
+    .food-name {
+        font-size: 14px;
+    }
+    
+    .food-price {
+        font-size: 18px;
+    }
+}
+
+/* Performance Optimizations */
+.premium-hero {
+    will-change: transform;
+}
+
+.hero-image-layer {
+    will-change: transform;
+}
+
+.particle {
+    will-change: transform, opacity;
+}
+
+.cta-button {
+    will-change: transform;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .hero-image-layer,
+    .hero-ambient-glow,
+    .particle,
+    .cta-primary {
+        animation: none;
+    }
+    
+    .trust-badge:hover,
+    .cta-button:hover,
+    .floating-food-card:hover {
+        transform: none;
+    }
+}

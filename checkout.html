@@ -703,38 +703,66 @@
                 // Clear any existing content
                 mapContainer.innerHTML = '';
                 
-                // Create map centered on Accra, Ghana
+                // Create map centered on Accra, Ghana with higher precision
                 map = L.map('deliveryMap', {
                     center: [selectedCoordinates.lat, selectedCoordinates.lng],
-                    zoom: 13,
+                    zoom: 16, // Higher zoom for better precision
                     zoomControl: true
                 });
                 
-                // Add OpenStreetMap tiles (more reliable)
+                // Add high-precision OpenStreetMap tiles
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                    maxZoom: 19
+                    maxZoom: 19,
+                    tileSize: 256
                 }).addTo(map);
                 
-                // Add draggable marker
+                // Add precise draggable marker with custom icon
+                const customIcon = L.divIcon({
+                    className: 'custom-marker',
+                    html: '<div style="background: #d4a373; border: 3px solid white; border-radius: 50%; width: 20px; height: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.3);"><div style="background: white; border-radius: 50%; width: 8px; height: 8px; margin: 6px auto;"></div></div>',
+                    iconSize: [20, 20],
+                    iconAnchor: [10, 10]
+                });
+                
                 marker = L.marker([selectedCoordinates.lat, selectedCoordinates.lng], {
-                    draggable: true
+                    draggable: true,
+                    icon: customIcon
                 }).addTo(map);
                 
-                // Marker drag event
+                // Add precision circle around marker
+                const precisionCircle = L.circle([selectedCoordinates.lat, selectedCoordinates.lng], {
+                    color: '#d4a373',
+                    fillColor: '#d4a373',
+                    fillOpacity: 0.1,
+                    radius: 20 // 20 meter precision circle
+                }).addTo(map);
+                
+                // Marker drag event with precision update
                 marker.on('dragend', function(event) {
                     const position = marker.getLatLng();
+                    precisionCircle.setLatLng(position);
                     updateLocation(position.lat, position.lng);
                 });
                 
-                // Map click event
+                // Map click event with precision
                 map.on('click', function(event) {
                     const position = event.latlng;
                     marker.setLatLng(position);
+                    precisionCircle.setLatLng(position);
                     updateLocation(position.lat, position.lng);
                 });
                 
-                console.log('Map initialized successfully');
+                // Add location accuracy indicator
+                map.on('locationfound', function(e) {
+                    const radius = e.accuracy / 2;
+                    precisionCircle.setRadius(radius);
+                    marker.setLatLng(e.latlng);
+                    precisionCircle.setLatLng(e.latlng);
+                    updateLocation(e.latlng.lat, e.latlng.lng);
+                });
+                
+                console.log('Map initialized with high precision');
             } catch (error) {
                 console.error('Error initializing map:', error);
                 // Fallback: show simple location input
@@ -763,27 +791,66 @@
 
         // Setup map event listeners
         function setupMapEventListeners() {
-            // Use My Location button
+            // Use My Location button with high precision
             document.getElementById('useMyLocationBtn').addEventListener('click', function() {
                 if (navigator.geolocation) {
+                    // Show loading state
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Getting Location...';
+                    this.disabled = true;
+                    
+                    // Get high precision location
                     navigator.geolocation.getCurrentPosition(
                         function(position) {
                             const lat = position.coords.latitude;
                             const lng = position.coords.longitude;
+                            const accuracy = position.coords.accuracy;
                             
-                            // Move marker to user location
-                            marker.setLatLng([lat, lng]);
-                            map.setView([lat, lng], 15);
+                            // Move marker to user location with high precision
+                            if (marker && map) {
+                                marker.setLatLng([lat, lng]);
+                                map.setView([lat, lng], 18); // Maximum zoom for precision
+                                
+                                // Update precision circle
+                                const precisionCircle = map._layers[Object.keys(map._layers).find(key => map._layers[key] instanceof L.Circle)];
+                                if (precisionCircle) {
+                                    precisionCircle.setLatLng([lat, lng]);
+                                    precisionCircle.setRadius(accuracy / 2); // Use actual GPS accuracy
+                                }
+                                
+                                updateLocation(lat, lng);
+                                
+                                // Show success feedback
+                                const locationText = document.getElementById('locationText');
+                                locationText.textContent = `Precise location found (±${Math.round(accuracy)}m)`;
+                                locationText.style.color = '#28a745';
+                            }
                             
-                            updateLocation(lat, lng);
+                            // Reset button
+                            document.getElementById('useMyLocationBtn').innerHTML = '<i class="fas fa-location-crosshairs"></i> Use My Location';
+                            document.getElementById('useMyLocationBtn').disabled = false;
                         },
                         function(error) {
                             console.error('Geolocation error:', error);
-                            alert('Unable to get your location. Please select your location on map.');
+                            
+                            // Reset button
+                            document.getElementById('useMyLocationBtn').innerHTML = '<i class="fas fa-location-crosshairs"></i> Use My Location';
+                            document.getElementById('useMyLocationBtn').disabled = false;
+                            
+                            // Show error message
+                            const locationText = document.getElementById('locationText');
+                            locationText.textContent = 'Location unavailable - Please select manually';
+                            locationText.style.color = '#dc3545';
+                            
+                            alert('Unable to get your location. Please select your location on the map manually.');
+                        },
+                        {
+                            enableHighAccuracy: true, // High precision mode
+                            timeout: 10000, // 10 seconds timeout
+                            maximumAge: 0 // Don't use cached location
                         }
                     );
                 } else {
-                    alert('Geolocation is not supported by your browser. Please select your location on map.');
+                    alert('Geolocation is not supported by your browser. Please select your location on the map.');
                 }
             });
 
