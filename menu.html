@@ -1076,6 +1076,42 @@
         let cartItems = [];
         let cartCount = 0;
 
+        /** Sticky cart bar (same bar as index; must exist on this page too). */
+        function updateStickyCartBar() {
+            let raw;
+            try {
+                raw = JSON.parse(localStorage.getItem('craveCart')) || [];
+            } catch (e) {
+                raw = [];
+            }
+            const cart = Array.isArray(raw) ? raw : [];
+            const stickyCartBar = document.getElementById('stickyCartBar');
+            const stickyCartCount = document.getElementById('stickyCartCount');
+            const stickyCartItems = document.getElementById('stickyCartItems');
+            const stickyCartTotal = document.getElementById('stickyCartTotal');
+
+            if (!stickyCartBar) return;
+
+            const cartCountVal = cart.length;
+            let total = 0;
+            cart.forEach(item => {
+                const unit = typeof item.price === 'number' ? item.price : parseFloat(String(item.price).replace(/[^\d.]/g, '')) || 0;
+                total += unit * (item.quantity || 1);
+            });
+
+            if (stickyCartCount) stickyCartCount.textContent = cartCountVal;
+            if (stickyCartItems) {
+                stickyCartItems.textContent = cartCountVal + ' ' + (cartCountVal === 1 ? 'item' : 'items');
+            }
+            if (stickyCartTotal) stickyCartTotal.textContent = total.toFixed(2);
+
+            if (cartCountVal > 0) {
+                stickyCartBar.classList.add('active');
+            } else {
+                stickyCartBar.classList.remove('active');
+            }
+        }
+
         // Load cart from localStorage on page load
         function loadCartFromStorage() {
             const storedCart = localStorage.getItem('craveCart');
@@ -1473,7 +1509,7 @@
                     }
                 ]
             },
-            'Siracha Mayo Hot Wings': {
+            'Siracha Mayo Hot Wings (6) and Fries': {
                 description: 'Spicy wings with creamy sriracha mayo',
                 options: [
                     {
@@ -1925,6 +1961,7 @@
             basePrice = foodPrice;
             currentQuantity = 1;
             selectedOptions = {};
+            selectedAddons = [];
             
             // Update modal content
             document.getElementById('modalFoodTitle').textContent = foodName;
@@ -1955,6 +1992,7 @@
             currentFoodItem = null;
             currentQuantity = 1;
             selectedOptions = {};
+            selectedAddons = [];
         }
         
         // Generate Customization Options
