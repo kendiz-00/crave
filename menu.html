@@ -1268,13 +1268,13 @@
             loadCartFromStorage(); // Load cart first
             initializeMenu();
             initializeCategoryNav();
+            updateStickyCartBar(); // Initialize sticky cart bar
             
             // Copyright year
             const yearSpan = document.getElementById('copyright-year');
-            if (yearSpan) {
-                yearSpan.textContent = new Date().getFullYear();
-            }
+            if (yearSpan) yearSpan.textContent = new Date().getFullYear();
         });
+
     </script>
     
     <!-- PWA Service Worker Registration -->
@@ -2351,11 +2351,6 @@
             // Animate sticky cart icon
             animateCartIcon();
         };
-        
-        // Initialize sticky cart bar on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            updateStickyCartBar();
-        });
         
         // Listen for cart changes (for cross-tab sync)
         window.addEventListener('storage', function(e) {
