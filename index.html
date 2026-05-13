@@ -1297,41 +1297,68 @@
 			}
 		}, false);
 
-		// Sticky Cart Bar Functionality
+		// Sticky Cart Bar — totals + premium update feedback
+		var stickyCartPrevSig = '';
+		function getCraveCartArray() {
+			try {
+				const raw = JSON.parse(localStorage.getItem('craveCart')) || [];
+				return Array.isArray(raw) ? raw : [];
+			} catch (e) {
+				return [];
+			}
+		}
+		function craveCartLineTotal(item) {
+			const qty = item.quantity || 1;
+			if (typeof item.price === 'number' && !Number.isNaN(item.price)) {
+				return item.price * qty;
+			}
+			const parsed = parseFloat(String(item.price != null ? item.price : '').replace(/[^\d.]/g, ''));
+			if (!Number.isNaN(parsed)) {
+				return parsed * qty;
+			}
+			let unit = Number(item.basePrice) || 0;
+			if (Array.isArray(item.addons)) {
+				unit += item.addons.reduce((s, a) => s + (Number(a.price) || 0), 0);
+			}
+			if (Array.isArray(item.customizations)) {
+				unit += item.customizations.reduce((s, o) => s + (Number(o.price) || 0), 0);
+			}
+			return unit * qty;
+		}
 		function updateStickyCartBar() {
-			const cart = JSON.parse(localStorage.getItem('craveCart')) || [];
-			const cartCount = cart.length;
+			const cart = getCraveCartArray();
+			const cartCountVal = cart.length;
+			let total = 0;
+			cart.forEach(function (item) {
+				total += craveCartLineTotal(item);
+			});
 			const stickyCartBar = document.getElementById('stickyCartBar');
-			const stickyCartCount = document.getElementById('stickyCartCount');
 			const stickyCartItems = document.getElementById('stickyCartItems');
 			const stickyCartTotal = document.getElementById('stickyCartTotal');
-			
+			const stickyCartUpdateDot = document.getElementById('stickyCartUpdateDot');
 			if (!stickyCartBar) return;
-			
-			// Calculate total
-			let total = 0;
-			cart.forEach(item => {
-				const itemTotal = (item.basePrice || 0) + 
-					(item.customizations?.reduce((sum, opt) => sum + (opt.price || 0), 0) || 0) +
-					(item.addons?.reduce((sum, addon) => sum + (addon.price || 0), 0) || 0);
-				total += itemTotal * (item.quantity || 1);
-			});
-			
-			// Update content
-			if (stickyCartCount) {
-				stickyCartCount.textContent = cartCount;
-			}
-			
 			if (stickyCartItems) {
-				stickyCartItems.textContent = `${cartCount} ${cartCount === 1 ? 'item' : 'items'}`;
+				stickyCartItems.textContent = cartCountVal + ' ' + (cartCountVal === 1 ? 'item' : 'items');
 			}
-			
 			if (stickyCartTotal) {
 				stickyCartTotal.textContent = total.toFixed(2);
 			}
-			
-			// Show/hide bar based on cart content
-			if (cartCount > 0) {
+			stickyCartBar.setAttribute('aria-hidden', cartCountVal === 0 ? 'true' : 'false');
+			const sig = cartCountVal + ':' + total.toFixed(2);
+			if (stickyCartPrevSig && stickyCartPrevSig !== sig) {
+				stickyCartBar.classList.add('sticky-cart--updated');
+				setTimeout(function () {
+					stickyCartBar.classList.remove('sticky-cart--updated');
+				}, 480);
+				if (stickyCartUpdateDot) {
+					stickyCartUpdateDot.classList.add('is-on');
+					setTimeout(function () {
+						stickyCartUpdateDot.classList.remove('is-on');
+					}, 720);
+				}
+			}
+			stickyCartPrevSig = cartCountVal > 0 ? sig : '';
+			if (cartCountVal > 0) {
 				stickyCartBar.classList.add('active');
 			} else {
 				stickyCartBar.classList.remove('active');
@@ -1351,47 +1378,45 @@
 		});
 	</script>
 
+	<!-- Premium sticky floating cart (tap = cart / checkout flow) -->
+	<div id="stickyCartBar" class="sticky-cart-bar" aria-hidden="true">
+		<a href="cart.html" class="sticky-cart-hit" id="stickyCartBarLink" aria-label="View cart and continue to checkout">
+			<div class="sticky-cart-shell">
+				<div class="sticky-cart-glow-ring" aria-hidden="true"></div>
+				<div class="sticky-cart-shell-inner">
+					<span class="sticky-cart-shimmer" aria-hidden="true"></span>
+					<div class="sticky-cart-content">
+						<div class="sticky-cart-info">
+							<div class="sticky-cart-icon-wrap sticky-cart-icon-hit" aria-hidden="true">
+								<span class="sticky-cart-emoji">🛒</span>
+								<span class="sticky-cart-update-dot" id="stickyCartUpdateDot" aria-hidden="true"></span>
+							</div>
+							<div class="sticky-cart-text">
+								<span class="sticky-cart-label">View Cart</span>
+								<span class="sticky-cart-items" id="stickyCartItems" aria-live="polite">0 items</span>
+							</div>
+						</div>
+						<div class="sticky-cart-right">
+							<div class="sticky-cart-price">
+								<span class="sticky-cart-price-currency">GHS</span>
+								<span class="sticky-cart-price-value" id="stickyCartTotal">0.00</span>
+							</div>
+							<span class="sticky-cart-chevron" aria-hidden="true">
+								<svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+									<path d="M6 12L10 8M10 8L6 4M10 8H2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</a>
+	</div>
+
 	<!-- WhatsApp Floating Button -->
 	<a href="https://wa.me/233550020788?text=Hi%20Crave%2C%20I%E2%80%99d%20like%20to%20place%20an%20order" class="whatsapp-float" target="_blank" aria-label="Order via WhatsApp" title="Order on WhatsApp">
 		<i class="fa-brands fa-whatsapp"></i>
 	</a>
-
-	<!-- Premium Sticky Floating Mobile CTA Bar -->
-	<div id="stickyCartBar" class="sticky-cart-bar">
-		<div class="sticky-cart-container">
-			<div class="sticky-cart-content">
-				<!-- Cart Icon and Items Count -->
-				<div class="sticky-cart-info">
-					<div class="sticky-cart-icon-wrapper">
-						<div class="sticky-cart-icon">
-							<svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-								<path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17M17 13v6m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-							</svg>
-							<div class="sticky-cart-count" id="stickyCartCount">0</div>
-						</div>
-					</div>
-					<div class="sticky-cart-text">
-						<span class="sticky-cart-label">View Cart</span>
-						<span class="sticky-cart-items" id="stickyCartItems">0 items</span>
-					</div>
-				</div>
-				
-				<!-- Cart Total and CTA -->
-				<div class="sticky-cart-action">
-					<div class="sticky-cart-total">
-						<span class="sticky-total-label">Total</span>
-						<span class="sticky-total-amount">GHS <span id="stickyCartTotal">0</span></span>
-					</div>
-					<button class="sticky-cart-btn" onclick="window.location.href='checkout.html'">
-						<span>Checkout</span>
-						<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-							<path d="M6 12L10 8M10 8L6 4M10 8H2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-						</svg>
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
 
 	<!-- PWA Service Worker Registration -->
 	<script>
