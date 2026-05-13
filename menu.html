@@ -1142,6 +1142,33 @@
             updateCartBadge();
         }
 
+        /** Premium card: success state on add (+1 flyout, button ✓, pulse). */
+        function playFoodCardAddedSuccess(btn) {
+            if (!btn) return;
+            const card = btn.closest('.bolt-food-item');
+            const footer = btn.closest('.bolt-food-footer');
+            if (!btn.dataset.defaultLabel) btn.dataset.defaultLabel = '+';
+            btn.disabled = true;
+            btn.textContent = '\u2713 Added';
+            btn.classList.add('bolt-food-add-btn--success');
+            if (card) card.classList.add('bolt-food-item--pulse');
+            if (footer) {
+                const fly = document.createElement('span');
+                fly.className = 'bolt-food-flyout';
+                fly.textContent = '+1';
+                footer.appendChild(fly);
+                setTimeout(function () {
+                    if (fly.parentNode) fly.parentNode.removeChild(fly);
+                }, 1000);
+            }
+            setTimeout(function () {
+                btn.textContent = btn.dataset.defaultLabel || '+';
+                btn.classList.remove('bolt-food-add-btn--success');
+                btn.disabled = false;
+                if (card) card.classList.remove('bolt-food-item--pulse');
+            }, 1000);
+        }
+
         // Initialize menu
         function initializeMenu() {
             Object.keys(menuData).forEach(categoryId => {
@@ -1157,23 +1184,85 @@
             });
         }
 
-        // Create food item element
+        // Create food item (premium card DOM — no inline handlers; safe text nodes)
         function createFoodItem(item, categoryId) {
             const div = document.createElement('div');
             div.className = 'bolt-food-item';
-            
-            div.innerHTML = `
-                <div class="bolt-food-content">
-                    <div class="bolt-food-name">${item.name}</div>
-                    <div class="bolt-food-description">${item.description}</div>
-                    <div class="bolt-food-price">GH¢${item.price.toFixed(2)}</div>
-                </div>
-                <div class="bolt-food-right">
-                    <img src="images/${getFoodImage(item.name)}" alt="${item.name}" class="bolt-food-image" onerror="this.src='images/placeholder.jpg'">
-                    <button class="bolt-food-add-btn" onclick="addToCart('${item.name}', ${item.price})">+</button>
-                </div>
-            `;
-            
+            div.dataset.itemRef = encodeURIComponent(item.name);
+
+            const inner = document.createElement('div');
+            inner.className = 'bolt-food-card-inner';
+
+            const media = document.createElement('div');
+            media.className = 'bolt-food-media';
+
+            const wrap = document.createElement('div');
+            wrap.className = 'bolt-food-img-wrap';
+
+            const shimmer = document.createElement('span');
+            shimmer.className = 'bolt-food-img-shimmer';
+            shimmer.setAttribute('aria-hidden', 'true');
+
+            const img = document.createElement('img');
+            img.className = 'bolt-food-image';
+            img.alt = item.name;
+            img.loading = 'lazy';
+            img.src = 'images/' + getFoodImage(item.name);
+            img.addEventListener('load', function onImgLoad() {
+                wrap.classList.add('is-loaded');
+                img.removeEventListener('load', onImgLoad);
+            });
+            img.addEventListener('error', function onImgErr() {
+                img.src = 'images/placeholder.jpg';
+                wrap.classList.add('is-loaded');
+                img.removeEventListener('error', onImgErr);
+            });
+            if (img.complete && img.naturalWidth > 0) {
+                wrap.classList.add('is-loaded');
+            }
+
+            wrap.appendChild(shimmer);
+            wrap.appendChild(img);
+            media.appendChild(wrap);
+
+            const body = document.createElement('div');
+            body.className = 'bolt-food-body';
+
+            const content = document.createElement('div');
+            content.className = 'bolt-food-content';
+
+            const nameEl = document.createElement('div');
+            nameEl.className = 'bolt-food-name';
+            nameEl.textContent = item.name;
+
+            const descEl = document.createElement('div');
+            descEl.className = 'bolt-food-description';
+            descEl.textContent = item.description;
+
+            const footer = document.createElement('div');
+            footer.className = 'bolt-food-footer';
+
+            const priceEl = document.createElement('div');
+            priceEl.className = 'bolt-food-price';
+            priceEl.textContent = 'GH¢' + item.price.toFixed(2);
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'bolt-food-add-btn';
+            btn.textContent = '+';
+            btn.setAttribute('data-item-name', encodeURIComponent(item.name));
+            btn.setAttribute('data-item-price', String(item.price));
+            btn.setAttribute('aria-label', 'Add ' + item.name + ' to cart');
+
+            footer.appendChild(priceEl);
+            footer.appendChild(btn);
+            content.appendChild(nameEl);
+            content.appendChild(descEl);
+            content.appendChild(footer);
+            body.appendChild(content);
+            inner.appendChild(media);
+            inner.appendChild(body);
+            div.appendChild(inner);
             return div;
         }
 
@@ -1222,40 +1311,24 @@
             return imageMap[name] || 'placeholder.jpg';
         }
 
-        // Add to cart - Now opens customization modal
+        // Add to cart (programmatic — e.g. tests); menu UI uses delegated clicks on .bolt-food-add-btn
         function addToCart(itemName, price) {
-            // Check if item has customizations
-            if (foodCustomizations[itemName]) {
-                // Open customization modal
+            if (typeof foodCustomizations !== 'undefined' && foodCustomizations[itemName]) {
                 openFoodModal(itemName, price);
-            } else {
-                // Direct add to cart for items without customizations
-                const item = {
-                    name: itemName,
-                    price: price,
-                    quantity: 1,
-                    customizations: {},
-                    timestamp: new Date().toISOString()
-                };
-                
-                cartItems.push(item);
-                cartCount++;
-                
-                // Save to localStorage for persistence
-                localStorage.setItem('craveCart', JSON.stringify(cartItems));
-                
-                updateCartBadge();
-                showCartFeedback(itemName);
+                return;
             }
-        }
-
-        // Update cart badge
-        function updateCartBadge() {
-            const badge = document.getElementById('cartBadge');
-            if (badge) {
-                badge.textContent = cartCount;
-                badge.style.display = cartCount > 0 ? 'flex' : 'none';
-            }
+            const item = {
+                name: itemName,
+                price: price,
+                quantity: 1,
+                customizations: {},
+                timestamp: new Date().toISOString()
+            };
+            cartItems.push(item);
+            cartCount = cartItems.length;
+            localStorage.setItem('craveCart', JSON.stringify(cartItems));
+            updateCartBadge({ bump: true });
+            showCartFeedback(itemName);
         }
 
         // Show cart feedback
@@ -1328,6 +1401,50 @@
                 console.error('Error initializing menu:', error);
             }
             
+            // Delegated add-to-cart (premium cards)
+            const menuRoot = document.querySelector('.bolt-menu-container');
+            if (menuRoot) {
+                menuRoot.addEventListener('click', function (e) {
+                    const btn = e.target.closest('.bolt-food-add-btn');
+                    if (!btn || btn.disabled) return;
+                    e.preventDefault();
+                    const enc = btn.getAttribute('data-item-name');
+                    const priceStr = btn.getAttribute('data-item-price');
+                    if (!enc || priceStr == null) return;
+                    var itemName;
+                    try {
+                        itemName = decodeURIComponent(enc);
+                    } catch (err) {
+                        return;
+                    }
+                    var price = parseFloat(priceStr, 10);
+                    if (Number.isNaN(price)) return;
+
+                    if (typeof foodCustomizations !== 'undefined' && foodCustomizations[itemName]) {
+                        btn.classList.add('bolt-food-add-btn--press');
+                        setTimeout(function () {
+                            btn.classList.remove('bolt-food-add-btn--press');
+                        }, 220);
+                        openFoodModal(itemName, price);
+                        return;
+                    }
+
+                    var cartItem = {
+                        name: itemName,
+                        price: price,
+                        quantity: 1,
+                        customizations: {},
+                        timestamp: new Date().toISOString()
+                    };
+                    cartItems.push(cartItem);
+                    cartCount = cartItems.length;
+                    localStorage.setItem('craveCart', JSON.stringify(cartItems));
+                    updateCartBadge({ bump: true });
+                    showCartFeedback(itemName);
+                    playFoodCardAddedSuccess(btn);
+                });
+            }
+
             // Initialize category navigation with error handling
             try {
                 initializeCategoryNav();
@@ -2290,14 +2407,19 @@
             cart.push(cartItem);
             localStorage.setItem('craveCart', JSON.stringify(cart));
             
-            // Update cart badge
-            updateCartBadge();
-            
-            // Show feedback
+            // Update cart badge + row success (same UX as quick-add)
+            updateCartBadge({ bump: true });
             showCartFeedback(currentFoodItem);
-            
-            // Close modal
+
             closeFoodModal();
+
+            var enc = encodeURIComponent(currentFoodItem);
+            var rowBtn = document.querySelector('.bolt-food-add-btn[data-item-name="' + enc + '"]');
+            if (rowBtn && typeof playFoodCardAddedSuccess === 'function') {
+                requestAnimationFrame(function () {
+                    playFoodCardAddedSuccess(rowBtn);
+                });
+            }
         }
         
         // Show Cart Feedback
@@ -2343,16 +2465,37 @@
             }, 3000);
         }
         
-        // Update Cart Badge
-        function updateCartBadge() {
-            const cart = JSON.parse(localStorage.getItem('craveCart')) || [];
-            const cartCount = cart.length;
-            const badge = document.getElementById('cartBadge');
-            if (badge) {
-                badge.textContent = cartCount;
-                badge.style.display = cartCount > 0 ? 'flex' : 'none';
+        // Update Cart Badge (reads localStorage; optional bump animation)
+        function updateCartBadge(options) {
+            var opts = options || {};
+            var doBump = opts.bump === true;
+            var cart = [];
+            try {
+                cart = JSON.parse(localStorage.getItem('craveCart')) || [];
+            } catch (e1) {
+                cart = [];
             }
-            
+            if (!Array.isArray(cart)) cart = [];
+            var count = cart.length;
+            var badge = document.getElementById('cartBadge');
+            if (badge) {
+                badge.textContent = count;
+                badge.style.display = count > 0 ? 'flex' : 'none';
+                if (doBump) {
+                    badge.classList.remove('bolt-cart-badge--bump');
+                    void badge.offsetWidth;
+                    badge.classList.add('bolt-cart-badge--bump');
+                    setTimeout(function () {
+                        badge.classList.remove('bolt-cart-badge--bump');
+                    }, 450);
+                }
+            }
+            if (typeof cartCount !== 'undefined') {
+                cartCount = count;
+            }
+            if (typeof cartItems !== 'undefined') {
+                cartItems = cart;
+            }
             updateStickyCartBar();
         }
         
