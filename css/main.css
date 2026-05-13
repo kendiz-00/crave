@@ -2893,7 +2893,7 @@ body.menu-page,
 .bolt-menu-container {
   background: #111;
   min-height: 100vh;
-  padding-bottom: clamp(100px, 18vh, 140px);
+  padding-bottom: 88px;
 }
 
 /* Sticky Category Navigation */
@@ -2957,7 +2957,7 @@ body.menu-page,
 /* Menu Sections */
 .bolt-menu-section {
   padding: 20px;
-  max-width: 1080px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
@@ -2972,44 +2972,43 @@ body.menu-page,
   letter-spacing: 1px;
 }
 
-/* Food items — premium app-style cards */
+/* Food items — compact horizontal rows (classic size) + premium finish */
 .bolt-food-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
-  gap: clamp(14px, 3vw, 22px);
-  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .bolt-food-item {
   position: relative;
-  display: flex;
-  flex-direction: column;
+  display: block;
   min-width: 0;
-  min-height: 100%;
   padding: 0;
-  border-radius: 24px;
-  background: rgba(18, 18, 18, 0.95);
-  border: 1px solid rgba(212, 175, 55, 0.12);
+  border-radius: 18px;
+  background: rgba(18, 18, 18, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(212, 175, 55, 0.14);
   box-shadow:
-    0 8px 28px rgba(0, 0, 0, 0.45),
-    0 0 0 1px rgba(0, 0, 0, 0.35) inset;
+    0 4px 20px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
   overflow: hidden;
   transform: translate3d(0, 0, 0);
   transition:
-    transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.42s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.35s ease;
+    transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.3s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .bolt-food-item:hover {
-    transform: translate3d(0, -6px, 0) scale(1.01);
-    border-color: rgba(212, 175, 55, 0.38);
+    transform: translate3d(0, -3px, 0);
+    border-color: rgba(212, 175, 55, 0.32);
     box-shadow:
-      0 16px 40px rgba(0, 0, 0, 0.55),
-      0 0 32px rgba(212, 175, 55, 0.14),
-      0 0 0 1px rgba(212, 175, 55, 0.18) inset;
+      0 10px 28px rgba(0, 0, 0, 0.42),
+      0 0 24px rgba(212, 175, 55, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
   }
 }
 
@@ -3020,39 +3019,43 @@ body.menu-page,
 @keyframes boltFoodCardPulse {
   0% {
     box-shadow:
-      0 8px 28px rgba(0, 0, 0, 0.45),
-      0 0 0 1px rgba(0, 0, 0, 0.35) inset;
+      0 4px 20px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
   }
-  35% {
+  40% {
     box-shadow:
-      0 12px 36px rgba(0, 0, 0, 0.5),
-      0 0 36px rgba(46, 204, 113, 0.22),
-      0 0 28px rgba(212, 175, 55, 0.35);
+      0 8px 26px rgba(0, 0, 0, 0.4),
+      0 0 28px rgba(46, 204, 113, 0.18),
+      0 0 20px rgba(212, 175, 55, 0.28);
   }
   100% {
     box-shadow:
-      0 8px 28px rgba(0, 0, 0, 0.45),
-      0 0 0 1px rgba(0, 0, 0, 0.35) inset;
+      0 4px 20px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
   }
 }
 
 .bolt-food-card-inner {
   display: flex;
-  flex-direction: column;
-  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 14px 16px;
   min-height: 0;
-}
-
-.bolt-food-media {
-  position: relative;
-  flex-shrink: 0;
 }
 
 .bolt-food-img-wrap {
   position: relative;
-  aspect-ratio: 4 / 3;
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
   overflow: hidden;
-  background: rgba(12, 12, 12, 0.9);
+  border-radius: 14px;
+  background: rgba(12, 12, 12, 0.95);
+  border: 1px solid rgba(212, 175, 55, 0.18);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
 
 .bolt-food-img-shimmer {
@@ -3061,12 +3064,12 @@ body.menu-page,
   z-index: 1;
   pointer-events: none;
   opacity: 1;
-  transition: opacity 0.45s ease;
+  transition: opacity 0.4s ease;
   background: linear-gradient(
     105deg,
     rgba(28, 28, 28, 0.95) 0%,
     rgba(42, 42, 42, 0.9) 38%,
-    rgba(55, 48, 36, 0.55) 50%,
+    rgba(55, 48, 36, 0.5) 50%,
     rgba(42, 42, 42, 0.9) 62%,
     rgba(28, 28, 28, 0.95) 100%
   );
@@ -3098,39 +3101,30 @@ body.menu-page,
   object-fit: cover;
   transform: translate3d(0, 0, 0) scale(1);
   transition:
-    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 0.45s ease;
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.35s ease;
   filter: brightness(1);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .bolt-food-item:hover .bolt-food-image {
-    transform: translate3d(0, 0, 0) scale(1.06);
-    filter: brightness(1.06);
+    transform: translate3d(0, 0, 0) scale(1.04);
+    filter: brightness(1.05);
   }
 }
 
-.bolt-food-body {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  padding: clamp(14px, 3.5vw, 20px);
-  padding-top: clamp(12px, 3vw, 16px);
-  min-height: 0;
-}
-
 .bolt-food-content {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  flex: 1;
-  gap: 8px;
-  min-width: 0;
+  gap: 6px;
 }
 
 .bolt-food-name {
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
-  font-size: clamp(0.95rem, 2.8vw, 1.1rem);
+  font-size: clamp(0.95rem, 2.4vw, 1.05rem);
   color: #fafafa;
   margin: 0;
   line-height: 1.28;
@@ -3143,67 +3137,65 @@ body.menu-page,
 
 .bolt-food-description {
   font-family: 'Poppins', sans-serif;
-  font-size: clamp(0.75rem, 2.1vw, 0.875rem);
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.52);
+  color: rgba(255, 255, 255, 0.55);
   margin: 0;
-  line-height: 1.45;
+  line-height: 1.42;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
-  flex: 1;
-  min-height: 2.9em;
-}
-
-.bolt-food-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: auto;
-  padding-top: 4px;
-  position: relative;
 }
 
 .bolt-food-price {
   font-family: 'Poppins', sans-serif;
   color: #e8c76b;
   font-weight: 700;
-  font-size: clamp(1rem, 2.6vw, 1.15rem);
+  font-size: clamp(0.95rem, 2.3vw, 1.05rem);
   letter-spacing: 0.02em;
-  text-shadow: 0 0 18px rgba(212, 175, 55, 0.2);
-  white-space: nowrap;
+  margin-top: 4px;
+  text-shadow: 0 0 14px rgba(212, 175, 55, 0.18);
+}
+
+.bolt-food-right {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
 }
 
 .bolt-food-add-btn {
   position: relative;
   overflow: hidden;
-  min-width: 44px;
-  height: 44px;
-  padding: 0 16px;
-  border-radius: 999px;
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  padding: 0;
+  border-radius: 50%;
   border: none;
   cursor: pointer;
   flex-shrink: 0;
   font-family: 'Poppins', sans-serif;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: #111;
   line-height: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #e8c76b 0%, #c9a227 45%, #b8935f 100%);
+  background: linear-gradient(135deg, #e8c76b 0%, #c9a227 48%, #b8935f 100%);
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.12) inset,
-    0 4px 16px rgba(212, 175, 55, 0.35),
-    0 0 24px rgba(212, 175, 55, 0.2);
+    0 3px 12px rgba(212, 175, 55, 0.32),
+    0 0 18px rgba(212, 175, 55, 0.15);
   transform: translate3d(0, 0, 0) scale(1);
   transition:
     transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.3s ease,
-    filter 0.25s ease;
+    box-shadow 0.28s ease,
+    filter 0.22s ease;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 }
@@ -3228,17 +3220,17 @@ body.menu-page,
 
 @media (hover: hover) and (pointer: fine) {
   .bolt-food-add-btn:hover {
-    transform: translate3d(0, 0, 0) scale(1.05);
+    transform: translate3d(0, 0, 0) scale(1.06);
     box-shadow:
-      0 0 0 1px rgba(255, 255, 255, 0.16) inset,
-      0 6px 22px rgba(212, 175, 55, 0.48),
-      0 0 36px rgba(212, 175, 55, 0.32);
-    filter: brightness(1.05);
+      0 0 0 1px rgba(255, 255, 255, 0.14) inset,
+      0 5px 18px rgba(212, 175, 55, 0.42),
+      0 0 26px rgba(212, 175, 55, 0.22);
+    filter: brightness(1.04);
   }
 
   .bolt-food-add-btn:hover::after {
     opacity: 1;
-    animation: boltFoodBtnShimmer 0.85s ease-out;
+    animation: boltFoodBtnShimmer 0.75s ease-out;
   }
 }
 
@@ -3252,7 +3244,7 @@ body.menu-page,
 }
 
 .bolt-food-add-btn:active:not(:disabled) {
-  transform: translate3d(0, 0, 0) scale(0.94);
+  transform: translate3d(0, 0, 0) scale(0.93);
   transition-duration: 0.08s;
 }
 
@@ -3274,12 +3266,16 @@ body.menu-page,
 
 .bolt-food-add-btn--success {
   color: #0d1f14;
+  width: auto;
+  min-width: 76px;
+  padding: 0 10px;
+  border-radius: 999px;
   background: linear-gradient(135deg, #5ee4a0 0%, #2ecc71 55%, #27ae60 100%);
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.2) inset,
-    0 0 28px rgba(46, 204, 113, 0.45),
-    0 6px 20px rgba(0, 0, 0, 0.35);
-  font-size: clamp(0.68rem, 2vw, 0.78rem);
+    0 0 22px rgba(46, 204, 113, 0.4),
+    0 4px 14px rgba(0, 0, 0, 0.3);
+  font-size: clamp(0.62rem, 1.8vw, 0.72rem);
   font-weight: 700;
   letter-spacing: 0.02em;
 }
@@ -3291,29 +3287,30 @@ body.menu-page,
 
 .bolt-food-flyout {
   position: absolute;
-  left: 50%;
-  bottom: 52px;
+  right: 0;
+  bottom: calc(100% + 2px);
   font-family: 'Poppins', sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
   color: #2ecc71;
-  text-shadow: 0 0 12px rgba(46, 204, 113, 0.6);
+  text-shadow: 0 0 10px rgba(46, 204, 113, 0.55);
   pointer-events: none;
   z-index: 4;
+  white-space: nowrap;
   animation: boltFoodFlyout 0.95s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes boltFoodFlyout {
   0% {
     opacity: 0;
-    transform: translate3d(-50%, 8px, 0) scale(0.85);
+    transform: translate3d(0, 8px, 0) scale(0.88);
   }
   22% {
     opacity: 1;
   }
   100% {
     opacity: 0;
-    transform: translate3d(-50%, -40px, 0) scale(1.05);
+    transform: translate3d(0, -26px, 0) scale(1.02);
   }
 }
 
@@ -3421,7 +3418,7 @@ body.menu-page,
   font-size: 1.2rem;
 }
 
-/* Mobile Optimization — menu cards */
+/* Mobile Optimization — menu rows */
 @media (max-width: 768px) {
   .bolt-menu-section {
     padding: 15px;
@@ -3431,15 +3428,31 @@ body.menu-page,
     font-size: 20px;
   }
 
-  .bolt-food-list {
-    grid-template-columns: 1fr;
-    gap: 14px;
+  .bolt-food-card-inner {
+    gap: 12px;
+    padding: 12px 14px;
+  }
+
+  .bolt-food-img-wrap {
+    width: 90px;
+    height: 90px;
+    border-radius: 12px;
+  }
+
+  .bolt-food-right {
+    gap: 10px;
   }
 
   .bolt-food-add-btn {
-    min-width: 44px;
-    height: 44px;
-    padding: 0 14px;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    font-size: 1.05rem;
+  }
+
+  .bolt-food-add-btn--success {
+    min-width: 70px;
+    padding: 0 8px;
   }
 
   .bolt-cart-feedback {
@@ -3454,9 +3467,15 @@ body.menu-page,
   }
 }
 
-@media (min-width: 600px) and (max-width: 900px) {
-  .bolt-food-list {
-    grid-template-columns: repeat(2, 1fr);
+@media (max-width: 380px) {
+  .bolt-food-img-wrap {
+    width: 80px;
+    height: 80px;
+  }
+
+  .bolt-food-card-inner {
+    padding: 10px 12px;
+    gap: 10px;
   }
 }
 

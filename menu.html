@@ -1142,21 +1142,21 @@
             updateCartBadge();
         }
 
-        /** Premium card: success state on add (+1 flyout, button ✓, pulse). */
+        /** Premium row: success state on add (+1 flyout, button ✓, pulse). */
         function playFoodCardAddedSuccess(btn) {
             if (!btn) return;
             const card = btn.closest('.bolt-food-item');
-            const footer = btn.closest('.bolt-food-footer');
+            const flyAnchor = btn.closest('.bolt-food-footer') || btn.closest('.bolt-food-right');
             if (!btn.dataset.defaultLabel) btn.dataset.defaultLabel = '+';
             btn.disabled = true;
             btn.textContent = '\u2713 Added';
             btn.classList.add('bolt-food-add-btn--success');
             if (card) card.classList.add('bolt-food-item--pulse');
-            if (footer) {
+            if (flyAnchor) {
                 const fly = document.createElement('span');
                 fly.className = 'bolt-food-flyout';
                 fly.textContent = '+1';
-                footer.appendChild(fly);
+                flyAnchor.appendChild(fly);
                 setTimeout(function () {
                     if (fly.parentNode) fly.parentNode.removeChild(fly);
                 }, 1000);
@@ -1184,7 +1184,7 @@
             });
         }
 
-        // Create food item (premium card DOM — no inline handlers; safe text nodes)
+        // Create food item — compact horizontal row (original footprint) + premium styling
         function createFoodItem(item, categoryId) {
             const div = document.createElement('div');
             div.className = 'bolt-food-item';
@@ -1193,8 +1193,27 @@
             const inner = document.createElement('div');
             inner.className = 'bolt-food-card-inner';
 
-            const media = document.createElement('div');
-            media.className = 'bolt-food-media';
+            const content = document.createElement('div');
+            content.className = 'bolt-food-content';
+
+            const nameEl = document.createElement('div');
+            nameEl.className = 'bolt-food-name';
+            nameEl.textContent = item.name;
+
+            const descEl = document.createElement('div');
+            descEl.className = 'bolt-food-description';
+            descEl.textContent = item.description;
+
+            const priceEl = document.createElement('div');
+            priceEl.className = 'bolt-food-price';
+            priceEl.textContent = 'GH¢' + item.price.toFixed(2);
+
+            content.appendChild(nameEl);
+            content.appendChild(descEl);
+            content.appendChild(priceEl);
+
+            const right = document.createElement('div');
+            right.className = 'bolt-food-right';
 
             const wrap = document.createElement('div');
             wrap.className = 'bolt-food-img-wrap';
@@ -1223,28 +1242,6 @@
 
             wrap.appendChild(shimmer);
             wrap.appendChild(img);
-            media.appendChild(wrap);
-
-            const body = document.createElement('div');
-            body.className = 'bolt-food-body';
-
-            const content = document.createElement('div');
-            content.className = 'bolt-food-content';
-
-            const nameEl = document.createElement('div');
-            nameEl.className = 'bolt-food-name';
-            nameEl.textContent = item.name;
-
-            const descEl = document.createElement('div');
-            descEl.className = 'bolt-food-description';
-            descEl.textContent = item.description;
-
-            const footer = document.createElement('div');
-            footer.className = 'bolt-food-footer';
-
-            const priceEl = document.createElement('div');
-            priceEl.className = 'bolt-food-price';
-            priceEl.textContent = 'GH¢' + item.price.toFixed(2);
 
             const btn = document.createElement('button');
             btn.type = 'button';
@@ -1254,14 +1251,11 @@
             btn.setAttribute('data-item-price', String(item.price));
             btn.setAttribute('aria-label', 'Add ' + item.name + ' to cart');
 
-            footer.appendChild(priceEl);
-            footer.appendChild(btn);
-            content.appendChild(nameEl);
-            content.appendChild(descEl);
-            content.appendChild(footer);
-            body.appendChild(content);
-            inner.appendChild(media);
-            inner.appendChild(body);
+            right.appendChild(wrap);
+            right.appendChild(btn);
+
+            inner.appendChild(content);
+            inner.appendChild(right);
             div.appendChild(inner);
             return div;
         }
