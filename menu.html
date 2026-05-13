@@ -1265,14 +1265,35 @@
 
         // Initialize everything on page load
         document.addEventListener('DOMContentLoaded', function() {
-            loadCartFromStorage(); // Load cart first
-            initializeMenu();
-            initializeCategoryNav();
-            updateStickyCartBar(); // Initialize sticky cart bar
+            console.log('Menu page initializing...');
+            
+            // Load cart first
+            loadCartFromStorage();
+            
+            // Initialize menu with error handling
+            try {
+                initializeMenu();
+                console.log('Menu initialized successfully');
+            } catch (error) {
+                console.error('Error initializing menu:', error);
+            }
+            
+            // Initialize category navigation with error handling
+            try {
+                initializeCategoryNav();
+                console.log('Category navigation initialized');
+            } catch (error) {
+                console.error('Error initializing category navigation:', error);
+            }
+            
+            // Initialize sticky cart bar
+            updateStickyCartBar();
             
             // Copyright year
             const yearSpan = document.getElementById('copyright-year');
             if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+            
+            console.log('Menu page initialization complete');
         });
 
     </script>
@@ -2280,51 +2301,10 @@
                 badge.style.display = cartCount > 0 ? 'flex' : 'none';
             }
             
-            // Update sticky cart bar
             updateStickyCartBar();
         }
         
-        // Update Sticky Cart Bar
-        function updateStickyCartBar() {
-            const cart = JSON.parse(localStorage.getItem('craveCart')) || [];
-            const cartCount = cart.length;
-            const stickyCartBar = document.getElementById('stickyCartBar');
-            const stickyCartCount = document.getElementById('stickyCartCount');
-            const stickyCartItems = document.getElementById('stickyCartItems');
-            const stickyCartTotal = document.getElementById('stickyCartTotal');
-            
-            if (!stickyCartBar) return;
-            
-            // Calculate total
-            let total = 0;
-            cart.forEach(item => {
-                const itemTotal = (item.basePrice || 0) + 
-                    (item.customizations?.reduce((sum, opt) => sum + (opt.price || 0), 0) || 0) +
-                    (item.addons?.reduce((sum, addon) => sum + (addon.price || 0), 0) || 0);
-                total += itemTotal * (item.quantity || 1);
-            });
-            
-            // Update content
-            if (stickyCartCount) {
-                stickyCartCount.textContent = cartCount;
-            }
-            
-            if (stickyCartItems) {
-                stickyCartItems.textContent = `${cartCount} ${cartCount === 1 ? 'item' : 'items'}`;
-            }
-            
-            if (stickyCartTotal) {
-                stickyCartTotal.textContent = total.toFixed(2);
-            }
-            
-            // Show/hide bar based on cart content
-            if (cartCount > 0) {
-                stickyCartBar.classList.add('active');
-            } else {
-                stickyCartBar.classList.remove('active');
-            }
-        }
-        
+                
         // Animate cart icon on item add
         function animateCartIcon() {
             const cartIcon = document.querySelector('.sticky-cart-icon');
