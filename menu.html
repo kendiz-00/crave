@@ -839,7 +839,6 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="bolt-menu-search-chips" id="boltMenuSearchChips" aria-label="Search suggestions"></div>
             <div class="bolt-menu-search-empty" id="boltMenuSearchEmpty" hidden role="status" aria-live="polite">
                 <p class="bolt-menu-search-empty-title">No delicious matches found <span aria-hidden="true">🍴</span></p>
                 <p class="bolt-menu-search-empty-sub">Try a trending pick or scroll the categories above.</p>
@@ -1515,39 +1514,6 @@
             updateActiveCategory();
         }
 
-        var MENU_SEARCH_RECENT_KEY = 'craveMenuRecentSearches';
-        var MENU_SEARCH_TRENDING = [
-            { q: 'loaded fries', label: '🔥 Loaded Fries' },
-            { q: 'smoothies', label: '🥤 Smoothies' },
-            { q: 'burger', label: '🍔 Burgers' },
-            { q: 'spicy chicken', label: '🌶 Spicy Chicken' },
-            { q: 'taco', label: '🌮 Tacos' },
-            { q: 'jar cake', label: '🧁 Desserts' },
-            { q: 'wings', label: '🍗 Wings' },
-            { q: 'breakfast', label: '☀️ Breakfast' }
-        ];
-
-        function loadMenuRecentSearches() {
-            try {
-                var raw = localStorage.getItem(MENU_SEARCH_RECENT_KEY);
-                var arr = raw ? JSON.parse(raw) : [];
-                return Array.isArray(arr) ? arr : [];
-            } catch (e2) {
-                return [];
-            }
-        }
-
-        function saveMenuRecentSearch(q) {
-            q = String(q).trim().toLowerCase();
-            if (q.length < 2) return;
-            var arr = loadMenuRecentSearches().filter(function (x) { return x !== q; });
-            arr.unshift(q);
-            arr = arr.slice(0, 8);
-            try {
-                localStorage.setItem(MENU_SEARCH_RECENT_KEY, JSON.stringify(arr));
-            } catch (e3) { /* quota */ }
-        }
-
         function menuSearchTokensMatch(haystack, q) {
             if (!q) return true;
             var t = q.trim().toLowerCase().replace(/\s+/g, ' ');
@@ -1558,38 +1524,6 @@
                 if (haystack.indexOf(tokens[i]) === -1) return false;
             }
             return true;
-        }
-
-        function renderMenuSearchChips(chipsEl) {
-            if (!chipsEl) return;
-            chipsEl.innerHTML = '';
-            var recent = loadMenuRecentSearches();
-            if (recent.length) {
-                var rl = document.createElement('span');
-                rl.className = 'bolt-menu-search-chips-label';
-                rl.textContent = 'Recent';
-                chipsEl.appendChild(rl);
-                recent.slice(0, 4).forEach(function (q) {
-                    chipsEl.appendChild(createMenuSearchChip(q, q, 'bolt-search-chip--recent'));
-                });
-            }
-            var tl = document.createElement('span');
-            tl.className = 'bolt-menu-search-chips-label';
-            tl.textContent = 'Trending';
-            chipsEl.appendChild(tl);
-            MENU_SEARCH_TRENDING.forEach(function (row) {
-                chipsEl.appendChild(createMenuSearchChip(row.q, row.label, 'bolt-search-chip--trend'));
-            });
-        }
-
-        function createMenuSearchChip(query, labelHtml, extraClass) {
-            var b = document.createElement('button');
-            b.type = 'button';
-            b.className = 'bolt-search-chip ' + (extraClass || '');
-            b.setAttribute('data-search-query', query);
-            b.setAttribute('aria-label', 'Search for ' + query);
-            b.textContent = labelHtml;
-            return b;
         }
 
         var menuSearchDebounceTimer = null;
@@ -1628,10 +1562,7 @@
             var clearBtn = document.getElementById('boltMenuSearchClear');
             var wrap = document.getElementById('boltMenuSearchWrap');
             var searchBar = wrap ? wrap.querySelector('.bolt-menu-search') : null;
-            var chipsEl = document.getElementById('boltMenuSearchChips');
             if (!input || !wrap) return;
-
-            renderMenuSearchChips(chipsEl);
 
             function syncClear() {
                 var v = input.value.trim();
@@ -1660,25 +1591,9 @@
             }
             input.addEventListener('keydown', function (ev) {
                 if (ev.key === 'Enter') {
-                    var v = input.value.trim();
-                    if (v.length >= 2) saveMenuRecentSearch(v);
                     applyMenuSearchFilter(input.value);
                 }
             });
-            if (chipsEl) {
-                chipsEl.addEventListener('click', function (ev) {
-                    var chip = ev.target.closest('.bolt-search-chip');
-                    if (!chip) return;
-                    var q = chip.getAttribute('data-search-query');
-                    if (q == null) return;
-                    input.value = q;
-                    syncClear();
-                    saveMenuRecentSearch(q);
-                    renderMenuSearchChips(chipsEl);
-                    applyMenuSearchFilter(q);
-                    input.focus();
-                });
-            }
             syncClear();
         }
 
