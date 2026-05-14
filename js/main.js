@@ -193,138 +193,23 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /**
- * Initialize Navbar Behavior (toggle + sticky shadow)
+ * Navbar: active link + scroll shadow (no mobile drawer — links always visible).
  */
 function initNavbarBehavior() {
-  const navbarToggle = document.getElementById('navbarToggle');
   const navbarMenu = document.getElementById('navbarMenu');
   const navbarHeader = document.getElementById('siteHeader') || document.querySelector('.navbar-header');
   const navbarLinks = document.querySelectorAll('.navbar-link');
 
-  let navBackdropEl = null;
-
-  function ensureNavBackdrop() {
-    if (navBackdropEl) return navBackdropEl;
-    navBackdropEl = document.createElement('div');
-    navBackdropEl.className = 'navbar-drawer-backdrop';
-    navBackdropEl.id = 'navbarDrawerBackdrop';
-    navBackdropEl.setAttribute('aria-hidden', 'true');
-    navBackdropEl.addEventListener('click', closeMobileMenu);
-    document.body.appendChild(navBackdropEl);
-    return navBackdropEl;
+  if (navbarMenu) {
+    navbarMenu.setAttribute('aria-hidden', 'false');
   }
 
-  function setNavDrawerOpen(isOpen) {
-    document.body.classList.toggle('nav-mobile-open', isOpen);
-    const bd = ensureNavBackdrop();
-    bd.classList.toggle('is-visible', isOpen);
-    bd.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
-  }
-
-  function closeMobileMenu() {
-    setNavDrawerOpen(false);
-    if (navbarMenu) {
-      navbarMenu.classList.remove('open');
-      syncNavAriaDesktop();
-    }
-    if (navbarToggle) {
-      navbarToggle.classList.remove('open');
-      navbarToggle.setAttribute('aria-expanded', 'false');
-      navbarToggle.focus();
-    }
-    document.body.style.overflow = '';
-    document.removeEventListener('keydown', trapTabKey);
-  }
-
-  function syncNavAriaDesktop() {
-    if (!navbarMenu) return;
-    if (window.innerWidth > 768) {
-      navbarMenu.setAttribute('aria-hidden', 'false');
-    } else if (!navbarMenu.classList.contains('open')) {
-      navbarMenu.setAttribute('aria-hidden', 'true');
-    }
-  }
-
-  function updateFocusTrap() {
-    const focusable = navbarMenu.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])');
-    const focusArray = Array.from(focusable);
-    return {
-      first: focusArray[0],
-      last: focusArray[focusArray.length - 1],
-    };
-  }
-
-  function trapTabKey(e) {
-    if (!navbarMenu.classList.contains('open')) return;
-    if (e.key === 'Escape') {
-      closeMobileMenu();
-      return;
-    }
-    if (e.key !== 'Tab') return;
-
-    const { first, last } = updateFocusTrap();
-    if (!first || !last) return;
-
-    if (e.shiftKey) {
-      if (document.activeElement === first || document.activeElement === navbarToggle) {
-        e.preventDefault();
-        last.focus();
-      }
-    } else {
-      if (document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    }
-  }
-
-  if (navbarToggle && navbarMenu) {
-    navbarToggle.addEventListener('click', function(event) {
-      event.stopPropagation();
+  navbarLinks.forEach(link => {
+    link.addEventListener('click', function() {
       if (window.CraveHaptic) window.CraveHaptic.tap();
-      if (window.CraveSound) window.CraveSound.tap();
-      navbarMenu.classList.toggle('open');
-      const isOpen = navbarMenu.classList.contains('open');
-      navbarToggle.classList.toggle('open', isOpen);
-      navbarToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-      navbarMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
-      document.body.style.overflow = isOpen ? 'hidden' : '';
-      setNavDrawerOpen(isOpen);
-
-      if (isOpen) {
-        const { first } = updateFocusTrap();
-        if (first) first.focus();
-        document.addEventListener('keydown', trapTabKey);
-      } else {
-        document.removeEventListener('keydown', trapTabKey);
-      }
     });
-
-    navbarLinks.forEach(link => {
-      link.addEventListener('click', function() {
-        if (window.CraveHaptic) window.CraveHaptic.tap();
-        if (window.innerWidth <= 768) {
-          closeMobileMenu();
-        }
-      });
-    });
-
-    document.addEventListener('click', function(event) {
-      if (!event.target.closest('.navbar-container')) {
-        closeMobileMenu();
-      }
-    });
-  }
-
-  window.addEventListener('resize', function() {
-    if (navbarToggle && navbarMenu && window.innerWidth > 768) {
-      closeMobileMenu();
-    }
-    syncNavAriaDesktop();
   });
-  syncNavAriaDesktop();
 
-  // Active link highlight based on current page path
   const path = window.location.pathname.split('/').pop().toLowerCase() || 'index.html';
   const pageName = path === '' ? 'index.html' : path;
 
