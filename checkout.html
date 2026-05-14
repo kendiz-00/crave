@@ -336,12 +336,11 @@
 
                 <!-- Empty Cart State -->
                 <div class="checkout-empty-cart" id="emptyCartState" style="display: none;">
-                    <div class="checkout-empty-cart-icon">
-                        <i class="fas fa-shopping-cart"></i>
-                    </div>
-                    <div class="checkout-empty-cart-text">Your cart is empty</div>
+                    <div class="checkout-empty-cart-icon" aria-hidden="true">🍟</div>
+                    <div class="checkout-empty-cart-text">Your cravings are waiting…</div>
+                    <p class="checkout-empty-cart-sub">Add something delicious to continue.</p>
                     <a href="menu.html" class="checkout-empty-cart-link">
-                        <i class="fas fa-arrow-left"></i> Back to Menu
+                        Browse Menu
                     </a>
                 </div>
 
@@ -971,7 +970,8 @@
             // Show success feedback
             setTimeout(() => {
                 button.innerHTML = '<i class="fas fa-check"></i> Opening WhatsApp...';
-                
+                if (window.CraveSound) window.CraveSound.success();
+
                 // Generate WhatsApp message
                 const message = generateWhatsAppMessage(orderData);
 
@@ -1258,6 +1258,7 @@
             
             // Show success message
             showPaymentMessage('Payment successful! Processing your order...', 'success');
+            if (window.CraveSound) window.CraveSound.success();
             
             // Send order confirmation to WhatsApp (for order tracking)
             sendOrderConfirmation(orderData, amount, response.reference);

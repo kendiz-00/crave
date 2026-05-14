@@ -86,7 +86,31 @@
 
         .empty-cart {
             text-align: center;
-            padding: 60px 20px;
+            padding: 56px 22px 48px;
+            border-radius: 22px;
+            border: 1px dashed rgba(212, 175, 55, 0.22);
+            background: linear-gradient(165deg, rgba(18, 18, 18, 0.75) 0%, rgba(12, 12, 12, 0.55) 100%);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+
+        .empty-cart-visual {
+            font-size: 3.25rem;
+            line-height: 1;
+            margin: 0 auto 16px;
+            display: inline-block;
+            filter: drop-shadow(0 6px 20px rgba(212, 175, 55, 0.2));
+            animation: emptyCartFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes emptyCartFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .empty-cart-visual { animation: none; }
         }
 
         .empty-icon {
@@ -97,34 +121,50 @@
 
         .empty-title {
             font-family: 'Poppins', sans-serif;
-            font-size: 1.5rem;
-            color: #fff;
-            margin: 0 0 10px 0;
+            font-size: clamp(1.35rem, 4vw, 1.65rem);
+            font-weight: 600;
+            color: #fafafa;
+            margin: 0 0 12px 0;
+            letter-spacing: -0.02em;
         }
 
         .empty-text {
             font-family: 'Poppins', sans-serif;
-            color: rgba(255, 255, 255, 0.6);
-            margin: 0 0 30px 0;
+            color: rgba(255, 255, 255, 0.55);
+            margin: 0 0 28px 0;
+            font-size: 0.98rem;
+            line-height: 1.55;
+            max-width: 320px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .browse-menu-btn {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
-            padding: 14px 28px;
-            background: linear-gradient(135deg, #d4a574 0%, #c19660 100%);
-            color: #fff;
+            padding: 15px 32px;
+            background: linear-gradient(135deg, #d4a574 0%, #b88a5a 100%);
+            color: #111;
             text-decoration: none;
-            border-radius: 30px;
+            border-radius: 999px;
             font-family: 'Poppins', sans-serif;
             font-weight: 600;
-            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 6px 24px rgba(212, 165, 116, 0.35);
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
         }
 
         .browse-menu-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(212, 165, 116, 0.4);
+            box-shadow: 0 10px 32px rgba(212, 165, 116, 0.45);
+            color: #111;
+        }
+
+        .browse-menu-btn:active {
+            transform: translateY(0);
         }
 
         .cart-items {
@@ -454,13 +494,11 @@
             <div class="cart-content">
                 <!-- Empty State -->
                 <div class="empty-cart" id="emptyCart">
-                    <div class="empty-icon">
-                        <i class="fas fa-shopping-bag"></i>
-                    </div>
-                    <h2 class="empty-title">Your cart is empty 🛒</h2>
-                    <p class="empty-text">Start adding delicious items from our menu</p>
+                    <div class="empty-cart-visual" aria-hidden="true">🍟</div>
+                    <h2 class="empty-title">Your cravings are waiting…</h2>
+                    <p class="empty-text">Your cart is empty for now. Treat yourself—pick something irresistible from the menu.</p>
                     <a href="menu.html" class="browse-menu-btn">
-                        <i class="fas fa-search"></i>
+                        <i class="fas fa-utensils" aria-hidden="true"></i>
                         Browse Menu
                     </a>
                 </div>

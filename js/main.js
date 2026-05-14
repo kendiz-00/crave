@@ -1,3 +1,74 @@
+/**
+ * Subtle UI sounds (Web Audio). Very low gain; skipped when prefers-reduced-motion.
+ */
+const CraveSound = (function () {
+  let ctx = null;
+
+  function getCtx() {
+    if (typeof window === 'undefined') return null;
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    try {
+      if (!ctx) ctx = new AC();
+    } catch (e) {
+      return null;
+    }
+    return ctx;
+  }
+
+  function muted() {
+    return (
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    );
+  }
+
+  function resume(ac) {
+    if (ac && ac.state === 'suspended') {
+      ac.resume().catch(function () {});
+    }
+  }
+
+  function playTone(ac, freq, peak, dur, type, startAt) {
+    const o = ac.createOscillator();
+    const g = ac.createGain();
+    const t0 = startAt != null ? startAt : ac.currentTime;
+    o.type = type || 'sine';
+    o.frequency.setValueAtTime(freq, t0);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(Math.max(peak, 0.0002), t0 + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g);
+    g.connect(ac.destination);
+    o.start(t0);
+    o.stop(t0 + dur + 0.03);
+  }
+
+  return {
+    tap() {
+      const ac = getCtx();
+      if (!ac || muted()) return;
+      resume(ac);
+      playTone(ac, 658, 0.042, 0.065, 'sine');
+    },
+    modalOpen() {
+      const ac = getCtx();
+      if (!ac || muted()) return;
+      resume(ac);
+      playTone(ac, 392, 0.03, 0.095, 'triangle');
+    },
+    success() {
+      const ac = getCtx();
+      if (!ac || muted()) return;
+      resume(ac);
+      const t0 = ac.currentTime;
+      playTone(ac, 523.25, 0.048, 0.1, 'sine', t0);
+      playTone(ac, 783.99, 0.036, 0.14, 'sine', t0 + 0.072);
+    },
+  };
+})();
+window.CraveSound = CraveSound;
+
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
   // Navbar toggle and sticky behavior
@@ -78,10 +149,31 @@ function initNavbarBehavior() {
   const navbarHeader = document.getElementById('siteHeader') || document.querySelector('.navbar-header');
   const navbarLinks = document.querySelectorAll('.navbar-link');
 
+  let navBackdropEl = null;
+
+  function ensureNavBackdrop() {
+    if (navBackdropEl) return navBackdropEl;
+    navBackdropEl = document.createElement('div');
+    navBackdropEl.className = 'navbar-drawer-backdrop';
+    navBackdropEl.id = 'navbarDrawerBackdrop';
+    navBackdropEl.setAttribute('aria-hidden', 'true');
+    navBackdropEl.addEventListener('click', closeMobileMenu);
+    document.body.appendChild(navBackdropEl);
+    return navBackdropEl;
+  }
+
+  function setNavDrawerOpen(isOpen) {
+    document.body.classList.toggle('nav-mobile-open', isOpen);
+    const bd = ensureNavBackdrop();
+    bd.classList.toggle('is-visible', isOpen);
+    bd.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+  }
+
   function closeMobileMenu() {
+    setNavDrawerOpen(false);
     if (navbarMenu) {
       navbarMenu.classList.remove('open');
-      navbarMenu.setAttribute('aria-hidden', 'true');
+      syncNavAriaDesktop();
     }
     if (navbarToggle) {
       navbarToggle.classList.remove('open');
@@ -90,6 +182,15 @@ function initNavbarBehavior() {
     }
     document.body.style.overflow = '';
     document.removeEventListener('keydown', trapTabKey);
+  }
+
+  function syncNavAriaDesktop() {
+    if (!navbarMenu) return;
+    if (window.innerWidth > 768) {
+      navbarMenu.setAttribute('aria-hidden', 'false');
+    } else if (!navbarMenu.classList.contains('open')) {
+      navbarMenu.setAttribute('aria-hidden', 'true');
+    }
   }
 
   function updateFocusTrap() {
@@ -103,6 +204,10 @@ function initNavbarBehavior() {
 
   function trapTabKey(e) {
     if (!navbarMenu.classList.contains('open')) return;
+    if (e.key === 'Escape') {
+      closeMobileMenu();
+      return;
+    }
     if (e.key !== 'Tab') return;
 
     const { first, last } = updateFocusTrap();
@@ -130,6 +235,7 @@ function initNavbarBehavior() {
       navbarToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
       navbarMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
       document.body.style.overflow = isOpen ? 'hidden' : '';
+      setNavDrawerOpen(isOpen);
 
       if (isOpen) {
         const { first } = updateFocusTrap();
@@ -153,13 +259,15 @@ function initNavbarBehavior() {
         closeMobileMenu();
       }
     });
-
-    window.addEventListener('resize', function() {
-      if (window.innerWidth > 768) {
-        closeMobileMenu();
-      }
-    });
   }
+
+  window.addEventListener('resize', function() {
+    if (navbarToggle && navbarMenu && window.innerWidth > 768) {
+      closeMobileMenu();
+    }
+    syncNavAriaDesktop();
+  });
+  syncNavAriaDesktop();
 
   // Active link highlight based on current page path
   const path = window.location.pathname.split('/').pop().toLowerCase() || 'index.html';
@@ -546,6 +654,7 @@ function initSimpleCart() {
       
       // Save to localStorage
       localStorage.setItem('craveCart', JSON.stringify(cart));
+      if (window.CraveSound) window.CraveSound.tap();
       
       // Update displays
       updateCartDisplay();
@@ -662,6 +771,7 @@ function initMenuCart() {
       }
 
       localStorage.setItem('craveCart', JSON.stringify(cart));
+      if (window.CraveSound) window.CraveSound.tap();
       updateCartSummary();
       if (qtyInput) qtyInput.value = 1;
       return;

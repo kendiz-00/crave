@@ -810,9 +810,9 @@
 
                 <div class="navbar-menu" id="navbarMenu">
                     <ul class="navbar-menu-list">
-                        <li class="navbar-menu-item"><a href="index.html" class="navbar-link">Home</a></li>
-                        <li class="navbar-menu-item"><a href="menu.html" class="navbar-link active">Menu</a></li>
-                        <li class="navbar-menu-item"><a href="about.html" class="navbar-link">About</a></li>
+                        <li class="navbar-menu-item"><a href="index.html" class="navbar-link" data-page="home">Home</a></li>
+                        <li class="navbar-menu-item"><a href="menu.html" class="navbar-link" data-page="menu">Menu</a></li>
+                        <li class="navbar-menu-item"><a href="about.html" class="navbar-link" data-page="about">About</a></li>
                     </ul>
                 </div>
             </div>
@@ -1746,6 +1746,7 @@
                     cartItems.push(cartItem);
                     cartCount = cartItems.length;
                     localStorage.setItem('craveCart', JSON.stringify(cartItems));
+                    if (window.CraveSound) window.CraveSound.tap();
                     updateCartBadge({ bump: true });
                     showCartFeedback(itemName);
                     playFoodCardAddedSuccess(btn);
@@ -2418,6 +2419,7 @@
             const modal = document.getElementById('foodCustomizationModal');
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
+            if (window.CraveSound) window.CraveSound.modalOpen();
         }
         
         // Close Food Modal
@@ -2713,7 +2715,8 @@
             let cart = JSON.parse(localStorage.getItem('craveCart')) || [];
             cart.push(cartItem);
             localStorage.setItem('craveCart', JSON.stringify(cart));
-            
+            if (window.CraveSound) window.CraveSound.tap();
+
             // Update cart badge + row success (same UX as quick-add)
             updateCartBadge({ bump: true });
             showCartFeedback(currentFoodItem);
