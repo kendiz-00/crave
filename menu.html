@@ -1072,6 +1072,45 @@
             }
         };
 
+        const MENU_BADGE_DEFS = {
+            bestseller: { label: 'Bestseller', icon: '🔥', cls: 'bolt-badge--gold' },
+            hot: { label: 'Extra Hot', icon: '🌶', cls: 'bolt-badge--ember' },
+            chef: { label: 'Chef Favorite', icon: '🧁', cls: 'bolt-badge--chef' },
+            fast: { label: 'Fast Selling', icon: '⚡', cls: 'bolt-badge--fast' },
+            refresh: { label: 'Refreshing', icon: '🥤', cls: 'bolt-badge--cool' }
+        };
+
+        function inferItemBadges(item, categoryId, indexInCategory) {
+            const seen = new Set();
+            const out = [];
+            function push(id) {
+                if (!MENU_BADGE_DEFS[id] || seen.has(id)) return;
+                seen.add(id);
+                out.push(id);
+            }
+            if (Array.isArray(item.badges)) item.badges.forEach(push);
+            if (categoryId === 'most-popular' && typeof indexInCategory === 'number' && indexInCategory < 4) {
+                push('bestseller');
+            }
+            const n = item.name;
+            if (/Insanity|insanity|Siracha|Hot Wings/i.test(n)) push('hot');
+            if (/Jar Cake|Buttercream|Cake Slice|Biscoff|Pistachio|Guava|Bailey/i.test(n)) push('chef');
+            if (/smoothie|Colada|Watermelon|Lemonade|Blend|Glow|Strawberries and Cream|Banana Peanut|Pineapple Strawberry/i.test(n)) push('refresh');
+            if (/Loaded Fries|Shawarma|BBQ Chicken Cheddar|Ultimate Bacon|Jerk Chicken/i.test(n)) push('fast');
+            return out.slice(0, 3);
+        }
+
+        function getItemRatingDisplay(item, categoryId, indexInCategory) {
+            if (item.rating != null && item.rating !== '') return String(item.rating);
+            const ids = inferItemBadges(item, categoryId, indexInCategory);
+            if (ids.includes('bestseller') || ids.includes('fast')) return '4.9';
+            return null;
+        }
+
+        function itemHasCustomization(name) {
+            return typeof foodCustomizations !== 'undefined' && !!foodCustomizations[name];
+        }
+
         // Cart functionality
         let cartItems = [];
         let cartCount = 0;
@@ -1146,7 +1185,7 @@
         function playFoodCardAddedSuccess(btn) {
             if (!btn) return;
             const card = btn.closest('.bolt-food-item');
-            const flyAnchor = btn.closest('.bolt-food-footer') || btn.closest('.bolt-food-right');
+            const flyAnchor = btn.closest('.bolt-food-visual') || btn.closest('.bolt-food-right');
             if (!btn.dataset.defaultLabel) btn.dataset.defaultLabel = '+';
             btn.disabled = true;
             btn.textContent = '\u2713 Added';
@@ -1176,16 +1215,16 @@
                 const container = document.getElementById(`${categoryId}-items`);
                 
                 if (container) {
-                    category.items.forEach(item => {
-                        const foodItem = createFoodItem(item, categoryId);
+                    category.items.forEach(function (menuEntry, idx) {
+                        const foodItem = createFoodItem(menuEntry, categoryId, idx);
                         container.appendChild(foodItem);
                     });
                 }
             });
         }
 
-        // Create food item — compact horizontal row (original footprint) + premium styling
-        function createFoodItem(item, categoryId) {
+        // Create food item — Bolt-style listing: main column + image with floating +
+        function createFoodItem(item, categoryId, indexInCategory) {
             const div = document.createElement('div');
             div.className = 'bolt-food-item';
             div.dataset.itemRef = encodeURIComponent(item.name);
@@ -1193,8 +1232,8 @@
             const inner = document.createElement('div');
             inner.className = 'bolt-food-card-inner';
 
-            const content = document.createElement('div');
-            content.className = 'bolt-food-content';
+            const main = document.createElement('div');
+            main.className = 'bolt-food-main';
 
             const nameEl = document.createElement('div');
             nameEl.className = 'bolt-food-name';
@@ -1204,16 +1243,68 @@
             descEl.className = 'bolt-food-description';
             descEl.textContent = item.description;
 
-            const priceEl = document.createElement('div');
+            main.appendChild(nameEl);
+            main.appendChild(descEl);
+
+            const badgeIds = inferItemBadges(item, categoryId, indexInCategory);
+            if (badgeIds.length > 0) {
+                const badgesRow = document.createElement('div');
+                badgesRow.className = 'bolt-food-badges';
+                badgeIds.forEach(function (id) {
+                    const def = MENU_BADGE_DEFS[id];
+                    if (!def) return;
+                    const b = document.createElement('span');
+                    b.className = 'bolt-food-badge ' + def.cls;
+                    b.setAttribute('role', 'presentation');
+                    b.textContent = def.icon + ' ' + def.label;
+                    badgesRow.appendChild(b);
+                });
+                main.appendChild(badgesRow);
+            }
+
+            const meta = document.createElement('div');
+            meta.className = 'bolt-food-meta';
+
+            const priceRow = document.createElement('div');
+            priceRow.className = 'bolt-food-price-row';
+            const priceEl = document.createElement('span');
             priceEl.className = 'bolt-food-price';
             priceEl.textContent = 'GH¢' + item.price.toFixed(2);
+            priceRow.appendChild(priceEl);
+            meta.appendChild(priceRow);
 
-            content.appendChild(nameEl);
-            content.appendChild(descEl);
-            content.appendChild(priceEl);
+            if (itemHasCustomization(item.name)) {
+                const hint = document.createElement('div');
+                hint.className = 'bolt-food-customize-hint';
+                hint.textContent = 'Customize available';
+                meta.appendChild(hint);
+            }
 
-            const right = document.createElement('div');
-            right.className = 'bolt-food-right';
+            const ratingStr = getItemRatingDisplay(item, categoryId, indexInCategory);
+            if (ratingStr) {
+                const rating = document.createElement('div');
+                rating.className = 'bolt-food-rating';
+                const star = document.createElement('span');
+                star.className = 'bolt-food-rating-star';
+                star.setAttribute('aria-hidden', 'true');
+                star.textContent = '\u2605';
+                const num = document.createElement('span');
+                num.className = 'bolt-food-rating-num';
+                num.textContent = ratingStr;
+                const muted = document.createElement('span');
+                muted.className = 'bolt-food-rating-muted';
+                muted.textContent = ' \u00b7 Guest favorite';
+                rating.appendChild(star);
+                rating.appendChild(document.createTextNode(' '));
+                rating.appendChild(num);
+                rating.appendChild(muted);
+                meta.appendChild(rating);
+            }
+
+            main.appendChild(meta);
+
+            const visual = document.createElement('div');
+            visual.className = 'bolt-food-visual';
 
             const wrap = document.createElement('div');
             wrap.className = 'bolt-food-img-wrap';
@@ -1245,17 +1336,19 @@
 
             const btn = document.createElement('button');
             btn.type = 'button';
-            btn.className = 'bolt-food-add-btn';
+            btn.className = 'bolt-food-add-btn bolt-food-add-btn--float';
             btn.textContent = '+';
             btn.setAttribute('data-item-name', encodeURIComponent(item.name));
             btn.setAttribute('data-item-price', String(item.price));
-            btn.setAttribute('aria-label', 'Add ' + item.name + ' to cart');
+            btn.setAttribute('aria-label', itemHasCustomization(item.name)
+                ? ('Customize and add ' + item.name)
+                : ('Add ' + item.name + ' to cart'));
 
-            right.appendChild(wrap);
-            right.appendChild(btn);
+            visual.appendChild(wrap);
+            visual.appendChild(btn);
 
-            inner.appendChild(content);
-            inner.appendChild(right);
+            inner.appendChild(main);
+            inner.appendChild(visual);
             div.appendChild(inner);
             return div;
         }
