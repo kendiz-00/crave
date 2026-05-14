@@ -833,6 +833,25 @@
             </div>
         </nav>
 
+        <!-- Premium app-style menu search -->
+        <div class="bolt-menu-search-wrap" id="boltMenuSearchWrap">
+            <div class="bolt-menu-search" role="search">
+                <span class="bolt-menu-search-icon-wrap" aria-hidden="true"><i class="fas fa-search"></i></span>
+                <input type="search" id="boltMenuSearchInput" class="bolt-menu-search-input"
+                    placeholder="Search burgers, fries, smoothies…"
+                    autocomplete="off" autocorrect="off" spellcheck="false"
+                    enterkeyhint="search" aria-label="Search menu items and categories">
+                <button type="button" class="bolt-menu-search-clear" id="boltMenuSearchClear" aria-label="Clear search" hidden>
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="bolt-menu-search-chips" id="boltMenuSearchChips" aria-label="Search suggestions"></div>
+            <div class="bolt-menu-search-empty" id="boltMenuSearchEmpty" hidden role="status" aria-live="polite">
+                <p class="bolt-menu-search-empty-title">No delicious matches found <span aria-hidden="true">🍴</span></p>
+                <p class="bolt-menu-search-empty-sub">Try a trending pick or scroll the categories above.</p>
+            </div>
+        </div>
+
         <!-- Most Popular Section -->
         <section id="most-popular" class="bolt-menu-section">
             <h2 class="bolt-section-title">Most Popular</h2>
@@ -1350,7 +1369,36 @@
             inner.appendChild(main);
             inner.appendChild(visual);
             div.appendChild(inner);
+
+            const catTitle = (menuData[categoryId] && menuData[categoryId].title) ? menuData[categoryId].title : '';
+            const badgeLabels = badgeIds.map(function (bid) {
+                const d = MENU_BADGE_DEFS[bid];
+                return d ? (d.label + ' ' + d.icon) : '';
+            }).join(' ');
+            const extraKw = categorySearchKeywords(categoryId);
+            div.dataset.categoryId = categoryId;
+            div.dataset.searchHaystack = [
+                item.name,
+                item.description,
+                catTitle,
+                categoryId.replace(/-/g, ' '),
+                badgeLabels,
+                extraKw
+            ].join(' ').toLowerCase();
+
             return div;
+        }
+
+        function categorySearchKeywords(categoryId) {
+            const map = {
+                'most-popular': 'popular trending bestseller',
+                'texas-chicken': 'chicken wings burger sandwich fries crispy texas bbq hot spicy',
+                'mexican-food': 'mexican burrito taco tacos beef',
+                'cupcakes': 'dessert cake jar sweet cupcake pastry',
+                'breakfast': 'morning waffle omelette egg brunch',
+                'smoothies': 'smoothie drink juice colada refreshing fruit blend shake'
+            };
+            return map[categoryId] || '';
         }
 
         // Get food image based on name
@@ -1473,6 +1521,173 @@
             updateActiveCategory();
         }
 
+        var MENU_SEARCH_RECENT_KEY = 'craveMenuRecentSearches';
+        var MENU_SEARCH_TRENDING = [
+            { q: 'loaded fries', label: '🔥 Loaded Fries' },
+            { q: 'smoothies', label: '🥤 Smoothies' },
+            { q: 'burger', label: '🍔 Burgers' },
+            { q: 'spicy chicken', label: '🌶 Spicy Chicken' },
+            { q: 'taco', label: '🌮 Tacos' },
+            { q: 'jar cake', label: '🧁 Desserts' },
+            { q: 'wings', label: '🍗 Wings' },
+            { q: 'breakfast', label: '☀️ Breakfast' }
+        ];
+
+        function loadMenuRecentSearches() {
+            try {
+                var raw = localStorage.getItem(MENU_SEARCH_RECENT_KEY);
+                var arr = raw ? JSON.parse(raw) : [];
+                return Array.isArray(arr) ? arr : [];
+            } catch (e2) {
+                return [];
+            }
+        }
+
+        function saveMenuRecentSearch(q) {
+            q = String(q).trim().toLowerCase();
+            if (q.length < 2) return;
+            var arr = loadMenuRecentSearches().filter(function (x) { return x !== q; });
+            arr.unshift(q);
+            arr = arr.slice(0, 8);
+            try {
+                localStorage.setItem(MENU_SEARCH_RECENT_KEY, JSON.stringify(arr));
+            } catch (e3) { /* quota */ }
+        }
+
+        function menuSearchTokensMatch(haystack, q) {
+            if (!q) return true;
+            var t = q.trim().toLowerCase().replace(/\s+/g, ' ');
+            if (!t) return true;
+            var tokens = t.split(' ').filter(Boolean);
+            if (!tokens.length) return true;
+            for (var i = 0; i < tokens.length; i++) {
+                if (haystack.indexOf(tokens[i]) === -1) return false;
+            }
+            return true;
+        }
+
+        function renderMenuSearchChips(chipsEl) {
+            if (!chipsEl) return;
+            chipsEl.innerHTML = '';
+            var recent = loadMenuRecentSearches();
+            if (recent.length) {
+                var rl = document.createElement('span');
+                rl.className = 'bolt-menu-search-chips-label';
+                rl.textContent = 'Recent';
+                chipsEl.appendChild(rl);
+                recent.slice(0, 4).forEach(function (q) {
+                    chipsEl.appendChild(createMenuSearchChip(q, q, 'bolt-search-chip--recent'));
+                });
+            }
+            var tl = document.createElement('span');
+            tl.className = 'bolt-menu-search-chips-label';
+            tl.textContent = 'Trending';
+            chipsEl.appendChild(tl);
+            MENU_SEARCH_TRENDING.forEach(function (row) {
+                chipsEl.appendChild(createMenuSearchChip(row.q, row.label, 'bolt-search-chip--trend'));
+            });
+        }
+
+        function createMenuSearchChip(query, labelHtml, extraClass) {
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'bolt-search-chip ' + (extraClass || '');
+            b.setAttribute('data-search-query', query);
+            b.setAttribute('aria-label', 'Search for ' + query);
+            b.textContent = labelHtml;
+            return b;
+        }
+
+        var menuSearchDebounceTimer = null;
+
+        function applyMenuSearchFilter(rawQuery) {
+            var q = String(rawQuery || '').trim().toLowerCase();
+            var cards = document.querySelectorAll('.bolt-food-item');
+            var total = 0;
+            for (var i = 0; i < cards.length; i++) {
+                var c = cards[i];
+                var hay = c.getAttribute('data-search-haystack') || '';
+                var ok = menuSearchTokensMatch(hay, q);
+                if (ok) total++;
+                c.classList.toggle('bolt-menu-search-miss', !!q && !ok);
+            }
+            document.querySelectorAll('.bolt-menu-section').forEach(function (sec) {
+                var vis = sec.querySelectorAll('.bolt-food-item:not(.bolt-menu-search-miss)').length;
+                sec.classList.toggle('bolt-menu-section--search-empty', !!q && vis === 0);
+            });
+            var emptyEl = document.getElementById('boltMenuSearchEmpty');
+            if (emptyEl) {
+                var showEmpty = !!q && total === 0;
+                emptyEl.hidden = !showEmpty;
+            }
+        }
+
+        function queueMenuSearchApply(value) {
+            clearTimeout(menuSearchDebounceTimer);
+            menuSearchDebounceTimer = setTimeout(function () {
+                applyMenuSearchFilter(value);
+            }, 100);
+        }
+
+        function initBoltMenuSearch() {
+            var input = document.getElementById('boltMenuSearchInput');
+            var clearBtn = document.getElementById('boltMenuSearchClear');
+            var wrap = document.getElementById('boltMenuSearchWrap');
+            var searchBar = wrap ? wrap.querySelector('.bolt-menu-search') : null;
+            var chipsEl = document.getElementById('boltMenuSearchChips');
+            if (!input || !wrap) return;
+
+            renderMenuSearchChips(chipsEl);
+
+            function syncClear() {
+                var v = input.value.trim();
+                if (clearBtn) clearBtn.hidden = !v;
+            }
+
+            input.addEventListener('input', function () {
+                syncClear();
+                queueMenuSearchApply(input.value);
+            });
+            input.addEventListener('focus', function () {
+                wrap.classList.add('bolt-menu-search-wrap--focus');
+                if (searchBar) searchBar.classList.add('is-focused');
+            });
+            input.addEventListener('blur', function () {
+                wrap.classList.remove('bolt-menu-search-wrap--focus');
+                if (searchBar) searchBar.classList.remove('is-focused');
+            });
+            if (clearBtn) {
+                clearBtn.addEventListener('click', function () {
+                    input.value = '';
+                    syncClear();
+                    applyMenuSearchFilter('');
+                    input.focus();
+                });
+            }
+            input.addEventListener('keydown', function (ev) {
+                if (ev.key === 'Enter') {
+                    var v = input.value.trim();
+                    if (v.length >= 2) saveMenuRecentSearch(v);
+                    applyMenuSearchFilter(input.value);
+                }
+            });
+            if (chipsEl) {
+                chipsEl.addEventListener('click', function (ev) {
+                    var chip = ev.target.closest('.bolt-search-chip');
+                    if (!chip) return;
+                    var q = chip.getAttribute('data-search-query');
+                    if (q == null) return;
+                    input.value = q;
+                    syncClear();
+                    saveMenuRecentSearch(q);
+                    renderMenuSearchChips(chipsEl);
+                    applyMenuSearchFilter(q);
+                    input.focus();
+                });
+            }
+            syncClear();
+        }
+
         // Initialize everything on page load
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Menu page initializing...');
@@ -1487,7 +1702,12 @@
             } catch (error) {
                 console.error('Error initializing menu:', error);
             }
-            
+
+            try {
+                initBoltMenuSearch();
+            } catch (eSearch) {
+                console.error('Menu search init failed:', eSearch);
+            }            
             // Delegated add-to-cart (premium cards)
             const menuRoot = document.querySelector('.bolt-menu-container');
             if (menuRoot) {
