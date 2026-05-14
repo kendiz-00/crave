@@ -1,5 +1,6 @@
 /**
- * Subtle UI sounds (Web Audio). Very low gain; skipped when prefers-reduced-motion.
+ * Subtle UI sounds (Web Audio). Skipped when prefers-reduced-motion.
+ * Tap: short dual-layer tone — cleaner, slightly louder, app-like “tick”.
  */
 const CraveSound = (function () {
   let ctx = null;
@@ -36,12 +37,12 @@ const CraveSound = (function () {
     o.type = type || 'sine';
     o.frequency.setValueAtTime(freq, t0);
     g.gain.setValueAtTime(0.0001, t0);
-    g.gain.exponentialRampToValueAtTime(Math.max(peak, 0.0002), t0 + 0.012);
+    g.gain.exponentialRampToValueAtTime(Math.max(peak, 0.0002), t0 + 0.008);
     g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
     o.connect(g);
     g.connect(ac.destination);
     o.start(t0);
-    o.stop(t0 + dur + 0.03);
+    o.stop(t0 + dur + 0.02);
   }
 
   return {
@@ -49,28 +50,79 @@ const CraveSound = (function () {
       const ac = getCtx();
       if (!ac || muted()) return;
       resume(ac);
-      playTone(ac, 658, 0.042, 0.065, 'sine');
+      const t0 = ac.currentTime;
+      playTone(ac, 988, 0.085, 0.042, 'sine', t0);
+      playTone(ac, 1568, 0.038, 0.028, 'triangle', t0 + 0.003);
     },
     modalOpen() {
       const ac = getCtx();
       if (!ac || muted()) return;
       resume(ac);
-      playTone(ac, 392, 0.03, 0.095, 'triangle');
+      const t0 = ac.currentTime;
+      playTone(ac, 440, 0.042, 0.072, 'triangle', t0);
+      playTone(ac, 660, 0.032, 0.055, 'sine', t0 + 0.028);
+      if (window.CraveHaptic) window.CraveHaptic.tap();
     },
     success() {
       const ac = getCtx();
       if (!ac || muted()) return;
       resume(ac);
       const t0 = ac.currentTime;
-      playTone(ac, 523.25, 0.048, 0.1, 'sine', t0);
-      playTone(ac, 783.99, 0.036, 0.14, 'sine', t0 + 0.072);
+      playTone(ac, 523.25, 0.055, 0.095, 'sine', t0);
+      playTone(ac, 783.99, 0.042, 0.12, 'sine', t0 + 0.065);
+      if (window.CraveHaptic) window.CraveHaptic.softDouble();
     },
   };
 })();
 window.CraveSound = CraveSound;
 
+/** Short haptic patterns via navigator.vibrate — skipped when reduced-motion. */
+const CraveHaptic = (function () {
+  function off() {
+    return (
+      typeof navigator === 'undefined' ||
+      typeof navigator.vibrate !== 'function' ||
+      (typeof window.matchMedia === 'function' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+    );
+  }
+
+  function pulse(pattern) {
+    if (off()) return;
+    try {
+      navigator.vibrate(pattern);
+    } catch (e) {}
+  }
+
+  return {
+    tap() {
+      pulse(12);
+    },
+    softDouble() {
+      pulse([10, 22, 14]);
+    },
+  };
+})();
+window.CraveHaptic = CraveHaptic;
+
+function initCravePremiumTactileCapture() {
+  document.addEventListener(
+    'click',
+    function (e) {
+      const el = e.target && e.target.closest && e.target.closest(
+        '.bolt-floating-cart, #floatingCartBtn, .sticky-cart-hit, a.sticky-cart-hit'
+      );
+      if (!el) return;
+      if (window.CraveHaptic) window.CraveHaptic.tap();
+      if (window.CraveSound) window.CraveSound.tap();
+    },
+    true
+  );
+}
+
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
+  initCravePremiumTactileCapture();
   // Navbar toggle and sticky behavior
   initNavbarBehavior();
   
@@ -229,6 +281,8 @@ function initNavbarBehavior() {
   if (navbarToggle && navbarMenu) {
     navbarToggle.addEventListener('click', function(event) {
       event.stopPropagation();
+      if (window.CraveHaptic) window.CraveHaptic.tap();
+      if (window.CraveSound) window.CraveSound.tap();
       navbarMenu.classList.toggle('open');
       const isOpen = navbarMenu.classList.contains('open');
       navbarToggle.classList.toggle('open', isOpen);
@@ -248,6 +302,7 @@ function initNavbarBehavior() {
 
     navbarLinks.forEach(link => {
       link.addEventListener('click', function() {
+        if (window.CraveHaptic) window.CraveHaptic.tap();
         if (window.innerWidth <= 768) {
           closeMobileMenu();
         }
@@ -291,23 +346,6 @@ function initNavbarBehavior() {
 
   window.addEventListener('scroll', updateHeaderShadow, { passive: true });
   updateHeaderShadow();
-  initAdaptiveMenuSizing();
-}
-
-function initAdaptiveMenuSizing() {
-  const mql = window.matchMedia('(max-width: 768px)');
-  const navbarLinks = document.querySelectorAll('.navbar-link');
-
-  function applySizing() {
-    const isCompact = mql.matches;
-    navbarLinks.forEach(link => {
-      link.style.fontSize = isCompact ? '16px' : '15px';
-      link.style.padding = isCompact ? '12px 18px' : '0.5rem 0.65rem';
-    });
-  }
-
-  mql.addEventListener('change', applySizing);
-  applySizing();
 }
 
 
@@ -655,6 +693,7 @@ function initSimpleCart() {
       // Save to localStorage
       localStorage.setItem('craveCart', JSON.stringify(cart));
       if (window.CraveSound) window.CraveSound.tap();
+      if (window.CraveHaptic) window.CraveHaptic.softDouble();
       
       // Update displays
       updateCartDisplay();
@@ -772,7 +811,7 @@ function initMenuCart() {
 
       localStorage.setItem('craveCart', JSON.stringify(cart));
       if (window.CraveSound) window.CraveSound.tap();
-      updateCartSummary();
+      if (window.CraveHaptic) window.CraveHaptic.softDouble();
       if (qtyInput) qtyInput.value = 1;
       return;
     }
