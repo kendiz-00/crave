@@ -170,8 +170,34 @@ function initCraveReengagement() {
     if (cartItems.length) {
       return cartItems[Math.floor(Math.random() * cartItems.length)].title;
     }
-    const fallback = ['Jerk Chicken', 'Loaded Fries', 'Artisan Coffee', 'Truffle Pasta', 'Spicy Wings', 'Red Velvet Cupcake'];
+    const fallback = ['Grilled Chicken Salad', 'Loaded Fries', 'Artisan Coffee', 'Truffle Pasta', 'Fresh Smoothie', 'Jerk Chicken', 'Red Velvet Cupcake'];
     return fallback[Math.floor(Math.random() * fallback.length)];
+  }
+
+  // A/B test helpers: assign a sticky group per session and record impressions
+  function assignABGroup() {
+    const g = Math.random() < 0.5 ? 'A' : 'B';
+    sessionStorage.setItem('craveAB_group', g);
+    return g;
+  }
+
+  function getABGroup() {
+    return sessionStorage.getItem('craveAB_group') || assignABGroup();
+  }
+
+  function recordImpression(type, variant) {
+    try {
+      const key = `craveAB_impr_${type}_${variant}`;
+      const n = Number(sessionStorage.getItem(key) || '0') + 1;
+      sessionStorage.setItem(key, String(n));
+      // update debug overlay and dispatch analytics
+      try { updateDebugOverlay(); } catch (e) {}
+      try { enqueueAnalytics({ type: type, variant: variant, count: n, ts: Date.now() }); } catch (e) {}
+    } catch (e) {}
+  }
+
+  function getImpressionCount(type, variant) {
+    return Number(sessionStorage.getItem(`craveAB_impr_${type}_${variant}`) || '0');
   }
 
   function createContainers() {
@@ -209,7 +235,138 @@ function initCraveReengagement() {
       </div>
     `;
     document.body.appendChild(modal);
+    // create debug overlay if requested
+    if (localStorage.getItem('craveReengage_debug') === '1') createDebugOverlay();
   }
+
+  /* Debug overlay and analytics export */
+  function createDebugOverlay() {
+    if (document.getElementById('craveReengageDebug')) return;
+    const o = document.createElement('aside');
+    o.id = 'craveReengageDebug';
+    o.className = 'crave-reengage-debug';
+    o.setAttribute('aria-hidden', 'true');
+    o.innerHTML = `
+      <div class="crave-reengage-debug__inner">
+        <header class="crave-reengage-debug__hdr">Crave Reengage — Debug</header>
+        <div class="crave-reengage-debug__body">
+          <div>Group: <span id="craveReengageDebug_group">-</span></div>
+          <div>Social A: <span id="craveReengageDebug_social_A">0</span></div>
+          <div>Social B: <span id="craveReengageDebug_social_B">0</span></div>
+          <div>Feed A: <span id="craveReengageDebug_feed_A">0</span></div>
+          <div>Feed B: <span id="craveReengageDebug_feed_B">0</span></div>
+          <div>Notifs shown: <span id="craveReengageDebug_notifs">0</span></div>
+        </div>
+        <div class="crave-reengage-debug__footer"><button id="craveReengageDebug_close">Close</button></div>
+      </div>
+    `;
+    document.body.appendChild(o);
+    document.getElementById('craveReengageDebug_close').addEventListener('click', function() {
+      o.style.display = 'none';
+      localStorage.removeItem('craveReengage_debug');
+    });
+    updateDebugOverlay();
+  }
+
+  function updateDebugOverlay() {
+    const g = getABGroup();
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = String(v); };
+    set('craveReengageDebug_group', g);
+    set('craveReengageDebug_social_A', getImpressionCount('social','A'));
+    set('craveReengageDebug_social_B', getImpressionCount('social','B'));
+    set('craveReengageDebug_feed_A', getImpressionCount('feed','A'));
+    set('craveReengageDebug_feed_B', getImpressionCount('feed','B'));
+    set('craveReengageDebug_notifs', getNotificationCount());
+  }
+
+  function sendAnalytics(type, variant, count) {
+    // Deprecated: batching is used via enqueueAnalytics/flushAnalytics
+    try {
+      const payload = { event: 'crave_reengage_impression', type, variant, count, group: getABGroup(), path: window.location.pathname, ts: Date.now() };
+      if (window.console && window.console.log) console.log('sendAnalytics (legacy):', payload);
+    } catch (e) {}
+  }
+
+  // Analytics queue + flush
+  const _analyticsQueue = [];
+  function enqueueAnalytics(evt) {
+    try {
+      _analyticsQueue.push(evt);
+      // persist small queue to sessionStorage for resilience (trim to last 50)
+      try {
+        const copy = _analyticsQueue.slice(-50);
+        sessionStorage.setItem('craveAB_queue', JSON.stringify(copy));
+      } catch (e) {}
+    } catch (e) {}
+  }
+
+  function flushAnalytics() {
+    try {
+      const cfg = window.CraveReengageConfig || {};
+      const url = cfg.analyticsUrl || (document.querySelector('meta[name="crave-analytics-url"]') || {}).content;
+      if (!url) return;
+      // Rehydrate persisted queue
+      try {
+        const stored = JSON.parse(sessionStorage.getItem('craveAB_queue') || '[]');
+        if (stored && stored.length) {
+          // merge into _analyticsQueue start
+          stored.forEach(s => _analyticsQueue.unshift(s));
+        }
+      } catch (e) {}
+      if (_analyticsQueue.length === 0) return;
+      const batch = _analyticsQueue.splice(0, 50);
+      // clear persisted copy
+      try { sessionStorage.removeItem('craveAB_queue'); } catch (e) {}
+      const payload = { event: 'crave_reengage_batch', items: batch, path: window.location.pathname, ts: Date.now() };
+      const body = JSON.stringify(payload);
+      if (navigator.sendBeacon) {
+        try {
+          const blob = new Blob([body], { type: 'application/json' });
+          navigator.sendBeacon(url, blob);
+          return;
+        } catch (e) {}
+      }
+      // fallback fetch
+      fetch(url, { method: 'POST', body, headers: { 'Content-Type': 'application/json' }, keepalive: true }).catch(function(){});
+    } catch (e) {}
+  }
+
+  // periodic flush and unload flush
+  let _analyticsFlushInterval = null;
+  function startAnalyticsFlushInterval() {
+    if (_analyticsFlushInterval) return;
+    _analyticsFlushInterval = window.setInterval(flushAnalytics, 10000);
+    window.addEventListener('beforeunload', function() {
+      try {
+        // attempt final flush via sendBeacon synchronously
+        const cfg = window.CraveReengageConfig || {};
+        const url = cfg.analyticsUrl || (document.querySelector('meta[name="crave-analytics-url"]') || {}).content;
+        if (!url) return;
+        const stored = JSON.parse(sessionStorage.getItem('craveAB_queue') || '[]');
+        const all = _analyticsQueue.concat(stored);
+        if (!all || all.length === 0) return;
+        const payload = { event: 'crave_reengage_batch', items: all, path: window.location.pathname, ts: Date.now() };
+        const body = JSON.stringify(payload);
+        if (navigator.sendBeacon) {
+          const blob = new Blob([body], { type: 'application/json' });
+          navigator.sendBeacon(url, blob);
+        }
+      } catch (e) {}
+    });
+  }
+
+  // Toggle debug overlay with Ctrl+Shift+D
+  document.addEventListener('keydown', function (e) {
+    if (e.ctrlKey && e.shiftKey && e.key && e.key.toLowerCase() === 'd') {
+      if (localStorage.getItem('craveReengage_debug') === '1') {
+        localStorage.removeItem('craveReengage_debug');
+        const el = document.getElementById('craveReengageDebug'); if (el) el.style.display = 'none';
+      } else {
+        localStorage.setItem('craveReengage_debug', '1');
+        createDebugOverlay();
+      }
+    }
+  }, false);
 
   function closeModal() {
     const modal = document.getElementById(modalId);
@@ -295,12 +452,34 @@ function initCraveReengagement() {
   function showSocialProofNotification() {
     if (getCartCount() === 0) return;
     const itemName = getActivityItemName();
-    const guestCount = Math.floor(Math.random() * 3) + 2;
+    const safeName = itemName || getActivityItemName();
+    const customerCount = Math.floor(Math.random() * 3) + 2;
+
+    const group = getABGroup();
+    // Variant A: conversational templates. Variant B: emoji + urgency CTA.
+    const templatesA = [
+      `Just now, ${customerCount} customers nearby added ${safeName} — looks tasty!`,
+      `Hot now: ${safeName} was added by ${customerCount} customers nearby.`,
+      `Loved by locals: ${customerCount} nearby added ${safeName} to their orders.`,
+      `${customerCount} people just added ${safeName} — grab yours while it's fresh!`
+    ];
+    const templatesB = [
+      `🔥 ${safeName} was just added by ${customerCount} nearby — trending now!`,
+      `⏳ ${customerCount} customers grabbed ${safeName} just now — limited plates left.`,
+      `⭐ ${safeName} is hot — ${customerCount} nearby added it to their orders.`
+    ];
+
+    const pool = group === 'B' ? templatesB : templatesA;
+    const template = pool[Math.floor(Math.random() * pool.length)];
+
+    // Record impression for this AB group
+    recordImpression('social', group);
+
     showMessageCard({
       title: 'Live order update',
-      body: `Just now, ${guestCount} guests nearby added ${itemName} to their order.`,
+      body: template,
       badge: 'Live',
-      actionText: 'Continue browsing',
+      actionText: group === 'B' ? 'Order now' : 'View menu',
       actionType: 'dismiss'
     });
   }
@@ -330,7 +509,16 @@ function initCraveReengagement() {
     if (getCartCount() === 0) return;
     activityTimer = window.setTimeout(() => {
       if (getCartCount() === 0) return;
-      showActivityFeed(`A guest just added ${getActivityItemName()} to their order.`);
+      const activityName = getActivityItemName();
+      const feedVariants = [
+        `A customer added ${activityName} to their order.`,
+        `${activityName} just got added to an order.`,
+        `Someone nearby chose ${activityName}.`
+      ];
+      const group = getABGroup();
+      // Record feed impression per AB group
+      recordImpression('feed', group);
+      showActivityFeed(feedVariants[Math.floor(Math.random() * feedVariants.length)]);
       if (getNotificationCount() < maxNotifications) {
         showSocialProofNotification();
       }
@@ -417,6 +605,8 @@ function initCraveReengagement() {
     showReturnVisitorMessage();
     scheduleInactivityTimer();
     scheduleActivityCycle();
+    // start analytics flush interval
+    startAnalyticsFlushInterval();
   }
 
   init();

@@ -1842,6 +1842,30 @@ form button:hover {
   }
 }
 
+/* Debug overlay */
+.crave-reengage-debug {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 16000;
+  width: 260px;
+  pointer-events: auto;
+  font-family: 'Poppins', sans-serif;
+}
+.crave-reengage-debug__inner {
+  background: rgba(12,12,12,0.9);
+  color: #fff;
+  border: 1px solid rgba(212,175,55,0.12);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.crave-reengage-debug__hdr { font-weight: 700; color: #e8d8a8; margin-bottom: 8px; }
+.crave-reengage-debug__body div { font-size: 13px; margin: 6px 0; }
+.crave-reengage-debug__footer { text-align: right; margin-top: 8px; }
+.crave-reengage-debug__footer button { background: rgba(255,255,255,0.06); color: #fff; border: none; padding: 6px 8px; border-radius: 8px; cursor: pointer; }
+
 .cart-instructions {
   margin-bottom: 1.5rem;
 }
@@ -8559,8 +8583,9 @@ section {
 .featured-food-card {
     position: absolute;
     top: 50%;
-    right: -30px;
-    transform: translateY(-50%);
+    left: 50%;
+    right: auto;
+    transform: translate(-50%, -50%);
     background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(212, 163, 116, 0.3);
@@ -8574,7 +8599,7 @@ section {
 }
 
 .featured-food-card:hover {
-    transform: translateY(-50%) scale(1.02);
+    transform: translate(-50%, -50%) scale(1.02);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
     border-color: rgba(212, 163, 116, 0.5);
 }
@@ -8582,11 +8607,11 @@ section {
 @keyframes slideInRight {
     from {
         opacity: 0;
-        transform: translateY(-50%) translateX(40px);
+        transform: translate(-50%, -50%) translateX(40px);
     }
     to {
         opacity: 1;
-        transform: translateY(-50%) translateX(0);
+        transform: translate(-50%, -50%) translateX(0);
     }
 }
 
