@@ -120,6 +120,308 @@ function initCravePremiumTactileCapture() {
   );
 }
 
+function initCraveReengagement() {
+  const rootId = 'craveReengageRoot';
+  const feedId = 'craveReengageFeed';
+  const modalId = 'craveReengageExitModal';
+  const maxNotifications = 2;
+  const inactivityDelay = 25000;
+  const prefersReducedMotion = typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let inactivityTimer = null;
+  let activityTimer = null;
+  let modalOpen = false;
+
+  function readFlag(name) {
+    return sessionStorage.getItem(name) === '1';
+  }
+
+  function writeFlag(name) {
+    sessionStorage.setItem(name, '1');
+  }
+
+  function getNotificationCount() {
+    return Number(sessionStorage.getItem('craveReengageCount') || '0');
+  }
+
+  function incrementNotificationCount() {
+    sessionStorage.setItem('craveReengageCount', String(getNotificationCount() + 1));
+  }
+
+  function getCartCount() {
+    return getCartItemCount(getStoredCart());
+  }
+
+  function getCartItems() {
+    return Object.values(getStoredCart());
+  }
+
+  function getPrimaryCartSummary() {
+    const items = getCartItems();
+    if (!items.length) return 'Your selections are still ready while the kitchen prepares them.';
+    const first = items[0];
+    if (items.length === 1) {
+      return `${first.quantity} x ${first.title} is still waiting in your cart.`;
+    }
+    return `${first.title} and ${items.length - 1} other item${items.length > 2 ? 's' : ''} are waiting in your cart.`;
+  }
+
+  function getActivityItemName() {
+    const cartItems = getCartItems();
+    if (cartItems.length) {
+      return cartItems[Math.floor(Math.random() * cartItems.length)].title;
+    }
+    const fallback = ['Jerk Chicken', 'Loaded Fries', 'Artisan Coffee', 'Truffle Pasta', 'Spicy Wings', 'Red Velvet Cupcake'];
+    return fallback[Math.floor(Math.random() * fallback.length)];
+  }
+
+  function createContainers() {
+    if (document.getElementById(rootId)) return;
+
+    const root = document.createElement('div');
+    root.id = rootId;
+    root.className = 'crave-reengage-root';
+    root.setAttribute('aria-live', 'polite');
+    root.setAttribute('aria-atomic', 'false');
+    document.body.appendChild(root);
+
+    const feed = document.createElement('div');
+    feed.id = feedId;
+    feed.className = 'crave-reengage-feed';
+    feed.setAttribute('aria-live', 'polite');
+    feed.setAttribute('aria-atomic', 'false');
+    document.body.appendChild(feed);
+
+    const modal = document.createElement('div');
+    modal.id = modalId;
+    modal.className = 'crave-reengage-modal';
+    modal.setAttribute('aria-hidden', 'true');
+    modal.innerHTML = `
+      <div class="crave-reengage-modal__backdrop"></div>
+      <div class="crave-reengage-modal__panel" role="dialog" aria-modal="true" aria-labelledby="${modalId}-title">
+        <button type="button" class="crave-reengage-modal__close" aria-label="Close notification">×</button>
+        <p class="crave-reengage-modal__eyebrow">Before you go...</p>
+        <h2 id="${modalId}-title" class="crave-reengage-modal__title">Your order is ready to continue.</h2>
+        <p class="crave-reengage-modal__text">We’re keeping your selected dishes warm while the kitchen finalizes the next service wave.</p>
+        <div class="crave-reengage-modal__actions">
+          <button type="button" class="crave-reengage-modal__btn" data-action="openCart">View cart</button>
+          <button type="button" class="crave-reengage-modal__btn crave-reengage-modal__btn--secondary" data-action="stay">Keep browsing</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+
+  function closeModal() {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    modalOpen = false;
+    resetInactivityTimer();
+  }
+
+  function openModal() {
+    const modal = document.getElementById(modalId);
+    if (!modal || modalOpen) return;
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    modalOpen = true;
+    if (window.CraveSound) window.CraveSound.modalOpen();
+    writeFlag('craveReengageExitShown');
+  }
+
+  function showMessageCard({ title, body, badge, actionText, actionType }) {
+    if (getNotificationCount() >= maxNotifications) return;
+    const root = document.getElementById(rootId);
+    if (!root) return;
+
+    const card = document.createElement('article');
+    card.className = 'crave-reengage-card';
+    card.innerHTML = `
+      <div class="crave-reengage-card__header">
+        <span class="crave-reengage-card__badge">${badge || 'Live update'}</span>
+      </div>
+      <div class="crave-reengage-card__body">
+        <strong class="crave-reengage-card__title">${title}</strong>
+        <p class="crave-reengage-card__text">${body}</p>
+      </div>
+      ${actionText ? `<div class="crave-reengage-card__action"><button type="button" class="crave-reengage-card__button" data-action="${actionType}">${actionText}</button></div>` : ''}
+    `;
+
+    root.appendChild(card);
+    window.requestAnimationFrame(() => card.classList.add('is-visible'));
+    incrementNotificationCount();
+    if (window.CraveSound) window.CraveSound.tap();
+    if (window.CraveHaptic) window.CraveHaptic.softDouble();
+
+    const timeout = prefersReducedMotion ? 4500 : 5200;
+    window.setTimeout(() => {
+      card.classList.remove('is-visible');
+      window.setTimeout(() => {
+        if (card.parentNode) card.parentNode.removeChild(card);
+      }, 320);
+    }, timeout);
+  }
+
+  function showActivityFeed(text) {
+    const feed = document.getElementById(feedId);
+    if (!feed) return;
+
+    const item = document.createElement('div');
+    item.className = 'crave-reengage-feed__item';
+    item.textContent = text;
+    feed.appendChild(item);
+    window.requestAnimationFrame(() => item.classList.add('is-visible'));
+
+    window.setTimeout(() => {
+      item.classList.remove('is-visible');
+      window.setTimeout(() => {
+        if (item.parentNode) item.parentNode.removeChild(item);
+      }, 200);
+    }, 5200);
+  }
+
+  function showInactivityNotification() {
+    if (getCartCount() === 0) return;
+    showMessageCard({
+      title: 'Your order is waiting',
+      body: getPrimaryCartSummary(),
+      badge: 'Ready',
+      actionText: 'View cart',
+      actionType: 'openCart'
+    });
+  }
+
+  function showSocialProofNotification() {
+    if (getCartCount() === 0) return;
+    const itemName = getActivityItemName();
+    const guestCount = Math.floor(Math.random() * 3) + 2;
+    showMessageCard({
+      title: 'Live order update',
+      body: `Just now, ${guestCount} guests nearby added ${itemName} to their order.`,
+      badge: 'Live',
+      actionText: 'Continue browsing',
+      actionType: 'dismiss'
+    });
+  }
+
+  function scheduleInactivityTimer() {
+    if (inactivityTimer) {
+      window.clearTimeout(inactivityTimer);
+      inactivityTimer = null;
+    }
+    if (getCartCount() === 0 || getNotificationCount() >= maxNotifications || modalOpen) return;
+    inactivityTimer = window.setTimeout(() => {
+      if (getCartCount() > 0 && !modalOpen) {
+        showInactivityNotification();
+        scheduleActivityCycle();
+      }
+    }, inactivityDelay);
+  }
+
+  function resetInactivityTimer() {
+    scheduleInactivityTimer();
+  }
+
+  function scheduleActivityCycle() {
+    if (activityTimer) {
+      window.clearTimeout(activityTimer);
+    }
+    if (getCartCount() === 0) return;
+    activityTimer = window.setTimeout(() => {
+      if (getCartCount() === 0) return;
+      showActivityFeed(`A guest just added ${getActivityItemName()} to their order.`);
+      if (getNotificationCount() < maxNotifications) {
+        showSocialProofNotification();
+      }
+      scheduleActivityCycle();
+    }, 12000 + Math.round(Math.random() * 9000));
+  }
+
+  function handleInteraction() {
+    if (modalOpen) return;
+    resetInactivityTimer();
+  }
+
+  function handleExitIntent(event) {
+    if (event.clientY <= 0 && getCartCount() > 0 && !readFlag('craveReengageExitShown') && !modalOpen) {
+      openModal();
+    }
+  }
+
+  function handleModalAction(event) {
+    const action = event.target.dataset.action;
+    if (!action) return;
+    if (action === 'openCart') {
+      window.location.href = 'cart.html';
+      return;
+    }
+    if (action === 'stay' || action === 'dismiss') {
+      closeModal();
+    }
+  }
+
+  function handleModalKeydown(event) {
+    if (event.key === 'Escape' && modalOpen) {
+      closeModal();
+    }
+  }
+
+  function handleModalClick(event) {
+    if (event.target.id === modalId || event.target.classList.contains('crave-reengage-modal__backdrop')) {
+      closeModal();
+    }
+  }
+
+  function showReturnVisitorMessage() {
+    const lastVisit = Number(localStorage.getItem('craveLastVisit'));
+    const now = Date.now();
+    if (lastVisit && !readFlag('craveReengageReturnShown')) {
+      const daysSince = Math.max(1, Math.round((now - lastVisit) / 86400000));
+      const bodyText = daysSince === 1
+        ? 'Glad to see you again today. Your favorites are still close by.'
+        : `Welcome back — it’s been ${daysSince} day${daysSince > 1 ? 's' : ''}. Your menu awaits.`;
+      showMessageCard({
+        title: 'Welcome back',
+        body: bodyText,
+        badge: 'Welcome',
+        actionText: 'Continue',
+        actionType: 'dismiss'
+      });
+      writeFlag('craveReengageReturnShown');
+    }
+    localStorage.setItem('craveLastVisit', String(now));
+  }
+
+  function init() {
+    createContainers();
+    document.addEventListener('click', handleInteraction, { passive: true });
+    document.addEventListener('keydown', handleInteraction, { passive: true });
+    document.addEventListener('scroll', handleInteraction, { passive: true });
+    document.addEventListener('touchstart', handleInteraction, { passive: true });
+    document.addEventListener('visibilitychange', function() {
+      if (!document.hidden) {
+        resetInactivityTimer();
+      }
+    });
+    document.addEventListener('mouseout', handleExitIntent);
+    document.addEventListener('keydown', handleModalKeydown);
+    const root = document.getElementById(rootId);
+    if (root) {
+      root.addEventListener('click', handleModalAction);
+    }
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.addEventListener('click', handleModalClick);
+    }
+    showReturnVisitorMessage();
+    scheduleInactivityTimer();
+    scheduleActivityCycle();
+  }
+
+  init();
+}
+
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
   initCravePremiumTactileCapture();
@@ -146,6 +448,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // SIMPLE WORKING CART SYSTEM
   initSimpleCart();
+  initCraveReengagement();
   
   // Initialize menu category scroll
   initMenuCategoryScroll();
@@ -654,8 +957,21 @@ function parsePrice(value) {
   return Number.isNaN(number) ? 0 : number;
 }
 
+function getStoredCart() {
+  return JSON.parse(localStorage.getItem('craveCart')) || {};
+}
+
+function setStoredCart(cart) {
+  localStorage.setItem('craveCart', JSON.stringify(cart));
+}
+
+function getCartItemCount(cart) {
+  return Object.values(cart || {}).reduce((total, item) => total + (item.quantity || 0), 0);
+}
+
 function updateCartSummary() {
-  const orderCount = Object.values(cart).reduce((total, item) => total + item.quantity, 0);
+  const cart = getStoredCart();
+  const orderCount = getCartItemCount(cart);
   const orderSummary = document.getElementById('orderCount');
   if (orderSummary) {
     orderSummary.textContent = orderCount > 0 ? `Cart: ${orderCount} item${orderCount > 1 ? 's' : ''}` : 'Cart is empty';
@@ -663,18 +979,21 @@ function updateCartSummary() {
 }
 
 function clearCart() {
+  const cart = getStoredCart();
   Object.keys(cart).forEach(key => delete cart[key]);
-  localStorage.setItem('craveCart', JSON.stringify(cart));
+  setStoredCart(cart);
   updateCartSummary();
 }
 
 function buildWhatsAppCartMessage() {
+  const cart = getStoredCart();
   const lines = Object.values(cart).map(item => `${item.quantity} x ${item.title} (${item.price})`);
   if (lines.length === 0) return '';
   return `Hi Crave, I'd like to order:\n${lines.join('\n')}`;
 }
 
 function initMenuCart() {
+  let cart = getStoredCart();
   document.addEventListener('click', function(event) {
     const target = event.target;
 
