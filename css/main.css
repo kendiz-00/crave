@@ -8813,11 +8813,14 @@ section {
     .featured-food-card {
         position: static;
         transform: none;
-        margin-top: 40px;
-        opacity: 1;
-        animation: fadeInUp 0.8s ease-out 1.3s forwards;
-        max-width: 280px;
-        margin: 0 auto;
+      display: block;
+      width: clamp(260px, 90vw, 280px);
+      max-width: 100%;
+      left: auto;
+      right: auto;
+      margin: 40px auto 0;
+      opacity: 1;
+      animation: fadeInUp 0.8s ease-out 1.3s forwards;
     }
     
     .featured-food-card:hover {
@@ -8874,9 +8877,12 @@ section {
     }
     
     .featured-food-card {
-        margin-top: 30px;
-        padding: 16px;
-        min-width: 260px;
+      display: block;
+      width: clamp(260px, 90vw, 280px);
+      max-width: 100%;
+      margin: 30px auto 0;
+      padding: 16px;
+      min-width: auto;
     }
     
     .featured-food-name {
