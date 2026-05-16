@@ -2274,6 +2274,7 @@
             document.body.style.overflow = 'hidden';
             document.documentElement.style.overflow = 'hidden';
             document.body.style.touchAction = 'none';
+            document.documentElement.style.touchAction = 'none';
             if (window.CraveSound) window.CraveSound.modalOpen();
         }
         
@@ -2287,12 +2288,42 @@
             document.documentElement.style.overflow = '';
             document.body.style.touchAction = '';
             document.documentElement.style.touchAction = '';
-            
-            // Generate main customization sections
+
+            const optionsContainer = document.getElementById('customizationOptions');
+            const addonsContainer = document.getElementById('recommendedAddons');
+            const specialRequests = document.getElementById('specialRequests');
+            if (optionsContainer) optionsContainer.innerHTML = '';
+            if (addonsContainer) addonsContainer.innerHTML = '';
+            if (specialRequests) specialRequests.value = '';
+
+            currentFoodItem = null;
+            currentQuantity = 1;
+            selectedOptions = {};
+            selectedAddons = [];
+            basePrice = 0;
+
+            if (window.CraveSound && typeof window.CraveSound.modalClose === 'function') {
+                window.CraveSound.modalClose();
+            }
+        }
+
+        function generateCustomizationOptions(foodName) {
+            const customization = foodCustomizations[foodName];
+            const optionsContainer = document.getElementById('customizationOptions');
+            const addonsContainer = document.getElementById('recommendedAddons');
+            if (!optionsContainer || !addonsContainer) return;
+
+            optionsContainer.innerHTML = '';
+            addonsContainer.innerHTML = '';
+            selectedOptions = {};
+            selectedAddons = [];
+
+            if (!customization) return;
+
             customization.options.forEach((section, sectionIndex) => {
                 const sectionDiv = document.createElement('div');
                 sectionDiv.className = 'customization-section';
-                
+
                 const sectionHeader = document.createElement('div');
                 sectionHeader.className = 'section-header';
                 sectionHeader.innerHTML = `
@@ -2300,77 +2331,82 @@
                     ${section.required ? '<span class="required-badge">Required</span>' : ''}
                 `;
                 sectionDiv.appendChild(sectionHeader);
-                
+
                 section.choices.forEach((choice, choiceIndex) => {
                     const optionDiv = document.createElement('div');
                     optionDiv.className = 'option-item';
-                    optionDiv.onclick = () => selectOption(sectionIndex, choiceIndex, section.type);
-                    
+                    optionDiv.addEventListener('click', function () {
+                        selectOption(sectionIndex, choiceIndex, section.type);
+                    });
+
                     const optionLeft = document.createElement('div');
                     optionLeft.className = 'option-left';
-                    
+
                     const indicator = document.createElement('div');
                     indicator.className = section.type === 'radio' ? 'custom-radio' : 'custom-checkbox';
                     indicator.id = `option-${sectionIndex}-${choiceIndex}`;
-                    
+
                     const optionName = document.createElement('span');
                     optionName.className = 'option-name';
                     optionName.textContent = choice.name;
-                    
+
                     optionLeft.appendChild(indicator);
                     optionLeft.appendChild(optionName);
-                    
+
                     const optionPrice = document.createElement('span');
                     optionPrice.className = 'option-price';
                     optionPrice.textContent = choice.price > 0 ? `+GHS ${choice.price}` : '';
-                    
+
                     optionDiv.appendChild(optionLeft);
                     optionDiv.appendChild(optionPrice);
                     sectionDiv.appendChild(optionDiv);
                 });
-                
-                container.appendChild(sectionDiv);
+
+                optionsContainer.appendChild(sectionDiv);
             });
-            
-            // Generate recommended addons section
+
             if (customization.recommendedAddons && customization.recommendedAddons.length > 0) {
                 const addonsTitle = document.createElement('h3');
                 addonsTitle.className = 'addons-title';
                 addonsTitle.textContent = 'Recommended Addons';
-                
+
                 const addonsGrid = document.createElement('div');
                 addonsGrid.className = 'addons-grid';
-                
+
                 customization.recommendedAddons.forEach((addon, index) => {
                     const addonDiv = document.createElement('div');
                     addonDiv.className = 'addon-item';
-                    addonDiv.onclick = () => toggleRecommendedAddon(addon, index);
-                    
+                    addonDiv.addEventListener('click', function () {
+                        toggleRecommendedAddon(addon, index);
+                    });
+
                     const addonImage = document.createElement('img');
                     addonImage.className = 'addon-image';
                     addonImage.src = `images/${addon.image}`;
                     addonImage.alt = addon.name;
-                    addonImage.onerror = () => { addonImage.src = 'images/placeholder.jpg'; };
-                    
+                    addonImage.onerror = function () {
+                        addonImage.src = 'images/placeholder.jpg';
+                    };
+
                     const addonName = document.createElement('div');
                     addonName.className = 'addon-name';
                     addonName.textContent = addon.name;
-                    
+
                     const addonPrice = document.createElement('div');
                     addonPrice.className = 'addon-price';
                     addonPrice.textContent = `GHS ${addon.price}`;
-                    
+
                     addonDiv.appendChild(addonImage);
                     addonDiv.appendChild(addonName);
                     addonDiv.appendChild(addonPrice);
                     addonsGrid.appendChild(addonDiv);
                 });
-                
+
                 addonsContainer.appendChild(addonsTitle);
                 addonsContainer.appendChild(addonsGrid);
             }
         }
-        
+
         // Recommended Addons State
         let selectedAddons = [];
         
