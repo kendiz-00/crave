@@ -1019,7 +1019,7 @@
         }
 
         function itemHasCustomization(name) {
-            return typeof foodCustomizations !== 'undefined' && !!foodCustomizations[name];
+            return false; // Customization modal is disabled for the current menu flow.
         }
 
         // Cart functionality
@@ -1340,10 +1340,7 @@
 
         // Add to cart (programmatic — e.g. tests); menu UI uses delegated clicks on .bolt-food-add-btn
         function addToCart(itemName, price) {
-            if (typeof foodCustomizations !== 'undefined' && foodCustomizations[itemName]) {
-                openFoodModal(itemName, price);
-                return;
-            }
+            // Customization modals are disabled for now to keep the menu flow functional.
             const item = {
                 name: itemName,
                 price: price,
@@ -1534,15 +1531,6 @@
                     }
                     var price = parseFloat(priceStr, 10);
                     if (Number.isNaN(price)) return;
-
-                    if (typeof foodCustomizations !== 'undefined' && foodCustomizations[itemName]) {
-                        btn.classList.add('bolt-food-add-btn--press');
-                        setTimeout(function () {
-                            btn.classList.remove('bolt-food-add-btn--press');
-                        }, 220);
-                        openFoodModal(itemName, price);
-                        return;
-                    }
 
                     var cartItem = {
                         name: itemName,
@@ -2205,36 +2193,16 @@
         
         // Open Food Customization Modal
         function openFoodModal(foodName, foodPrice) {
-            currentFoodItem = foodName;
-            basePrice = foodPrice;
-            currentQuantity = 1;
-            selectedOptions = {};
-            selectedAddons = [];
-            
-            // Update modal content
-            document.getElementById('modalFoodTitle').textContent = foodName;
-            document.getElementById('modalFoodPrice').textContent = `GHS ${foodPrice.toFixed(2)}`;
-            document.getElementById('modalFoodImage').src = `images/${getFoodImage(foodName)}`;
-            document.getElementById('modalFoodDescription').textContent = foodCustomizations[foodName]?.description || '';
-            document.getElementById('quantity').textContent = currentQuantity;
-            
-            // Generate customization options
-            generateCustomizationOptions(foodName);
-            
-            // Update total price
-            updateTotalPrice();
-            
-            // Show modal
-            const modal = document.getElementById('foodCustomizationModal');
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            if (window.CraveSound) window.CraveSound.modalOpen();
+            // Customization modal is disabled for the current menu flow.
+            return;
         }
-        
+
         // Close Food Modal
         function closeFoodModal() {
             const modal = document.getElementById('foodCustomizationModal');
-            modal.classList.remove('active');
+            if (modal) {
+                modal.classList.remove('active');
+            }
             document.body.style.overflow = '';
             
             // Reset state
@@ -2659,71 +2627,6 @@
             }
         });
     </script>
-    
-    <!-- Premium Food Customization Modal -->
-    <div id="foodCustomizationModal" class="food-customization-modal">
-        <div class="modal-overlay" onclick="closeFoodModal()"></div>
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <button class="modal-close" onclick="closeFoodModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-                <div class="modal-food-image">
-                    <img id="modalFoodImage" src="" alt="">
-                </div>
-                <div class="modal-food-info">
-                    <h2 id="modalFoodTitle" class="modal-food-title"></h2>
-                    <div class="modal-food-price-row">
-                        <span id="modalFoodPrice" class="modal-food-price"></span>
-                        <span id="modalFoodDescription" class="modal-food-description"></span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Modal Body -->
-            <div class="modal-body">
-                <div id="customizationOptions" class="customization-options">
-                    <!-- Options will be dynamically generated -->
-                </div>
-                
-                <!-- Special Requests -->
-                <div class="special-requests-section">
-                    <div class="section-header">
-                        <h3 class="section-title">Special Requests</h3>
-                    </div>
-                    <textarea 
-                        id="specialRequests" 
-                        class="special-requests-input" 
-                        placeholder="Any special requests? (e.g., no onions, extra spicy)"
-                        rows="3"
-                    ></textarea>
-                </div>
-                
-                <!-- Recommended Addons -->
-                <div id="recommendedAddons" class="recommended-addons-section">
-                    <!-- Addons will be dynamically generated -->
-                </div>
-            </div>
-            
-            <!-- Modal Footer -->
-            <div class="modal-footer">
-                <div class="quantity-selector">
-                    <button class="quantity-btn" onclick="decreaseQuantity()">
-                        <i class="fas fa-minus"></i>
-                    </button>
-                    <span id="quantity" class="quantity">1</span>
-                    <button class="quantity-btn" onclick="increaseQuantity()">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-                <button id="addToCartBtn" class="add-to-cart-btn" onclick="addToCartWithCustomizations()">
-                    <span class="btn-text">Add to Cart</span>
-                    <span class="btn-price">GHS <span id="totalPrice">0</span></span>
-                </button>
-            </div>
-        </div>
-    </div>
     
     <!-- Premium sticky floating cart CTA -->
     <div id="stickyCartBar" class="sticky-cart-bar" aria-hidden="true">
