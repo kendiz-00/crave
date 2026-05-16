@@ -333,85 +333,74 @@
             return div;
         }
 
-        // Get food image based on name
-        function getFoodImage(name) {
-            const imageMap = {
-                'Loaded Fries': 'loaded-fries.jpg',
-                'Cheese Beef Loaded Fries': 'cheese-beef-fries.jpg',
-                'Jerk Chicken Shawarma': 'jerk-chicken.jpg',
-                'Chocolate Rich Buttercream Frosting Jar Cake': 'chocolate-cake.jpg',
-                'Warning! 2 Piece Extra Insanity Hot Fried Chicken and Fries': 'hot-chicken.jpg',
-                'Loaded BBQ Chicken Cheddar Cheese Fries': 'bbq-fries.jpg',
-                'Biscoff Jar Cake': 'biscoff-cake.jpg',
-                'Lemon Buttercream Jar Cake': 'lemon-cake.jpg',
-                'Honey BBQ Wings (6) and Fries': 'bbq-wings.jpg',
-                'Siracha Mayo Hot Wings (6) and Fries': 'sriracha-wings.jpg',
-                '2 Piece Glazed Crispy Chicken and Fries': 'glazed-chicken.jpg',
-                'Grilled Cheese Sandwich': 'grilled-cheese.jpg',
-                'Tuna Fish Sandwich': 'tuna-sandwich.jpg',
-                'American BLT (Bacon Lettuce Tomato)': 'blt-sandwich.jpg',
-                'Bacon Cheddar Fries': 'bacon-cheddar-fries.jpg',
-                'Ultimate Bacon Cheddar Burger': 'bacon-burger.jpg',
-                'Melted Cheddar Burger': 'cheddar-burger.jpg',
-                'Chicken Burrito': 'burrito.jpg',
-                '2 Chicken Crispy Tacos': 'chicken-tacos.jpg',
-                '2 Beef Crispy Tacos': 'beef-tacos.jpg',
-                'Vanilla Buttercream Cake Slice': 'vanilla-cake.jpg',
-                'Bailey\'s Irish Cream Jar Cake': 'baileys-cake.jpg',
-                'Salted Caramel Cake': 'caramel-cake.jpg',
-                'Pistachio Dream Jar Cake': 'pistachio-cake.jpg',
-                'Coffee Latte Jar Cake': 'coffee-cake.jpg',
-                'Pink Guava Buttercream Jar Cake': 'guava-cake.jpg',
-                'Chicken and Waffles': 'chicken-waffles.jpg',
-                'Loaded Omelette': 'omelette.jpg',
-                'Strawberry Colada': 'strawberry-smoothie.jpg',
-                'Pina Colada': 'pina-colada.jpg',
-                'Watermelon Mint Ice': 'watermelon-smoothie.jpg',
-                'Green Glow': 'green-smoothie.jpg',
-                'Tropical Fruit Blend': 'tropical-smoothie.jpg',
-                'Pineapple Strawberry': 'pineapple-strawberry.jpg',
-                'Strawberries and Cream': 'strawberry-cream.jpg',
-                'Lemonade Ice': 'lemonade-smoothie.jpg',
-                'Banana Peanut Butter Chocolate': 'banana-smoothie.jpg'
-            };
-            
-            return imageMap[name] || 'placeholder.jpg';
-        }
+        <!-- Premium Footer (copied from homepage) -->
+        <footer class="premium-footer crave-reveal" role="contentinfo">
+            <div class="premium-footer__inner container-fluid px-3 p-t-48 p-b-56">
+                <div class="premium-footer__grid row gx-4 gy-4 align-items-start">
+                    <div class="col-12 col-md-4">
+                        <div class="footer-brand">
+                            <img src="images/logo.png" alt="Crave" class="footer-brand__logo" width="160" height="44">
+                            <p class="footer-brand__tag">Crave — Elevating everyday comfort into curated experiences.</p>
+                            <p class="footer-brand__sub">Hospitality, elevated — open doors, warm service.</p>
+                        </div>
+                    </div>
 
-        // Add to cart
-        function addToCart(itemName, price) {
-            const item = {
-                name: itemName,
-                price: price,
-                quantity: 1,
-                timestamp: new Date().toISOString()
-            };
-            
-            cartItems.push(item);
-            cartCount++;
-            updateCartBadge();
-            showCartFeedback(itemName);
-        }
+                    <div class="col-6 col-md-4">
+                        <nav class="footer-nav" aria-label="Footer Navigation">
+                            <h4 class="footer-heading">Explore</h4>
+                            <ul class="footer-links">
+                                <li><a href="menu.html">Menu</a></li>
+                                <li><a href="reservation.html">Reservations</a></li>
+                                <li><a href="about.html">About</a></li>
+                                <li><a href="contact.html">Contact</a></li>
+                                <li><a href="delivery.html">Delivery Info</a></li>
+                            </ul>
+                        </nav>
+                    </div>
 
-        // Update cart badge
-        function updateCartBadge() {
-            const badge = document.getElementById('cartBadge');
-            if (badge) {
-                badge.textContent = cartCount;
-                badge.style.display = cartCount > 0 ? 'flex' : 'none';
-            }
-        }
-
-        // Show cart feedback
-        function showCartFeedback(itemName) {
-            const feedback = document.createElement('div');
-            feedback.className = 'bolt-cart-feedback';
-            feedback.innerHTML = `
-                <div class="bolt-cart-feedback-content">
-                    <i class="fas fa-check-circle"></i>
-                    <span>${itemName} added to cart!</span>
+                    <div class="col-6 col-md-4">
+                        <div class="footer-contact">
+                            <h4 class="footer-heading">Contact</h4>
+                            <address class="footer-address">
+                                <div class="footer-address__line">8th floor, 379 Hudson St, New York, NY</div>
+                                <a href="tel:+19671668879" class="footer-link">(+1) 96 716 6879</a>
+                                <a href="mailto:contact@crave-restaurant.com" class="footer-link">contact@crave-restaurant.com</a>
+                            </address>
+                            <div class="footer-hours">Open: <span>11:00 AM – 10:00 PM</span></div>
+                            <div class="footer-social">
+                                <a class="social-btn" href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                                <a class="social-btn" href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                                <a class="social-btn" href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            `;
+
+                <div class="premium-footer__cta mt-4 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+                    <div class="cta-copy">
+                        <h3 class="cta-title">Ready for another Crave experience?</h3>
+                        <p class="cta-sub">Order now or join our VIP list for exclusive offers.</p>
+                    </div>
+                    <div class="cta-actions d-flex gap-2 align-items-center">
+                        <a href="menu.html" class="btn btn-premium-ghost">View Menu</a>
+                        <a href="menu.html" class="btn btn-premium">Order Now</a>
+                        <form class="vip-form" action="#" onsubmit="event.preventDefault(); alert('Thanks — VIP registered (demo)');">
+                            <input type="email" name="vip_email" placeholder="Join VIP — email" aria-label="VIP email" required>
+                            <button class="vip-cta" type="submit">Join VIP</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="premium-footer__bottom">
+                <div class="container-fluid px-3">
+                    <div class="premium-footer__bar d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 p-3">
+                        <div class="footer-copyright">© <span id="copyright-year">2025</span> Crave Restaurant. All rights reserved.</div>
+                        <div class="footer-powered">Powered by Crave • Crafted with care</div>
+                    </div>
+                </div>
+            </div>
+        </footer>
             
             document.body.appendChild(feedback);
             
