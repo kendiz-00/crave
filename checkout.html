@@ -278,49 +278,48 @@
                         ></textarea>
                     </div>
 
+                    <!-- Order Summary Section -->
+                    <div class="checkout-summary-section checkout-summary-inline">
+                        <h2 class="checkout-summary-title">Order Summary</h2>
+                        
+                        <!-- Cart Items -->
+                        <div class="checkout-cart-items" id="checkoutCartItems">
+                            <!-- Items will be populated by JavaScript -->
+                        </div>
+
+                        <!-- Empty Cart State -->
+                        <div class="checkout-empty-cart" id="emptyCartState" style="display: none;">
+                            <div class="checkout-empty-cart-icon" aria-hidden="true">🍟</div>
+                            <div class="checkout-empty-cart-text">Your cravings are waiting…</div>
+                            <p class="checkout-empty-cart-sub">Add something delicious to continue.</p>
+                            <a href="menu.html" class="checkout-empty-cart-link">
+                                Browse Menu
+                            </a>
+                        </div>
+
+                        <!-- Order Totals -->
+                        <div class="checkout-summary-totals" id="orderTotals">
+                            <div class="checkout-summary-row">
+                                <span>Subtotal</span>
+                                <span id="subtotalAmount">GH¢ 0.00</span>
+                            </div>
+                            <div class="checkout-summary-row">
+                                <span>Delivery Fee</span>
+                                <span id="deliveryFee">GH¢ 15.00</span>
+                            </div>
+                            <div class="checkout-summary-row total">
+                                <span>Your Total</span>
+                                <span id="totalAmount">GH¢ 0.00</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Place Order Button -->
                     <button type="submit" class="checkout-place-order-btn" id="placeOrderBtn">
                         <i class="fas fa-shopping-cart"></i>
                         Confirm & Pay
                     </button>
-
-                                    </form>
-            </div>
-
-            <!-- Order Summary Section -->
-            <div class="checkout-summary-section">
-                <h2 class="checkout-summary-title">Order Summary</h2>
-                
-                <!-- Cart Items -->
-                <div class="checkout-cart-items" id="checkoutCartItems">
-                    <!-- Items will be populated by JavaScript -->
-                </div>
-
-                <!-- Empty Cart State -->
-                <div class="checkout-empty-cart" id="emptyCartState" style="display: none;">
-                    <div class="checkout-empty-cart-icon" aria-hidden="true">🍟</div>
-                    <div class="checkout-empty-cart-text">Your cravings are waiting…</div>
-                    <p class="checkout-empty-cart-sub">Add something delicious to continue.</p>
-                    <a href="menu.html" class="checkout-empty-cart-link">
-                        Browse Menu
-                    </a>
-                </div>
-
-                <!-- Order Totals -->
-                <div class="checkout-summary-totals" id="orderTotals">
-                    <div class="checkout-summary-row">
-                        <span>Subtotal</span>
-                        <span id="subtotalAmount">GH¢ 0.00</span>
-                    </div>
-                    <div class="checkout-summary-row">
-                        <span>Delivery Fee</span>
-                        <span id="deliveryFee">GH¢ 15.00</span>
-                    </div>
-                    <div class="checkout-summary-row total">
-                        <span>Your Total</span>
-                        <span id="totalAmount">GH¢ 0.00</span>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
