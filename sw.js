@@ -1,28 +1,27 @@
 const CACHE_VERSION = 'crave-pwa-v2';
 const STATIC_CACHE = `crave-static-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `crave-runtime-${CACHE_VERSION}`;
-const OFFLINE_URL = '/offline.html';
+const OFFLINE_URL = 'offline.html';
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/menu.html',
-  '/about.html',
-  '/cart.html',
-  '/checkout.html',
-  '/reservation.html',
-  '/tracking.html',
-  '/offline.html',
-  '/css/main.css',
-  '/css/util.css',
-  '/css/crave-home.css',
-  '/favicon.png',
-  '/favicon.ico',
-  '/icon-192.png',
-  '/icon-512.png',
-  '/manifest.json',
-  '/js/main.js',
-  '/js/vendor-setup.js',
-  '/js/swiper-custom.js'
+  'index.html',
+  'menu.html',
+  'about.html',
+  'cart.html',
+  'checkout.html',
+  'reservation.html',
+  'tracking.html',
+  'offline.html',
+  'css/main.css',
+  'css/util.css',
+  'css/crave-home.css',
+  'favicon.png',
+  'favicon.ico',
+  'icon-192.png',
+  'icon-512.png',
+  'manifest.json',
+  'js/main.js',
+  'js/vendor-setup.js',
+  'js/swiper-custom.js'
 ];
 
 self.addEventListener('install', event => {
@@ -50,7 +49,7 @@ self.addEventListener('fetch', event => {
   if (url.origin !== self.location.origin) return;
 
   if (request.mode === 'navigate') {
-    event.respondWith(fetch(request).catch(() => caches.match(OFFLINE_URL).then(res => res || caches.match('/index.html'))));
+    event.respondWith(fetch(request).catch(() => caches.match(OFFLINE_URL).then(res => res || caches.match('index.html'))));
     return;
   }
 
@@ -84,10 +83,10 @@ self.addEventListener('push', event => {
   const title = payload.title || 'CRAVE';
   const options = {
     body: payload.body || 'A fresh update is waiting for you.',
-    icon: '/icon-192.png',
-    badge: '/icon-192.png',
+    icon: 'icon-192.png',
+    badge: 'icon-192.png',
     tag: payload.tag || 'crave-notification',
-    data: payload.data || { url: '/' },
+    data: payload.data || { url: self.registration.scope },
     vibrate: [120, 60, 120]
   };
   event.waitUntil(self.registration.showNotification(title, options));
@@ -97,9 +96,9 @@ self.addEventListener('notificationclick', event => {
   event.notification.close();
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
-      const targetUrl = event.notification.data && event.notification.data.url ? event.notification.data.url : '/';
+      const targetUrl = event.notification.data && event.notification.data.url ? event.notification.data.url : self.registration.scope;
       for (const client of clientList) {
-        if (client.url.includes(targetUrl) && 'focus' in client) {
+        if (client.url === targetUrl || client.url.startsWith(targetUrl)) {
           return client.focus();
         }
       }

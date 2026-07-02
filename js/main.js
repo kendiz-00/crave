@@ -713,11 +713,14 @@ function initCravePwaLayer() {
     },
     showNotification(title, body, options) {
       if (!('Notification' in window) || Notification.permission !== 'granted') return;
-      const data = Object.assign({ url: '/index.html' }, options && options.data ? options.data : {});
+      const pathParts = window.location.pathname.split('/');
+      pathParts[pathParts.length - 1] = 'index.html';
+      const repoIndex = pathParts.join('/');
+      const data = Object.assign({ url: repoIndex }, options && options.data ? options.data : {});
       const payload = Object.assign({
         body,
-        icon: '/icon-192.png',
-        badge: '/icon-192.png',
+        icon: 'icon-192.png',
+        badge: 'icon-192.png',
         tag: 'crave-notification',
         data,
         vibrate: [120, 60, 120]
