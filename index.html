@@ -11,6 +11,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover, shrink-to-fit=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CRAVE">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#000000">
     <meta name="description" content="Crave - Fine Dining Restaurant. Experience memorable dining with our chefs' finest dishes.">
     
@@ -89,6 +91,24 @@
     </style>
 </head>
 <body class="crave-home">
+    <div id="craveInstallCard" class="crave-install-card" role="status" aria-live="polite">
+        <div class="crave-install-card__content">
+            <p class="crave-install-card__eyebrow">Install CRAVE</p>
+            <h2>Open the app faster with a polished home-screen experience.</h2>
+            <p>Keep your cart, enjoy quicker reorders, and launch CRAVE like a native app.</p>
+            <div class="crave-install-card__actions">
+                <button id="craveInstallBtn" class="crave-install-card__button" type="button">Install app</button>
+                <button id="craveNotifyBtn" class="crave-install-card__secondary" type="button">Enable reminders</button>
+                <button id="craveInstallDismiss" class="crave-install-card__dismiss" type="button" aria-label="Dismiss install prompt">Not now</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="craveUpdateToast" class="crave-update-toast" role="status" aria-live="polite">
+        <span>A fresh CRAVE update is ready.</span>
+        <button id="craveRefreshApp" type="button">Refresh</button>
+    </div>
+
     <!-- Premium app splash (max ~1.2s, session-scoped) -->
     <div id="craveSplash" class="crave-splash" role="dialog" aria-modal="true" aria-label="Crave">
         <div class="crave-splash__glow" aria-hidden="true"></div>

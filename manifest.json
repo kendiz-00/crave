@@ -1,13 +1,14 @@
 {
-  "name": "Crave",
-  "short_name": "Crave",
-  "description": "Premium dining experience with Crave Restaurant",
-  "start_url": "/index.html",
+  "name": "CRAVE Luxury Food Delivery",
+  "short_name": "CRAVE",
+  "description": "Premium food delivery experience with rich menus, reservations, and re-engagement features.",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "theme_color": "#d4a373",
-  "background_color": "#000000",
   "orientation": "portrait-primary",
-  "scope": "/",
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "id": "./",
   "icons": [
     {
       "src": "icon-192.png",
@@ -20,6 +21,28 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Order Now",
+      "url": "./menu.html",
+      "description": "Jump straight to the menu"
+    },
+    {
+      "name": "View Menu",
+      "url": "./menu.html",
+      "description": "Browse the latest menu"
+    },
+    {
+      "name": "Track Order",
+      "url": "./tracking.html",
+      "description": "Check current delivery status"
+    },
+    {
+      "name": "Reservations",
+      "url": "./reservation.html",
+      "description": "Book a table"
     }
   ],
   "categories": ["food", "restaurant", "lifestyle"],

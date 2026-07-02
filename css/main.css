@@ -26,6 +26,105 @@ body {
   padding-top: 72px;
 }
 
+body.crave-offline {
+  filter: saturate(0.95);
+}
+
+.crave-install-card,
+.crave-update-toast {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1200;
+  width: min(92vw, 640px);
+  border-radius: 22px;
+  border: 1px solid rgba(212, 175, 55, 0.26);
+  background: rgba(8, 8, 8, 0.84);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 64px rgba(0, 0, 0, 0.34);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.crave-install-card {
+  bottom: 20px;
+  padding: 16px 16px 18px;
+}
+
+.crave-install-card.is-visible,
+.crave-update-toast.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.crave-install-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.crave-install-card__eyebrow {
+  margin: 0;
+  color: #d4a373;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+.crave-install-card h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #f8efe1;
+}
+
+.crave-install-card p {
+  margin: 0;
+  color: rgba(248, 239, 225, 0.82);
+  line-height: 1.45;
+}
+
+.crave-install-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.crave-install-card__button,
+.crave-install-card__secondary,
+.crave-update-toast button {
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.crave-install-card__button,
+.crave-update-toast button {
+  color: #0f0f0f;
+  background: linear-gradient(135deg, #d4a373, #f2d18d);
+}
+
+.crave-install-card__secondary,
+.crave-install-card__dismiss {
+  color: #f8efe1;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(212, 175, 55, 0.18);
+}
+
+.crave-update-toast {
+  top: 86px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #f8efe1;
+}
+
 @media (max-width: 768px) {
   body {
     padding-top: calc(64px + env(safe-area-inset-top, 0px));

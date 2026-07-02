@@ -1,5 +1,8 @@
-const CACHE_NAME = 'crave-pwa-v1';
-const urlsToCache = [
+const CACHE_VERSION = 'crave-pwa-v2';
+const STATIC_CACHE = `crave-static-${CACHE_VERSION}`;
+const RUNTIME_CACHE = `crave-runtime-${CACHE_VERSION}`;
+const OFFLINE_URL = '/offline.html';
+const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/menu.html',
@@ -8,53 +11,100 @@ const urlsToCache = [
   '/checkout.html',
   '/reservation.html',
   '/tracking.html',
+  '/offline.html',
   '/css/main.css',
   '/css/util.css',
+  '/css/crave-home.css',
   '/favicon.png',
   '/favicon.ico',
   '/icon-192.png',
   '/icon-512.png',
-  '/manifest.json'
+  '/manifest.json',
+  '/js/main.js',
+  '/js/vendor-setup.js',
+  '/js/swiper-custom.js'
 ];
 
-// Install event - cache resources
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        return cache.addAll(urlsToCache);
-      })
+    caches.open(STATIC_CACHE).then(cache => cache.addAll(STATIC_ASSETS)).then(() => self.skipWaiting())
   );
 });
 
-// Fetch event - serve from cache when offline
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Return cached version or fetch from network
-        return response || fetch(event.request);
-      })
-      .catch(() => {
-        // Return offline page if both cache and network fail
-        if (event.request.destination === 'document') {
-          return caches.match('/index.html');
-        }
-      })
-  );
-});
-
-// Activate event - clean up old caches
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
+    caches.keys().then(keys => Promise.all(keys.map(key => {
+      if (key !== STATIC_CACHE && key !== RUNTIME_CACHE) {
+        return caches.delete(key);
+      }
+      return null;
+    }))).then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', event => {
+  const { request } = event;
+  const url = new URL(request.url);
+
+  if (request.method !== 'GET') return;
+  if (url.origin !== self.location.origin) return;
+
+  if (request.mode === 'navigate') {
+    event.respondWith(fetch(request).catch(() => caches.match(OFFLINE_URL).then(res => res || caches.match('/index.html'))));
+    return;
+  }
+
+  if (STATIC_ASSETS.some(asset => url.pathname.endsWith(asset.replace('/', '')) || url.pathname === asset)) {
+    event.respondWith(caches.match(request).then(cached => cached || fetch(request).then(response => {
+      const copy = response.clone();
+      caches.open(STATIC_CACHE).then(cache => cache.put(request, copy));
+      return response;
+    }).catch(() => caches.match(request))));
+    return;
+  }
+
+  event.respondWith(
+    caches.match(request).then(cached => cached || fetch(request).then(response => {
+      const copy = response.clone();
+      caches.open(RUNTIME_CACHE).then(cache => cache.put(request, copy));
+      return response;
+    }).catch(() => caches.match(OFFLINE_URL)))
+  );
+});
+
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
+self.addEventListener('push', event => {
+  if (!event.data) return;
+  const payload = event.data.json();
+  const title = payload.title || 'CRAVE';
+  const options = {
+    body: payload.body || 'A fresh update is waiting for you.',
+    icon: '/icon-192.png',
+    badge: '/icon-192.png',
+    tag: payload.tag || 'crave-notification',
+    data: payload.data || { url: '/' },
+    vibrate: [120, 60, 120]
+  };
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
+      const targetUrl = event.notification.data && event.notification.data.url ? event.notification.data.url : '/';
+      for (const client of clientList) {
+        if (client.url.includes(targetUrl) && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) return clients.openWindow(targetUrl);
+      return null;
     })
   );
 });
