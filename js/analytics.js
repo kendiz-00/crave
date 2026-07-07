@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    const MEASUREMENT_ID = 'G-SEKJ4E9T4H';
+    const MEASUREMENT_ID = 'G-7FCX73K5ZG';
     const CURRENCY = 'GHS';
     const ONE_DAY = 24 * 60 * 60 * 1000;
     const state = {
