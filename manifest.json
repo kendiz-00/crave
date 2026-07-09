@@ -2,7 +2,7 @@
   "name": "CRAVE Luxury Food Delivery",
   "short_name": "CRAVE",
   "description": "Premium food delivery experience with rich menus, reservations, and re-engagement features.",
-  "start_url": "./",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "display_override": [

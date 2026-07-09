@@ -1271,102 +1271,9 @@ function initWhatsAppOrders() {
 }
 
 /**
- * SIMPLE WORKING CART SYSTEM
+ * SIMPLE WORKING CART SYSTEM - REMOVED
+ * Cart logic is now handled in menu.html with array-based structure
  */
-function initSimpleCart() {
-  // Load cart from localStorage
-  let cart = JSON.parse(localStorage.getItem('craveCart')) || {};
-  
-  // Add to Cart
-  document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('btn-add-cart')) {
-      e.preventDefault();
-      
-      const title = e.target.getAttribute('data-item');
-      const price = e.target.getAttribute('data-price');
-      const qtyInput = document.querySelector(`.qty-input[data-item="${title}"]`);
-      const quantity = qtyInput ? parseInt(qtyInput.value) || 1 : 1;
-      
-      // Add to cart
-      const key = title.toLowerCase().replace(/\s+/g, '-');
-      if (cart[key]) {
-        cart[key].quantity += quantity;
-      } else {
-        cart[key] = { title, price, quantity };
-      }
-      
-      // Save to localStorage
-      localStorage.setItem('craveCart', JSON.stringify(cart));
-      if (window.CravePwa) {
-        window.CravePwa.updateBadge(Object.values(cart).reduce((total, item) => total + (item.quantity || 0), 0));
-      }
-      if (window.CraveSound) window.CraveSound.tap();
-      if (window.CraveHaptic) window.CraveHaptic.softDouble();
-      
-      // Update displays
-      updateCartDisplay();
-      
-      // Reset quantity
-      if (qtyInput) qtyInput.value = 1;
-      
-      console.log('Added to cart:', title, quantity);
-    }
-  });
-  
-  // Order This Item (WhatsApp)
-  document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('btn-order')) {
-      e.preventDefault();
-      
-      const title = e.target.getAttribute('data-item');
-      const message = `Hi Crave, I'd like to order: ${title}`;
-      const whatsappUrl = `https://wa.me/233550020788?text=${encodeURIComponent(message)}`;
-      window.open(whatsappUrl, '_blank');
-    }
-  });
-  
-  // Quantity Controls
-  document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('qty-btn')) {
-      e.preventDefault();
-      
-      const action = e.target.getAttribute('data-action');
-      const itemTitle = e.target.getAttribute('data-item');
-      const qtyInput = document.querySelector(`.qty-input[data-item="${itemTitle}"]`);
-      
-      if (qtyInput) {
-        let value = parseInt(qtyInput.value) || 1;
-        if (action === 'increase') {
-          value = Math.min(value + 1, 99);
-        } else if (action === 'decrease') {
-          value = Math.max(value - 1, 1);
-        }
-        qtyInput.value = value;
-      }
-    }
-  });
-  
-  // Update cart displays
-  function updateCartDisplay() {
-    const itemCount = Object.values(cart).reduce((total, item) => total + item.quantity, 0);
-    
-    // Update mini cart text
-    const miniCartText = document.getElementById('miniCartText');
-    if (miniCartText) {
-      miniCartText.textContent = itemCount === 0 ? '0 items' : `${itemCount} item${itemCount !== 1 ? 's' : ''}`;
-    }
-    
-    // Update floating cart badge
-    const cartBadge = document.getElementById('cartBadge');
-    if (cartBadge) {
-      cartBadge.textContent = itemCount;
-      cartBadge.style.display = itemCount > 0 ? 'block' : 'none';
-    }
-  }
-  
-  // Initial update
-  updateCartDisplay();
-}
 
 function getItemKey(itemTitle) {
   return itemTitle.trim().toLowerCase().replace(/\s+/g, '-');
@@ -1412,77 +1319,10 @@ function buildWhatsAppCartMessage() {
   return `Hi Crave, I'd like to order:\n${lines.join('\n')}`;
 }
 
-function initMenuCart() {
-  let cart = getStoredCart();
-  document.addEventListener('click', function(event) {
-    const target = event.target;
-
-    // Add to Cart functionality
-    if (target.matches('.btn-add-cart')) {
-      event.preventDefault();
-      
-      const itemTitle = target.getAttribute('data-item');
-      const itemPrice = target.getAttribute('data-price') || '$0';
-      const itemKey = getItemKey(itemTitle);
-      const qtyInput = document.querySelector(`.qty-input[data-item="${itemTitle}"]`);
-      const quantity = Math.max(1, Number(qtyInput ? qtyInput.value : 1));
-
-      if (!cart[itemKey]) {
-        cart[itemKey] = { title: itemTitle, price: itemPrice, quantity };
-      } else {
-        cart[itemKey].quantity += quantity;
-      }
-
-      localStorage.setItem('craveCart', JSON.stringify(cart));
-      if (window.CraveSound) window.CraveSound.tap();
-      if (window.CraveHaptic) window.CraveHaptic.softDouble();
-      if (qtyInput) qtyInput.value = 1;
-      return;
-    }
-
-    // Checkout functionality
-    if (target.matches('#checkoutOrder')) {
-      event.preventDefault();
-      const message = buildWhatsAppCartMessage();
-      if (!message) {
-        alert('Cart is empty. Add an item before checkout.');
-        return;
-      }
-      const phoneNumber = '233550020788';
-      const encodedMessage = encodeURIComponent(message);
-      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-      window.open(whatsappUrl, '_blank');
-      return;
-    }
-
-    // Clear cart functionality
-    if (target.matches('#clearCart')) {
-      event.preventDefault();
-      if (confirm('Are you sure you want to clear your cart?')) {
-        clearCart();
-      }
-      return;
-    }
-
-    // Quantity controls
-    if (target.matches('.qty-btn')) {
-      event.preventDefault();
-      const action = target.getAttribute('data-action');
-      const itemTitle = target.getAttribute('data-item');
-      const qtyInput = document.querySelector(`.qty-input[data-item="${itemTitle}"]`);
-      if (!qtyInput) return;
-      
-      let currentValue = parseInt(qtyInput.value) || 1;
-      if (action === 'increase') {
-        currentValue = Math.min(currentValue + 1, 99);
-      } else if (action === 'decrease') {
-        currentValue = Math.max(currentValue - 1, 1);
-      }
-      qtyInput.value = currentValue;
-      return;
-    }
-  });
-}
+/**
+ * INIT MENU CART - REMOVED
+ * Cart logic is now handled in menu.html with array-based structure
+ */
 
 /**
  * Initialize WhatsApp Order Integration
