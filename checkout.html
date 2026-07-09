@@ -607,7 +607,8 @@
             let subtotal = 0;
 
             cartItems.forEach((item, index) => {
-                const itemTotal = item.price * item.quantity;
+                // Use unitPrice which includes customizations and add-ons
+                const itemTotal = (item.unitPrice || item.price || 0) * (item.quantity || 1);
                 subtotal += itemTotal;
 
                 const itemElement = document.createElement('div');
@@ -617,6 +618,19 @@
                 let customizationsHtml = '';
                 if (item.customizations && Object.keys(item.customizations).length > 0) {
                     customizationsHtml = renderCustomizations(item.customizations);
+                }
+                
+                // Build addons HTML
+                let addonsHtml = '';
+                if (item.addons && Array.isArray(item.addons) && item.addons.length > 0) {
+                    addonsHtml = '<div class="checkout-item-addons">';
+                    item.addons.forEach(addon => {
+                        if (addon && addon.name) {
+                            const addonPrice = addon.price > 0 ? ` (+GH₵${addon.price})` : '';
+                            addonsHtml += `<div class="checkout-addon">+ ${addon.name}${addonPrice}</div>`;
+                        }
+                    });
+                    addonsHtml += '</div>';
                 }
                 
                 // Add special requests if present
@@ -632,6 +646,7 @@
                             <div class="checkout-item-name">${item.name}</div>
                             <div class="checkout-item-quantity">Quantity: ${item.quantity}</div>
                             ${customizationsHtml}
+                            ${addonsHtml}
                             ${specialRequestsHtml}
                         </div>
                     </div>
@@ -970,66 +985,27 @@
 
         // Generate ultra-clean WhatsApp message
         function generateWhatsAppMessage(orderData) {
-            // Group cart items
-            const groupedItems = {};
-            cartItems.forEach(item => {
-                if (groupedItems[item.name]) {
-                    groupedItems[item.name].quantity += 1;
-                } else {
-                    groupedItems[item.name] = {
-                        name: item.name,
-                        price: item.price,
-                        quantity: 1
-                    };
-                }
-            });
-
-            // Calculate total
+            // Iterate over ALL cart items individually (no grouping - preserve customizations per item)
             let total = 0;
-            const orderLines = [];
-
-            Object.values(groupedItems).forEach(item => {
-                const itemTotal = item.price * item.quantity;
-                total += itemTotal;
-                
-                // Build item line with customizations
-                let itemLine = `- ${item.name} x${item.quantity}`;
-                
-                // Add customizations to the message
-                const originalItem = cartItems.find(cartItem => cartItem.name === item.name);
-                if (originalItem && originalItem.customizations) {
-                    Object.values(originalItem.customizations).forEach(selections => {
-                        if (Array.isArray(selections)) {
-                            selections.forEach(choice => {
-                                itemLine += `\n  • ${choice.name}`;
-                            });
-                        } else if (selections && selections.name) {
-                            itemLine += `\n  • ${selections.name}`;
-                        }
-                    });
-                }
-                
-                itemLine += ` - GH¢ ${itemTotal.toFixed(2)}`;
-                orderLines.push(itemLine);
-            });
-
-            // Build ultra-clean WhatsApp message
             let message = `Hello Crave 👋\n\nI'd like to place an order:\n\n`;
             
-            Object.values(groupedItems).forEach(item => {
-                const itemTotal = item.price * item.quantity;
+            cartItems.forEach((item, index) => {
+                // Use unitPrice which includes customizations and add-ons
+                const itemTotal = (item.unitPrice || item.price || 0) * (item.quantity || 1);
+                total += itemTotal;
                 
                 // Add item header with emoji
                 const itemEmoji = getItemEmoji(item.name);
                 message += `${itemEmoji} ${item.name}\n`;
                 
                 // Add customizations
-                const originalItem = cartItems.find(cartItem => cartItem.name === item.name);
-                if (originalItem && originalItem.customizations) {
-                    Object.values(originalItem.customizations).forEach(selections => {
+                if (item.customizations && Object.keys(item.customizations).length > 0) {
+                    Object.values(item.customizations).forEach(selections => {
                         if (Array.isArray(selections)) {
                             selections.forEach(choice => {
-                                message += `  • ${choice.name}\n`;
+                                if (choice && choice.name) {
+                                    message += `  • ${choice.name}\n`;
+                                }
                             });
                         } else if (selections && selections.name) {
                             message += `  • ${selections.name}\n`;
@@ -1037,18 +1013,38 @@
                     });
                 }
                 
+                // Add add-ons with prices
+                if (item.addons && Array.isArray(item.addons) && item.addons.length > 0) {
+                    item.addons.forEach(addon => {
+                        if (addon && addon.name) {
+                            const addonPrice = addon.price > 0 ? ` (+GH₵${addon.price})` : '';
+                            message += `  + ${addon.name}${addonPrice}\n`;
+                        }
+                    });
+                }
+                
                 // Add special requests
-                if (originalItem && originalItem.specialRequests) {
-                    message += `  📝 ${originalItem.specialRequests}\n`;
+                if (item.specialRequests) {
+                    message += `  📝 ${item.specialRequests}\n`;
                 }
                 
                 // Add quantity and price
-                message += `  Qty: ${item.quantity}\n`;
+                message += `  Qty: ${item.quantity || 1}\n`;
                 message += `  GHS ${itemTotal.toFixed(2)}\n\n`;
             });
             
             // Add total with separator
             message += `━━━━━━━━━━━━━━━━━━\n`;
+            
+            // Add delivery fee if applicable
+            const orderType = document.querySelector('input[name="orderType"]:checked')?.value || 'Pickup';
+            const deliveryFeeAmount = orderType === 'Delivery' ? deliveryFee : 0;
+            if (deliveryFeeAmount > 0) {
+                message += `Subtotal: GHS ${total.toFixed(2)}\n`;
+                message += `Delivery: GHS ${deliveryFeeAmount.toFixed(2)}\n`;
+                total += deliveryFeeAmount;
+            }
+            
             message += `TOTAL: GHS ${total.toFixed(2)}\n\n\n`;
             
             // Add customer details

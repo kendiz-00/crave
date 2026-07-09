@@ -705,6 +705,7 @@
             let subtotal = 0;
             
             cart.forEach((item, index) => {
+                // Use unitPrice which includes customizations and add-ons
                 const unitPrice = Number(item.unitPrice ?? item.price ?? 0);
                 const itemTotal = unitPrice * (item.quantity || 1);
                 subtotal += itemTotal;
@@ -749,7 +750,11 @@
                         <img src="images/${getFoodImage(item.name)}" alt="${item.name}" class="cart-item-image" onerror="this.src='images/placeholder.jpg'">
                         <div class="cart-item-details">
                             <h4 class="cart-title">${item.name}</h4>
-                            <p class="cart-qty">Qty: ${item.quantity}</p>
+                            <div class="cart-qty-controls">
+                                <button class="cart-qty-btn" onclick="decreaseQuantity(${index})" title="Decrease quantity">-</button>
+                                <span class="cart-qty">${item.quantity}</span>
+                                <button class="cart-qty-btn" onclick="increaseQuantity(${index})" title="Increase quantity">+</button>
+                            </div>
                             ${customizationsHtml}
                             ${addonsHtml}
                             ${specialRequestsHtml}
@@ -813,6 +818,32 @@
             loadCartItems();
             updateCartDisplay();
             updateCartBadge();
+        }
+
+        // Increase quantity for specific item
+        function increaseQuantity(index) {
+            let cart = JSON.parse(localStorage.getItem('craveCart')) || [];
+            if (cart[index]) {
+                cart[index].quantity = (cart[index].quantity || 1) + 1;
+                localStorage.setItem('craveCart', JSON.stringify(cart));
+                window.cartItems = cart;
+                loadCartItems();
+                updateCartDisplay();
+                updateCartBadge();
+            }
+        }
+
+        // Decrease quantity for specific item
+        function decreaseQuantity(index) {
+            let cart = JSON.parse(localStorage.getItem('craveCart')) || [];
+            if (cart[index] && (cart[index].quantity || 1) > 1) {
+                cart[index].quantity--;
+                localStorage.setItem('craveCart', JSON.stringify(cart));
+                window.cartItems = cart;
+                loadCartItems();
+                updateCartDisplay();
+                updateCartBadge();
+            }
         }
 
         // Clear cart functionality

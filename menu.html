@@ -1399,12 +1399,21 @@
                 unitPrice: price,
                 quantity: 1,
                 customizations: {},
+                addons: [],
                 timestamp: new Date().toISOString()
             };
-            cartItems.push(item);
+            
+            // Always read from localStorage first to ensure sync
+            let cart = JSON.parse(localStorage.getItem('craveCart')) || [];
+            cart.push(item);
+            localStorage.setItem('craveCart', JSON.stringify(cart));
+            
+            // Sync global state
+            cartItems = cart;
             cartCount = cartItems.length;
-            localStorage.setItem('craveCart', JSON.stringify(cartItems));
+            
             updateCartBadge({ bump: true });
+            updateStickyCartBar();
             showCartFeedback(itemName);
         }
 
@@ -1600,14 +1609,23 @@
                         unitPrice: price,
                         quantity: 1,
                         customizations: {},
+                        addons: [],
                         timestamp: new Date().toISOString()
                     };
-                    cartItems.push(cartItem);
+                    
+                    // Always read from localStorage first to ensure sync
+                    var cart = JSON.parse(localStorage.getItem('craveCart')) || [];
+                    cart.push(cartItem);
+                    localStorage.setItem('craveCart', JSON.stringify(cart));
+                    
+                    // Sync global state
+                    cartItems = cart;
                     cartCount = cartItems.length;
-                    localStorage.setItem('craveCart', JSON.stringify(cartItems));
+                    
                     if (window.CraveSound) window.CraveSound.tap();
                     if (window.CraveHaptic) window.CraveHaptic.softDouble();
                     updateCartBadge({ bump: true });
+                    updateStickyCartBar();
                     showCartFeedback(itemName);
                     playFoodCardAddedSuccess(btn);
                 });
@@ -2606,15 +2624,21 @@
                 timestamp: new Date().toISOString()
             };
             
-            // Add to cart
+            // Add to cart - always read from localStorage first to ensure sync
             let cart = JSON.parse(localStorage.getItem('craveCart')) || [];
             cart.push(cartItem);
             localStorage.setItem('craveCart', JSON.stringify(cart));
+            
+            // Sync global state
+            cartItems = cart;
+            cartCount = cartItems.length;
+            
             if (window.CraveSound) window.CraveSound.tap();
             if (window.CraveHaptic) window.CraveHaptic.softDouble();
 
             // Update cart badge + row success (same UX as quick-add)
             updateCartBadge({ bump: true });
+            updateStickyCartBar();
             showCartFeedback(currentFoodItem);
 
             closeFoodModal();
