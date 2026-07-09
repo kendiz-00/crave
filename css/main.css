@@ -6967,13 +6967,16 @@ html {
 
 .hero-pretitle {
   font-family: 'Poppins', sans-serif;
-  font-size: 1.5rem;
-  color: #d4a574;
+  font-size: 2rem;
+  color: #fff3d6;
   margin: 0 0 20px 0;
-  letter-spacing: 3px;
+  letter-spacing: 4px;
   text-transform: uppercase;
-  font-weight: 400;
-  text-shadow: 0 2px 15px rgba(212, 165, 116, 0.4);
+  font-weight: 700;
+  text-shadow: 0 3px 18px rgba(0, 0, 0, 0.7);
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-bottom: 2px solid #d4a574;
 }
 
 .hero-headline {
