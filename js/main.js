@@ -632,7 +632,7 @@ function initCravePwaLayer() {
     registerServiceWorker() {
       if (!('serviceWorker' in navigator)) return;
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').then(registration => {
+        navigator.serviceWorker.register('/sw.js').then(registration => {
           if (registration.waiting) {
             this.showUpdateToast(registration);
           }
