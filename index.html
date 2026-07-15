@@ -1509,9 +1509,39 @@
 	</div>
 
 	<!-- WhatsApp Floating Button -->
-	<a href="https://wa.me/233550020788?text=Hi%20Crave%2C%20I%E2%80%99d%20like%20to%20place%20an%20order" class="whatsapp-float" target="_blank" aria-label="Order via WhatsApp" title="Order on WhatsApp">
+	<a href="#" id="whatsappFloatBtn" class="whatsapp-float" target="_blank" aria-label="Order via WhatsApp" title="Order on WhatsApp">
 		<i class="fa-brands fa-whatsapp"></i>
 	</a>
+	
+	<script>
+		// Update WhatsApp link with rewards data
+		document.addEventListener('DOMContentLoaded', function() {
+			const whatsappBtn = document.getElementById('whatsappFloatBtn');
+			
+			if (whatsappBtn && typeof CraveRewardsData !== 'undefined') {
+				let message = 'Hi Crave, I\'d like to place an order';
+				
+				// Add rewards information
+				const points = CraveRewardsData.Points.get();
+				const tier = CraveRewardsData.Tier.get();
+				
+				if (points > 0) {
+					message += `. I have ${points} Crave Points (${tier} tier)`;
+				}
+				
+				// Add available promo codes
+				if (typeof CravePromoCodes !== 'undefined') {
+					const promoCodes = CravePromoCodes.getAvailable();
+					const activeCodes = promoCodes.filter(pc => pc.available).slice(0, 2);
+					if (activeCodes.length > 0) {
+						message += '. Available codes: ' + activeCodes.map(pc => pc.code).join(', ');
+					}
+				}
+				
+				whatsappBtn.href = 'https://wa.me/233550020788?text=' + encodeURIComponent(message);
+			}
+		});
+	</script>
 
 	<!-- PWA Service Worker Registration -->
 	<script>
@@ -1528,5 +1558,42 @@
 		}
 	</script>
     <script src="js/analytics.js" defer></script>
+    
+    <!-- CRAVE Rewards System -->
+    <script src="js/rewards-config.js"></script>
+    <script src="js/rewards-data.js"></script>
+    <script src="js/rewards-engine.js"></script>
+    <script src="js/rewards-notifications.js"></script>
+    <script src="js/promo-codes.js"></script>
+    <script src="js/achievements.js"></script>
+    <script src="js/recommendations.js"></script>
+    <script src="js/spin-wheel.js"></script>
+    
+    <script>
+        // Initialize rewards on homepage
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for birthday reward
+            if (CraveRewardsEngine && CraveRewardsData) {
+                const birthdayReward = CraveRewardsEngine.checkBirthdayReward();
+                if (birthdayReward) {
+                    setTimeout(() => {
+                        CraveRewardsNotifications.birthdayReward();
+                    }, 2000);
+                }
+                
+                // Check for daily reward availability
+                if (CraveRewardsData.DailyRewards.canClaim()) {
+                    setTimeout(() => {
+                        CraveRewardsNotifications.show({
+                            type: 'info',
+                            icon: '📅',
+                            title: 'Daily Reward Available',
+                            message: 'Claim your daily bonus points!'
+                        });
+                    }, 3000);
+                }
+            }
+        });
+    </script>
 </body>
 </html>

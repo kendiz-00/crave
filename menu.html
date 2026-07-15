@@ -2869,5 +2869,48 @@
             </div>
         </a>
     </div>
+
+    <!-- CRAVE Rewards System -->
+    <script src="js/rewards-config.js"></script>
+    <script src="js/rewards-data.js"></script>
+    <script src="js/rewards-engine.js"></script>
+    <script src="js/rewards-notifications.js"></script>
+    <script src="js/promo-codes.js"></script>
+    <script src="js/achievements.js"></script>
+    <script src="js/recommendations.js"></script>
+    <script src="js/spin-wheel.js"></script>
+    
+    <script>
+        // Initialize rewards on menu page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Track menu views for recommendations
+            if (CraveRecommendations) {
+                // Personalized recommendations could be shown here
+                const recommendations = CraveRecommendations.getPersonalized();
+                console.log('Personalized recommendations loaded:', recommendations);
+            }
+            
+            // Show combo suggestions when items are added to cart
+            const originalAddToCart = window.addToCartWithCustomizations;
+            if (originalAddToCart && CraveRewardsEngine) {
+                window.addToCartWithCustomizations = function() {
+                    const result = originalAddToCart.apply(this, arguments);
+                    
+                    // Check for combo recommendations
+                    const cart = JSON.parse(localStorage.getItem('craveCart') || '[]');
+                    if (cart.length > 0) {
+                        const combos = CraveRewardsEngine.getComboRecommendations(cart);
+                        if (combos.length > 0) {
+                            setTimeout(() => {
+                                CraveRewardsNotifications.comboAvailable(combos[0]);
+                            }, 1000);
+                        }
+                    }
+                    
+                    return result;
+                };
+            }
+        });
+    </script>
 </body>
 </html>

@@ -1443,5 +1443,60 @@
             });
         }
     </script>
+    
+    <!-- CRAVE Rewards System -->
+    <script src="js/rewards-config.js"></script>
+    <script src="js/rewards-data.js"></script>
+    <script src="js/rewards-engine.js"></script>
+    <script src="js/rewards-notifications.js"></script>
+    <script src="js/promo-codes.js"></script>
+    <script src="js/achievements.js"></script>
+    <script src="js/recommendations.js"></script>
+    <script src="js/spin-wheel.js"></script>
+    
+    <script>
+        // Initialize rewards on checkout page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Track order completion for rewards
+            const originalPlaceOrder = window.placeOrder;
+            if (originalPlaceOrder && CraveRewardsEngine) {
+                window.placeOrder = function() {
+                    const cart = JSON.parse(localStorage.getItem('craveCart')) || [];
+                    const orderTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    
+                    // Process order through rewards engine
+                    const result = CraveRewardsEngine.processOrder(orderTotal, cart);
+                    
+                    if (result.pointsEarned > 0) {
+                        setTimeout(() => {
+                            CraveRewardsNotifications.orderPlaced(result.pointsEarned, result.tier);
+                        }, 500);
+                    }
+                    
+                    // Call original function
+                    return originalPlaceOrder.apply(this, arguments);
+                };
+            }
+            
+            // Apply promo code functionality
+            const promoCodeInput = document.getElementById('promoCodeInput');
+            const applyPromoBtn = document.getElementById('applyPromoBtn');
+            
+            if (promoCodeInput && applyPromoBtn && CravePromoCodes) {
+                applyPromoBtn.addEventListener('click', function() {
+                    const code = promoCodeInput.value.trim();
+                    const orderTotal = parseFloat(document.getElementById('orderTotal').textContent.replace('GHS ', ''));
+                    
+                    const result = CravePromoCodes.apply(code, orderTotal);
+                    
+                    if (result.valid) {
+                        // Update order total with discount
+                        const finalPrice = CravePromoCodes.calculateFinalPrice(orderTotal, result);
+                        document.getElementById('orderTotal').textContent = 'GHS ' + finalPrice.finalTotal.toFixed(2);
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>

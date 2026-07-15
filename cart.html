@@ -886,5 +886,40 @@
         }
     </script>
     <script src="js/analytics.js" defer></script>
+    
+    <!-- CRAVE Rewards System -->
+    <script src="js/rewards-config.js"></script>
+    <script src="js/rewards-data.js"></script>
+    <script src="js/rewards-engine.js"></script>
+    <script src="js/rewards-notifications.js"></script>
+    <script src="js/promo-codes.js"></script>
+    <script src="js/achievements.js"></script>
+    <script src="js/recommendations.js"></script>
+    <script src="js/spin-wheel.js"></script>
+    
+    <script>
+        // Initialize rewards on cart page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show "complete your meal" suggestions
+            if (CraveRecommendations) {
+                const cart = JSON.parse(localStorage.getItem('craveCart')) || [];
+                if (cart.length > 0) {
+                    const suggestions = CraveRecommendations.getCompleteYourMeal(cart);
+                    if (suggestions.length > 0) {
+                        setTimeout(() => {
+                            CraveRewardsNotifications.comboAvailable(suggestions[0]);
+                        }, 1500);
+                    }
+                }
+            }
+            
+            // Track cart abandonment recovery (simplified)
+            const cart = JSON.parse(localStorage.getItem('craveCart')) || [];
+            if (cart.length > 0 && CraveRewardsData) {
+                // Could trigger a reminder notification after some time
+                console.log('Cart has items, ready for rewards integration');
+            }
+        });
+    </script>
 </body>
 </html>
