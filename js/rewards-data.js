@@ -320,6 +320,31 @@ const CraveRewardsData = (function() {
             return this.get().filter(r => r.status === 'completed').length;
         },
 
+        getPendingCount: function() {
+            return this.get().filter(r => r.status === 'pending').length;
+        },
+
+        getTotalReferrals: function() {
+            return this.getCount();
+        },
+
+        getTotalEarned: function() {
+            const completed = this.get().filter(r => r.status === 'completed');
+            return completed.length * 20; // GHS 20 per completed referral
+        },
+
+        getHistory: function() {
+            return this.get();
+        },
+
+        getReferralCode: function() {
+            return getStorage('crave_referral_code', null);
+        },
+
+        setReferralCode: function(code) {
+            return setStorage('crave_referral_code', code);
+        },
+
         generateReferralCode: function() {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
             let code = '';
@@ -375,6 +400,14 @@ const CraveRewardsData = (function() {
             
             const diff = birthDate - today;
             return Math.ceil(diff / (1000 * 60 * 60 * 24));
+        },
+
+        getLastClaimed: function() {
+            return getStorage('crave_birthday_last_claimed', null);
+        },
+
+        setLastClaimed: function(timestamp) {
+            return setStorage('crave_birthday_last_claimed', timestamp);
         }
     };
 
@@ -537,6 +570,44 @@ const CraveRewardsData = (function() {
         }
     };
 
+    // Flash Deals
+    const FlashDeals = {
+        getClaimedDeals: function() {
+            return getStorage('crave_flash_deals_claimed', {});
+        },
+
+        setClaimedDeals: function(deals) {
+            return setStorage('crave_flash_deals_claimed', deals);
+        },
+
+        markClaimed: function(dealKey) {
+            const claimed = this.getClaimedDeals();
+            const today = new Date().toDateString();
+            claimed[dealKey] = today;
+            return this.setClaimedDeals(claimed);
+        },
+
+        hasClaimedToday: function(dealKey) {
+            const claimed = this.getClaimedDeals();
+            const today = new Date().toDateString();
+            return claimed[dealKey] === today;
+        },
+
+        resetDaily: function() {
+            const claimed = this.getClaimedDeals();
+            const today = new Date().toDateString();
+            const newClaimed = {};
+            
+            for (const [key, date] of Object.entries(claimed)) {
+                if (date === today) {
+                    newClaimed[key] = date;
+                }
+            }
+            
+            return this.setClaimedDeals(newClaimed);
+        }
+    };
+
     // Export all modules
     return {
         Points,
@@ -552,6 +623,7 @@ const CraveRewardsData = (function() {
         TimeOrders,
         VIP,
         SurpriseRewards,
+        FlashDeals,
         
         // Utility functions
         clearAll: function() {

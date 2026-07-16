@@ -523,7 +523,62 @@ const CraveRewardsEngine = (function() {
         
         if (!data.Birthday.isToday()) return null;
         
+        // Check if already claimed this year
+        const lastClaimed = data.Birthday.getLastClaimed();
+        if (lastClaimed) {
+            const lastClaimedDate = new Date(lastClaimed);
+            const currentYear = new Date().getFullYear();
+            
+            if (lastClaimedDate.getFullYear() === currentYear) {
+                return null;
+            }
+        }
+        
         return config.birthday.reward;
+    }
+
+    // Claim birthday reward
+    function claimBirthdayReward() {
+        if (!config || !data) return { success: false, message: 'System not available' };
+        
+        const reward = checkBirthdayReward();
+        if (!reward) {
+            return { success: false, message: 'Birthday reward not available' };
+        }
+        
+        // Mark as claimed
+        data.Birthday.setLastClaimed(Date.now());
+        
+        emit('birthday_reward_claimed', reward);
+        
+        return {
+            success: true,
+            reward,
+            message: 'Birthday reward claimed successfully!'
+        };
+    }
+
+    // Track referral visit
+    function trackReferral(referralCode) {
+        if (!data) return { success: false, message: 'System not available' };
+        
+        const referralData = {
+            id: referralCode,
+            referrerBonus: config.referral.referrerReward.value,
+            friendBonus: config.referral.friendReward.value
+        };
+        
+        const isNewReferral = !data.Referrals.get().some(r => r.id === referralCode);
+        
+        if (isNewReferral) {
+            data.Referrals.add(referralData);
+        }
+        
+        return {
+            success: true,
+            isNewReferral,
+            message: 'Referral tracked successfully'
+        };
     }
 
     // Activate VIP
@@ -674,10 +729,12 @@ const CraveRewardsEngine = (function() {
         generateReferralLink,
         processReferral,
         completeReferral,
+        trackReferral,
         
         // Birthday
         setBirthday,
         checkBirthdayReward,
+        claimBirthdayReward,
         
         // VIP
         activateVIP,

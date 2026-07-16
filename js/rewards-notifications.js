@@ -574,7 +574,7 @@ const CraveRewardsNotifications = (function() {
             return {
                 type: 'info',
                 icon: '⚡',
-                title: 'Flash Deal Available!'',
+                title: 'Flash Deal Available!',
                 message: deal.description || 'Limited time offer!'
             };
         },
