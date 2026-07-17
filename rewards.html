@@ -469,6 +469,189 @@
             font-size: 12px;
         }
 
+        /* Reward Vault */
+        .reward-vault-section {
+            margin-bottom: 32px;
+        }
+
+        .reward-vault-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .reward-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .reward-card:hover {
+            border-color: rgba(212, 163, 115, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .reward-card.redeemed {
+            opacity: 0.5;
+            border-color: rgba(76, 175, 80, 0.3);
+        }
+
+        .reward-card.expired {
+            opacity: 0.3;
+            border-color: rgba(244, 67, 54, 0.3);
+        }
+
+        .reward-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .reward-name {
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .reward-expiry {
+            color: #888888;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .reward-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .reward-status.active {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+        }
+
+        .reward-status.redeemed {
+            background: rgba(212, 163, 115, 0.2);
+            color: #d4a373;
+        }
+
+        .reward-status.expired {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+        }
+
+        .redeem-btn {
+            margin-top: 12px;
+            padding: 8px 16px;
+            background: rgba(212, 163, 115, 0.2);
+            border: 1px solid rgba(212, 163, 115, 0.4);
+            border-radius: 8px;
+            color: #d4a373;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .redeem-btn:hover:not(:disabled) {
+            background: rgba(212, 163, 115, 0.3);
+        }
+
+        .redeem-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Spin Stats */
+        .spin-stats-section {
+            margin-bottom: 32px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #d4a373;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: #aaaaaa;
+            font-size: 14px;
+        }
+
+        .spin-history {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .spin-history-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .spin-history-item:last-child {
+            border-bottom: none;
+        }
+
+        .spin-history-icon {
+            font-size: 24px;
+            margin-right: 16px;
+        }
+
+        .spin-history-info {
+            flex: 1;
+        }
+
+        .spin-history-prize {
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .spin-history-date {
+            color: #888888;
+            font-size: 12px;
+        }
+
+        .empty-vault,
+        .empty-history {
+            text-align: center;
+            padding: 40px;
+            color: #888888;
+        }
+
+        .empty-vault i,
+        .empty-history i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .rewards-header h1 {
@@ -583,6 +766,18 @@
             <div class="promo-codes-list" id="promoCodesList">
                 <!-- Promo codes will be loaded dynamically -->
             </div>
+
+            <!-- Reward Vault -->
+            <h2 class="section-title">Reward Vault</h2>
+            <div class="reward-vault-section" id="rewardVaultSection">
+                <!-- Rewards will be loaded dynamically -->
+            </div>
+
+            <!-- Spin Stats -->
+            <h2 class="section-title">Spin Statistics</h2>
+            <div class="spin-stats-section" id="spinStatsSection">
+                <!-- Stats will be loaded dynamically -->
+            </div>
         </div>
     </div>
 
@@ -685,6 +880,12 @@
 
             // Load daily reward status
             loadDailyReward();
+
+            // Load reward vault
+            loadRewardVault();
+
+            // Load spin stats
+            loadSpinStats();
         }
 
         function loadMilestones() {
@@ -750,6 +951,96 @@
                 btn.textContent = 'Claimed';
                 text.textContent = `Current streak: ${streak} days`;
             }
+        }
+
+        function loadRewardVault() {
+            const vault = CraveRewardsData.RewardVault.getActive();
+            const section = document.getElementById('rewardVaultSection');
+
+            if (vault.length === 0) {
+                section.innerHTML = `
+                    <div class="empty-vault">
+                        <i class="fas fa-gift"></i>
+                        <p>No rewards in your vault yet. Spin the wheel to win prizes!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            section.innerHTML = `
+                <div class="reward-vault-grid">
+                    ${vault.map(reward => `
+                        <div class="reward-card">
+                            <div class="reward-icon">${reward.prize.icon}</div>
+                            <div class="reward-name">${reward.prize.name}</div>
+                            <div class="reward-expiry">Expires: ${new Date(reward.expiresAt).toLocaleDateString()}</div>
+                            <span class="reward-status active">Active</span>
+                            <button class="redeem-btn" onclick="redeemReward(${reward.id})">Redeem</button>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function loadSpinStats() {
+            const stats = CraveRewardsData.SpinStats;
+            const section = document.getElementById('spinStatsSection');
+            const history = stats.getSpinHistory();
+
+            section.innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">${stats.getTotalSpins()}</div>
+                        <div class="stat-label">Total Spins</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${stats.getTotalPrizesWon()}</div>
+                        <div class="stat-label">Prizes Won</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${stats.getTotalPointsWon()}</div>
+                        <div class="stat-label">Points Won</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">GH₵${stats.getTotalSavings()}</div>
+                        <div class="stat-label">Total Savings</div>
+                    </div>
+                </div>
+                <div class="spin-history">
+                    <h4>Recent Spins</h4>
+                    ${history.length === 0 ? `
+                        <div class="empty-history">
+                            <i class="fas fa-history"></i>
+                            <p>No spin history yet</p>
+                        </div>
+                    ` : history.slice(0, 5).map(spin => `
+                        <div class="spin-history-item">
+                            <span class="spin-history-icon">${spin.prize.icon}</span>
+                            <div class="spin-history-info">
+                                <div class="spin-history-prize">${spin.prize.name}</div>
+                                <div class="spin-history-date">${new Date(spin.timestamp).toLocaleString()}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function redeemReward(rewardId) {
+            const reward = CraveRewardsData.RewardVault.getById(rewardId);
+            if (!reward) return;
+
+            CraveRewardsData.RewardVault.markRedeemed(rewardId);
+            
+            CraveRewardsNotifications.show({
+                type: 'success',
+                icon: '✅',
+                title: 'Reward Redeemed!',
+                message: `${reward.prize.name} has been redeemed`
+            });
+
+            loadRewardVault();
+            loadRewardsData();
         }
 
         function setupEventListeners() {

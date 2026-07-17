@@ -402,12 +402,168 @@ const CraveRewardsData = (function() {
             return Math.ceil(diff / (1000 * 60 * 60 * 24));
         },
 
-        getLastClaimed: function() {
-            return getStorage('crave_birthday_last_claimed', null);
+        getLastRewardYear: function() {
+            return getStorage('crave_birthday_reward_year', null);
         },
 
-        setLastClaimed: function(timestamp) {
-            return setStorage('crave_birthday_last_claimed', timestamp);
+        setLastRewardYear: function(year) {
+            return setStorage('crave_birthday_reward_year', year);
+        },
+
+        canClaimBirthdayReward: function() {
+            const currentYear = new Date().getFullYear();
+            const lastRewardYear = this.getLastRewardYear();
+            
+            return lastRewardYear !== currentYear;
+        },
+
+        claimBirthdayReward: function() {
+            const currentYear = new Date().getFullYear();
+            return this.setLastRewardYear(currentYear);
+        }
+    };
+
+    // Reward Vault Management
+    const RewardVault = {
+        get: function() {
+            return getStorage('crave_reward_vault', []);
+        },
+
+        set: function(vault) {
+            return setStorage('crave_reward_vault', vault);
+        },
+
+        add: function(reward) {
+            const vault = this.get();
+            vault.push(reward);
+            return this.set(vault);
+        },
+
+        remove: function(rewardId) {
+            const vault = this.get();
+            const filtered = vault.filter(r => r.id !== rewardId);
+            return this.set(filtered);
+        },
+
+        getById: function(rewardId) {
+            const vault = this.get();
+            return vault.find(r => r.id === rewardId);
+        },
+
+        markRedeemed: function(rewardId) {
+            const vault = this.get();
+            const reward = vault.find(r => r.id === rewardId);
+            if (reward) {
+                reward.redeemed = true;
+                reward.redeemedAt = new Date().toISOString();
+                return this.set(vault);
+            }
+            return false;
+        },
+
+        getActive: function() {
+            const vault = this.get();
+            const now = new Date();
+            return vault.filter(r => !r.redeemed && new Date(r.expiresAt) > now);
+        },
+
+        getExpired: function() {
+            const vault = this.get();
+            const now = new Date();
+            return vault.filter(r => new Date(r.expiresAt) <= now);
+        },
+
+        getRedeemed: function() {
+            const vault = this.get();
+            return vault.filter(r => r.redeemed);
+        },
+
+        getTotalValue: function() {
+            const active = this.getActive();
+            let total = 0;
+            active.forEach(r => {
+                if (r.prize.type === 'coupon') total += r.prize.value;
+                if (r.prize.type === 'points') total += r.prize.value;
+            });
+            return total;
+        },
+
+        clearExpired: function() {
+            const vault = this.get();
+            const now = new Date();
+            const filtered = vault.filter(r => new Date(r.expiresAt) > now);
+            return this.set(filtered);
+        }
+    };
+
+    // Spin History & Lifetime Stats
+    const SpinStats = {
+        getTotalSpins: function() {
+            return getStorage('crave_total_spins', 0);
+        },
+
+        incrementTotalSpins: function() {
+            return setStorage('crave_total_spins', this.getTotalSpins() + 1);
+        },
+
+        getTotalPrizesWon: function() {
+            return getStorage('crave_total_prizes_won', 0);
+        },
+
+        incrementTotalPrizesWon: function() {
+            return setStorage('crave_total_prizes_won', this.getTotalPrizesWon() + 1);
+        },
+
+        getTotalPointsWon: function() {
+            return getStorage('crave_total_points_won', 0);
+        },
+
+        addPointsWon: function(points) {
+            return setStorage('crave_total_points_won', this.getTotalPointsWon() + points);
+        },
+
+        getTotalSavings: function() {
+            return getStorage('crave_total_savings', 0);
+        },
+
+        addSavings: function(amount) {
+            return setStorage('crave_total_savings', this.getTotalSavings() + amount);
+        },
+
+        getSpinHistory: function() {
+            return getStorage('crave_spin_history', []);
+        },
+
+        addSpinHistory: function(spinResult) {
+            const history = this.getSpinHistory();
+            history.unshift({
+                ...spinResult,
+                timestamp: new Date().toISOString()
+            });
+            // Keep only last 50 spins
+            if (history.length > 50) history.pop();
+            return setStorage('crave_spin_history', history);
+        },
+
+        getLastSpinTime: function() {
+            return getStorage('crave_last_spin_time', 0);
+        },
+
+        setLastSpinTime: function(timestamp) {
+            return setStorage('crave_last_spin_time', timestamp);
+        },
+
+        getNextSpinTime: function() {
+            const lastSpin = this.getLastSpinTime();
+            if (lastSpin === 0) return 0;
+            return lastSpin + (24 * 60 * 60 * 1000); // 24 hours
+        },
+
+        getTimeUntilNextSpin: function() {
+            const nextSpin = this.getNextSpinTime();
+            const now = Date.now();
+            const diff = nextSpin - now;
+            return Math.max(0, diff);
         }
     };
 
@@ -624,6 +780,8 @@ const CraveRewardsData = (function() {
         VIP,
         SurpriseRewards,
         FlashDeals,
+        RewardVault,
+        SpinStats,
         
         // Utility functions
         clearAll: function() {
