@@ -534,6 +534,11 @@
             color: #4caf50;
         }
 
+        .reward-status.expiring {
+            background: rgba(255, 152, 0, 0.2);
+            color: #ff9800;
+        }
+
         .reward-status.redeemed {
             background: rgba(212, 163, 115, 0.2);
             color: #d4a373;
@@ -831,6 +836,21 @@
         document.addEventListener('DOMContentLoaded', function() {
             loadRewardsData();
             setupEventListeners();
+            
+            // Initialize flash deals system
+            if (typeof CraveFlashDeals !== 'undefined' && CraveFlashDeals.init) {
+                CraveFlashDeals.init();
+            }
+            
+            // Check for referral code in URL
+            if (typeof CraveReferralSystem !== 'undefined' && CraveReferralSystem.checkURL) {
+                CraveReferralSystem.checkURL();
+            }
+            
+            // Check birthday on load
+            if (typeof CraveBirthdaySystem !== 'undefined' && CraveBirthdaySystem.checkOnLoad) {
+                CraveBirthdaySystem.checkOnLoad();
+            }
         });
 
         function loadRewardsData() {
@@ -929,7 +949,7 @@
                 <div class="promo-code-item">
                     <div class="promo-code-info">
                         <h4>${promo.code}</h4>
-                        <p>${promo.description} - ${CravePromoCodes.formatDiscount(promo.value, promo.type)}</p>
+                        <p>${promo.description} - ${promo.type === 'percentage' ? promo.value + '%' : promo.type === 'fixed' ? 'GHS ' + promo.value : promo.type}</p>
                     </div>
                     <button class="promo-code-btn" onclick="copyPromoCode('${promo.code}')">Copy</button>
                 </div>
@@ -969,15 +989,20 @@
 
             section.innerHTML = `
                 <div class="reward-vault-grid">
-                    ${vault.map(reward => `
+                    ${vault.map(reward => {
+                        const isExpiringSoon = new Date(reward.expiresAt) - new Date() < 7 * 24 * 60 * 60 * 1000;
+                        const statusClass = isExpiringSoon ? 'expiring' : 'active';
+                        const statusText = isExpiringSoon ? 'Expiring Soon' : 'Active';
+                        
+                        return `
                         <div class="reward-card">
                             <div class="reward-icon">${reward.prize.icon}</div>
                             <div class="reward-name">${reward.prize.name}</div>
                             <div class="reward-expiry">Expires: ${new Date(reward.expiresAt).toLocaleDateString()}</div>
-                            <span class="reward-status active">Active</span>
+                            <span class="reward-status ${statusClass}">${statusText}</span>
                             <button class="redeem-btn" onclick="redeemReward(${reward.id})">Redeem</button>
                         </div>
-                    `).join('')}
+                    `}).join('')}
                 </div>
             `;
         }

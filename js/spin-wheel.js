@@ -215,7 +215,7 @@ const CraveSpinWheel = (function() {
     function calculateAvailableSpins() {
         if (!data) return 0;
         
-        let spins = 0;
+        let earnedSpins = 0;
         const orders = data.Orders.getCount();
         const totalSpent = data.Orders.getTotalSpent();
         const dailyStreak = data.DailyRewards.getStreak();
@@ -223,22 +223,26 @@ const CraveSpinWheel = (function() {
         const birthday = data.Birthday.get();
         
         // First order bonus
-        if (orders === 1) spins += SPIN_ECONOMY.firstOrder;
+        if (orders === 1) earnedSpins += SPIN_ECONOMY.firstOrder;
         
         // Spend thresholds
-        if (totalSpent >= 150) spins += SPIN_ECONOMY.spend150;
-        else if (totalSpent >= 80) spins += SPIN_ECONOMY.spend80;
+        if (totalSpent >= 150) earnedSpins += SPIN_ECONOMY.spend150;
+        else if (totalSpent >= 80) earnedSpins += SPIN_ECONOMY.spend80;
         
         // Daily streak bonus
-        if (dailyStreak >= 7) spins += SPIN_ECONOMY.dailyStreakBonus;
+        if (dailyStreak >= 7) earnedSpins += SPIN_ECONOMY.dailyStreakBonus;
         
         // Referral bonus
-        if (referralsMade > 0) spins += SPIN_ECONOMY.referralBonus * referralsMade;
+        if (referralsMade > 0) earnedSpins += SPIN_ECONOMY.referralBonus * referralsMade;
         
         // Birthday bonus
-        if (birthday && isBirthdayToday(birthday)) spins += SPIN_ECONOMY.birthdaySpins;
+        if (birthday && isBirthdayToday(birthday)) earnedSpins += SPIN_ECONOMY.birthdaySpins;
         
-        return spins;
+        // Subtract spins already used
+        const spinsUsed = data.SpinStats.getTotalSpins();
+        const availableSpins = Math.max(0, earnedSpins - spinsUsed);
+        
+        return availableSpins;
     }
 
     function isBirthdayToday(birthday) {

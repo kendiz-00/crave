@@ -410,6 +410,14 @@ const CraveRewardsData = (function() {
             return setStorage('crave_birthday_reward_year', year);
         },
 
+        getLastClaimed: function() {
+            return getStorage('crave_birthday_last_claimed', null);
+        },
+
+        setLastClaimed: function(timestamp) {
+            return setStorage('crave_birthday_last_claimed', timestamp);
+        },
+
         canClaimBirthdayReward: function() {
             const currentYear = new Date().getFullYear();
             const lastRewardYear = this.getLastRewardYear();
