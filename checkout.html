@@ -55,8 +55,11 @@
             border: none;
             border-radius: 12px;
             font-size: 16px;
-            <!-- Premium Footer (copied from homepage) -->
-            <footer class="premium-footer crave-reveal" role="contentinfo">
+        }
+    </style>
+
+    <!-- Premium Footer (copied from homepage) -->
+    <footer class="premium-footer crave-reveal" role="contentinfo">
                 <div class="premium-footer__inner container-fluid px-3 p-t-48 p-b-56">
                     <div class="premium-footer__grid row gx-4 gy-4 align-items-start">
                         <div class="col-12 col-md-4">
@@ -903,6 +906,25 @@
             // Generate WhatsApp message immediately
             const message = generateWhatsAppMessage(orderData);
 
+            // Calculate order total
+            let total = 0;
+            cartItems.forEach((item) => {
+                const itemTotal = (item.unitPrice || item.price || 0) * (item.quantity || 1);
+                total += itemTotal;
+            });
+            const orderType = document.querySelector('input[name="orderType"]:checked')?.value || 'Pickup';
+            const deliveryFeeAmount = orderType === 'Delivery' ? deliveryFee : 0;
+            total += deliveryFeeAmount;
+
+            // Store order data for success screen
+            const orderCompletionData = {
+                total: total,
+                orderType: orderType,
+                items: cartItems.map(item => ({ name: item.name, price: item.unitPrice || item.price, quantity: item.quantity })),
+                timestamp: Date.now()
+            };
+            sessionStorage.setItem('craveOrderCompletion', JSON.stringify(orderCompletionData));
+
             // Use official WhatsApp API endpoint for better Safari compatibility
             const whatsappUrl = `https://api.whatsapp.com/send?phone=233550020788&text=${encodeURIComponent(message)}`;
 
@@ -915,6 +937,9 @@
                 // Use window.location.href instead of window.open to avoid popup blockers
                 try {
                     window.location.href = whatsappUrl;
+
+                    // Set flag to detect return from WhatsApp
+                    sessionStorage.setItem('craveWhatsAppOpened', 'true');
 
                     // Reset form and clear cart after a short delay
                     setTimeout(() => {
@@ -1063,6 +1088,214 @@
             
             return emojiMap[itemName] || '🍽';
         }
+
+        // ============================================
+        // ORDER COMPLETION FLOW
+        // ============================================
+
+        // Check if user returned from WhatsApp
+        function checkWhatsAppReturn() {
+            const whatsappOpened = sessionStorage.getItem('craveWhatsAppOpened');
+            const orderCompletionData = sessionStorage.getItem('craveOrderCompletion');
+
+            if (whatsappOpened === 'true' && orderCompletionData) {
+                // Clear the flag
+                sessionStorage.removeItem('craveWhatsAppOpened');
+                
+                // Show success overlay
+                showOrderSuccessOverlay(JSON.parse(orderCompletionData));
+            }
+        }
+
+        // Show order success overlay
+        function showOrderSuccessOverlay(orderData) {
+            const overlay = document.getElementById('orderSuccessOverlay');
+            
+            // Calculate points earned
+            let pointsEarned = 0;
+            if (typeof CraveRewardsEngine !== 'undefined') {
+                const result = CraveRewardsEngine.processOrder({
+                    total: orderData.total,
+                    items: orderData.items
+                });
+                pointsEarned = result.pointsEarned || 0;
+            }
+
+            // Get current tier and progress
+            let currentTier = 'Bronze';
+            let tierProgress = 0;
+            let currentPoints = 0;
+            
+            if (typeof CraveRewardsData !== 'undefined') {
+                currentPoints = CraveRewardsData.Points.get();
+                currentTier = CraveRewardsData.Tier.get();
+                const progress = CraveRewardsEngine.getMilestoneProgress();
+                tierProgress = progress ? Math.round(progress.progress) : 0;
+            }
+
+            // Update overlay with data
+            document.getElementById('successOrderTotal').textContent = `GH₵ ${orderData.total.toFixed(2)}`;
+            document.getElementById('successPrepTime').textContent = orderData.orderType === 'Delivery' ? '20-30 min' : '15-20 min';
+            document.getElementById('successCurrentPoints').textContent = currentPoints;
+            document.getElementById('successPointsEarned').textContent = `+${pointsEarned}`;
+            document.getElementById('successCurrentTier').textContent = currentTier.charAt(0).toUpperCase() + currentTier.slice(1);
+            document.getElementById('successTierProgress').textContent = `${tierProgress}%`;
+            document.getElementById('successProgressBar').style.width = `${tierProgress}%`;
+
+            // Check for spin unlock
+            let earnedSpin = false;
+            if (typeof CraveSpinWheel !== 'undefined') {
+                const availableSpins = CraveSpinWheel.getAvailableSpins();
+                earnedSpin = availableSpins > 0;
+            }
+
+            // Show announcements
+            if (pointsEarned > 0) {
+                document.getElementById('rewardAnnouncement').style.display = 'flex';
+            }
+            if (earnedSpin) {
+                document.getElementById('spinAnnouncement').style.display = 'flex';
+            }
+
+            // Show overlay
+            overlay.style.display = 'flex';
+
+            // Play success sound
+            if (window.CraveSound) window.CraveSound.success();
+
+            // Launch confetti
+            launchConfetti();
+
+            // Animate numbers
+            animateCountUp('successCurrentPoints', 0, currentPoints, 1000);
+            animateCountUp('successPointsEarned', 0, pointsEarned, 1000);
+
+            // Start countdown
+            startRedirectCountdown();
+
+            // Setup event listeners
+            setupSuccessOverlayListeners(earnedSpin);
+        }
+
+        // Animate count-up
+        function animateCountUp(elementId, start, end, duration) {
+            const element = document.getElementById(elementId);
+            const range = end - start;
+            const increment = range / (duration / 16);
+            let current = start;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= end) {
+                    current = end;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current);
+            }, 16);
+        }
+
+        // Launch confetti
+        function launchConfetti() {
+            // Simple confetti implementation
+            const colors = ['#d4a373', '#c49a6c', '#ffd700', '#00c853', '#2196f3'];
+            const confettiCount = 100;
+
+            for (let i = 0; i < confettiCount; i++) {
+                createConfettiPiece(colors[Math.floor(Math.random() * colors.length)]);
+            }
+        }
+
+        function createConfettiPiece(color) {
+            const confetti = document.createElement('div');
+            confetti.style.cssText = `
+                position: fixed;
+                width: 10px;
+                height: 10px;
+                background: ${color};
+                left: ${Math.random() * 100}vw;
+                top: -10px;
+                border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
+                z-index: 10003;
+                pointer-events: none;
+                animation: confettiFall ${2 + Math.random() * 2}s linear forwards;
+            `;
+            document.body.appendChild(confetti);
+
+            setTimeout(() => confetti.remove(), 4000);
+        }
+
+        // Add confetti animation
+        const confettiStyle = document.createElement('style');
+        confettiStyle.textContent = `
+            @keyframes confettiFall {
+                to {
+                    transform: translateY(100vh) rotate(720deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(confettiStyle);
+
+        // Start redirect countdown
+        let countdownTimer;
+        function startRedirectCountdown() {
+            let seconds = 5;
+            const countdownElement = document.getElementById('redirectCountdown');
+            
+            countdownTimer = setInterval(() => {
+                seconds--;
+                countdownElement.textContent = seconds;
+                
+                if (seconds <= 0) {
+                    clearInterval(countdownTimer);
+                    redirectToRewards();
+                }
+            }, 1000);
+        }
+
+        // Setup success overlay listeners
+        function setupSuccessOverlayListeners(earnedSpin) {
+            const viewRewardsBtn = document.getElementById('viewRewardsBtn');
+            
+            viewRewardsBtn.addEventListener('click', () => {
+                clearInterval(countdownTimer);
+                redirectToRewards(earnedSpin);
+            });
+        }
+
+        // Redirect to rewards
+        function redirectToRewards(earnedSpin = false) {
+            // Store spin unlock flag for rewards page
+            if (earnedSpin) {
+                sessionStorage.setItem('craveEarnedSpin', 'true');
+            }
+            
+            window.location.href = 'rewards.html';
+        }
+
+        // Visibility change detection
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                checkWhatsAppReturn();
+            }
+        });
+
+        // Focus detection
+        window.addEventListener('focus', () => {
+            checkWhatsAppReturn();
+        });
+
+        // Page show detection (for Safari)
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted) {
+                checkWhatsAppReturn();
+            }
+        });
+
+        // Check on page load (in case user refreshed)
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(checkWhatsAppReturn, 500);
+        });
     </script>
     
     <!-- Payment Modal -->
@@ -1088,6 +1321,98 @@
                 <i class="fab fa-whatsapp"></i> Open WhatsApp
             </a>
             <button class="whatsapp-fallback-close" onclick="closeWhatsAppFallback()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Premium Order Success Overlay -->
+    <div class="order-success-overlay" id="orderSuccessOverlay" style="display: none;">
+        <div class="order-success-content">
+            <div class="success-checkmark">
+                <div class="checkmark-circle"></div>
+                <div class="checkmark-check"></div>
+            </div>
+            <h1 class="success-title">🎉 Thank You!</h1>
+            <p class="success-subtitle">Your CRAVE order has been prepared and sent successfully.</p>
+            
+            <div class="success-details">
+                <div class="success-detail-item">
+                    <div class="detail-icon">💰</div>
+                    <div class="detail-info">
+                        <div class="detail-label">Order Total</div>
+                        <div class="detail-value" id="successOrderTotal">GH₵ 0.00</div>
+                    </div>
+                </div>
+                <div class="success-detail-item">
+                    <div class="detail-icon">⏱️</div>
+                    <div class="detail-info">
+                        <div class="detail-label">Est. Preparation Time</div>
+                        <div class="detail-value" id="successPrepTime">15-20 min</div>
+                    </div>
+                </div>
+                <div class="success-detail-item">
+                    <div class="detail-icon">⭐</div>
+                    <div class="detail-info">
+                        <div class="detail-label">Current Points</div>
+                        <div class="detail-value" id="successCurrentPoints">0</div>
+                    </div>
+                </div>
+                <div class="success-detail-item highlight">
+                    <div class="detail-icon">🎁</div>
+                    <div class="detail-info">
+                        <div class="detail-label">Points Earned</div>
+                        <div class="detail-value" id="successPointsEarned">+0</div>
+                    </div>
+                </div>
+                <div class="success-detail-item">
+                    <div class="detail-icon">🏆</div>
+                    <div class="detail-info">
+                        <div class="detail-label">Current Tier</div>
+                        <div class="detail-value" id="successCurrentTier">Bronze</div>
+                    </div>
+                </div>
+                <div class="success-detail-item">
+                    <div class="detail-icon">📈</div>
+                    <div class="detail-info">
+                        <div class="detail-label">Progress to Next Tier</div>
+                        <div class="detail-value" id="successTierProgress">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reward-announcement" id="rewardAnnouncement" style="display: none;">
+                <div class="reward-icon">🎁</div>
+                <div class="reward-text">Reward Unlocked!</div>
+            </div>
+
+            <div class="spin-announcement" id="spinAnnouncement" style="display: none;">
+                <div class="spin-icon">🎡</div>
+                <div class="spin-text">You earned a FREE Spin!</div>
+            </div>
+
+            <div class="success-progress-bar">
+                <div class="progress-fill" id="successProgressBar"></div>
+            </div>
+
+            <button class="success-cta-btn" id="viewRewardsBtn">
+                <i class="fas fa-gift"></i> View My Rewards
+            </button>
+            
+            <div class="redirect-countdown">
+                Redirecting in <span id="redirectCountdown">5</span> seconds...
+            </div>
+        </div>
+    </div>
+
+    <!-- Spin Popup -->
+    <div class="spin-popup-overlay" id="spinPopupOverlay" style="display: none;">
+        <div class="spin-popup-content">
+            <div class="spin-popup-icon">🎉</div>
+            <h2 class="spin-popup-title">Congratulations!</h2>
+            <p class="spin-popup-subtitle">You earned a Spin & Win opportunity.</p>
+            <button class="spin-popup-btn" id="spinNowBtn">
+                <i class="fas fa-dharmachakra"></i> 🎡 Spin Now
+            </button>
+            <button class="spin-popup-close" id="spinPopupClose">Maybe Later</button>
         </div>
     </div>
 
@@ -1165,6 +1490,339 @@
 
         .whatsapp-fallback-close:hover {
             color: #666;
+        }
+
+        /* Premium Order Success Overlay */
+        .order-success-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10001;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .order-success-content {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 48px 32px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .success-checkmark {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 32px;
+        }
+
+        .checkmark-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00c853, #00a843);
+            animation: scaleIn 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        .checkmark-check {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 30px;
+            border-left: 8px solid white;
+            border-bottom: 8px solid white;
+            transform: translate(-50%, -60%) rotate(-45deg);
+            animation: drawCheck 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+        }
+
+        @keyframes drawCheck {
+            from { width: 0; height: 0; opacity: 0; }
+            to { width: 60px; height: 30px; opacity: 1; }
+        }
+
+        .success-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 12px;
+            animation: bounceIn 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .success-subtitle {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+
+        .success-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .success-detail-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+
+        .success-detail-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .success-detail-item.highlight {
+            background: linear-gradient(135deg, rgba(212, 163, 115, 0.2), rgba(196, 154, 108, 0.2));
+            border-color: rgba(212, 163, 115, 0.4);
+            grid-column: span 2;
+        }
+
+        .detail-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .detail-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .success-detail-item.highlight .detail-value {
+            color: #d4a373;
+            font-size: 24px;
+        }
+
+        .reward-announcement,
+        .spin-announcement {
+            background: linear-gradient(135deg, rgba(212, 163, 115, 0.3), rgba(196, 154, 108, 0.3));
+            border: 1px solid rgba(212, 163, 115, 0.5);
+            border-radius: 16px;
+            padding: 16px 24px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .reward-icon,
+        .spin-icon {
+            font-size: 32px;
+        }
+
+        .reward-text,
+        .spin-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: #d4a373;
+        }
+
+        .success-progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #d4a373, #c49a6c);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 1s ease-out;
+        }
+
+        .success-cta-btn {
+            width: 100%;
+            padding: 18px 32px;
+            background: linear-gradient(135deg, #d4a373, #c49a6c);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(212, 163, 115, 0.3);
+            margin-bottom: 16px;
+        }
+
+        .success-cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(212, 163, 115, 0.4);
+        }
+
+        .redirect-countdown {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Spin Popup */
+        .spin-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10002;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .spin-popup-content {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border: 2px solid #d4a373;
+            border-radius: 24px;
+            padding: 48px 40px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 25px 80px rgba(212, 163, 115, 0.3);
+            animation: bounceIn 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .spin-popup-icon {
+            font-size: 80px;
+            margin-bottom: 24px;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .spin-popup-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .spin-popup-subtitle {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 32px;
+        }
+
+        .spin-popup-btn {
+            width: 100%;
+            padding: 18px 32px;
+            background: linear-gradient(135deg, #ffd700, #ffb700);
+            color: #1a1a2e;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+            margin-bottom: 12px;
+        }
+
+        .spin-popup-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
+        }
+
+        .spin-popup-close {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            cursor: pointer;
+            padding: 8px 16px;
+            transition: color 0.3s ease;
+        }
+
+        .spin-popup-close:hover {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .order-success-content {
+                padding: 32px 24px;
+                max-width: 95%;
+            }
+
+            .success-details {
+                grid-template-columns: 1fr;
+            }
+
+            .success-detail-item.highlight {
+                grid-column: span 1;
+            }
+
+            .success-title {
+                font-size: 28px;
+            }
+
+            .success-checkmark {
+                width: 100px;
+                height: 100px;
+            }
         }
     </style>
     
